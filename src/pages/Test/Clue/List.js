@@ -1,19 +1,18 @@
-import React, { PureComponent } from 'react';
-import { connect } from 'dva';
-import router from 'umi/router';
+import React, { PureComponent , Fragment } from 'react'
+import { connect } from 'dva'
+import router from 'umi/router'
 import {
-  Row,
-  Col,
   Card,
   Form,
   Button,
-  Radio,
-} from 'antd';
-import StandardTable from '@/components/StandardTable';
-import PageHeaderWrapper from '@/components/PageHeaderWrapper';
+} from 'antd'
+import { FormattedMessage } from 'umi/locale'
+import StandardFormRow from '@/components/StandardFormRow'
+import TagSelect from '@/components/TagSelect'
+import StandardTable from '@/components/StandardTable'
 import SignForm from './SignForm'
 
-import styles from './List.less';
+import styles from './List.less'
 
 const getValue = obj =>
   Object.keys(obj)
@@ -79,6 +78,14 @@ class List extends PureComponent {
       title: '备注',
       dataIndex: 'remark',
     },
+    {
+      title: '操作',
+      render: () => (
+        <Fragment>
+          <a onClick={() => router.push('/test/clue/sign')}>签合同</a>
+        </Fragment>
+      ),
+    },
   ];
 
   componentDidMount() {
@@ -114,9 +121,9 @@ class List extends PureComponent {
     });
   };
 
-  previewItem = id => {
+  previewItem = () => {
     // TODO 展示联系人信息
-    router.push(`/profile/basic/${id}`);
+    router.push('/test/clue/sign');
   };
 
   handleSelectRows = rows => {
@@ -125,98 +132,11 @@ class List extends PureComponent {
     });
   };
 
-  // TODO 选择单选框触发事件
-  handleSearch = e => {
-    e.preventDefault();
-
-    const { dispatch, form } = this.props;
-
-    form.validateFields((err, fieldsValue) => {
-      if (err) return;
-
-      const values = {
-        ...fieldsValue,
-        updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
-      };
-
-      this.setState({
-        formValues: values,
-      });
-
-      dispatch({
-        type: 'clue/fetch',
-        payload: values,
-      });
-    });
-  };
-
   handleSignModalVisible = (flag, record) => {
     this.setState({
       signModalVisible: !!flag,
       signFormValues: record || {},
     });
-  };
-
-  renderForm() {
-    const {
-      form: { getFieldDecorator },
-    } = this.props;
-    return (
-      <Form onSubmit={this.handleSearch} layout="inline">
-        <Row>
-          <Col span={24}>
-            <Form.Item label="线索来源">
-              {getFieldDecorator('source', {
-                initialValue: "0",
-              })(
-                <Radio.Group>
-                  <Radio.Button value="0">全部</Radio.Button>
-                  <Radio.Button value="1">独立开发</Radio.Button>
-                  <Radio.Button value="2">线下渠道</Radio.Button>
-                  <Radio.Button value="3">二次开发</Radio.Button>
-                  <Radio.Button value="4">转介绍</Radio.Button>
-                  <Radio.Button value="5">客服电话</Radio.Button>
-                  <Radio.Button value="6">百度推广</Radio.Button>
-                  <Radio.Button value="7">360推广</Radio.Button>
-                  <Radio.Button value="8">搜狗推广</Radio.Button>
-                </Radio.Group>
-              )}
-            </Form.Item>
-          </Col>
-          <Col span={24}>
-            <Form.Item label="用户状态">
-              {getFieldDecorator('status', {
-                initialValue: "0",
-              })(
-                <Radio.Group>
-                  <Radio.Button value="0">全部</Radio.Button>
-                  <Radio.Button value="1">有效</Radio.Button>
-                  <Radio.Button value="2">无效</Radio.Button>
-                  <Radio.Button value="3">重点</Radio.Button>
-                  <Radio.Button value="4">有意向</Radio.Button>
-                  <Radio.Button value="5">无意向</Radio.Button>
-                  <Radio.Button value="6">关闭</Radio.Button>
-                </Radio.Group>
-              )}
-            </Form.Item>
-          </Col>
-          <Col span={24}>
-            <Form.Item label="跟进状态">
-              {getFieldDecorator('upStatus', {
-                initialValue: "0",
-              })(
-                <Radio.Group>
-                  <Radio.Button value="0">全部</Radio.Button>
-                  <Radio.Button value="1">初次联系</Radio.Button>
-                  <Radio.Button value="2">二次跟进</Radio.Button>
-                  <Radio.Button value="3">多次跟进</Radio.Button>
-                </Radio.Group>
-              )}
-            </Form.Item>
-          </Col>
-        </Row>
-      </Form>
-    );
   }
 
   render() {
@@ -225,14 +145,51 @@ class List extends PureComponent {
       loading,
     } = this.props;
     const { selectedRows, signModalVisible, signFormValues } = this.state;
+    const actionsTextMap = {
+      expandText: <FormattedMessage id="component.tagSelect.expand" defaultMessage="Expand" />,
+      collapseText: (
+        <FormattedMessage id="component.tagSelect.collapse" defaultMessage="Collapse" />
+      ),
+      selectAllText: <FormattedMessage id="component.tagSelect.all" defaultMessage="All" />,
+    };
     const signMethods = {
       handleSignModalVisible: this.handleSignModalVisible,
     };
     return (
-      <PageHeaderWrapper title="线索表格">
+      <Fragment>
         <Card bordered={false}>
           <div className={styles.tableList}>
-            <div className={styles.tableListForm}>{this.renderForm()}</div>
+            <div className={styles.tableListForm}>
+              <StandardFormRow title="线索来源">
+                <TagSelect actionsText={actionsTextMap}>
+                  <TagSelect.Option value="1">独立开发</TagSelect.Option>
+                  <TagSelect.Option value="2">线下渠道</TagSelect.Option>
+                  <TagSelect.Option value="3">二次开发</TagSelect.Option>
+                  <TagSelect.Option value="4">转介绍</TagSelect.Option>
+                  <TagSelect.Option value="5">客服电话</TagSelect.Option>
+                  <TagSelect.Option value="6">百度推广</TagSelect.Option>
+                  <TagSelect.Option value="7">360推广</TagSelect.Option>
+                  <TagSelect.Option value="8">搜狗推广</TagSelect.Option>
+                </TagSelect>
+              </StandardFormRow>
+              <StandardFormRow title="用户状态">
+                <TagSelect actionsText={actionsTextMap}>
+                  <TagSelect.Option value="1">有效</TagSelect.Option>
+                  <TagSelect.Option value="2">无效</TagSelect.Option>
+                  <TagSelect.Option value="3">重点</TagSelect.Option>
+                  <TagSelect.Option value="4">有意向</TagSelect.Option>
+                  <TagSelect.Option value="5">无意向</TagSelect.Option>
+                  <TagSelect.Option value="6">关闭</TagSelect.Option>
+                </TagSelect>
+              </StandardFormRow>
+              <StandardFormRow title="跟进状态">
+                <TagSelect actionsText={actionsTextMap}>
+                  <TagSelect.Option value="1">初次联系</TagSelect.Option>
+                  <TagSelect.Option value="2">二次跟进</TagSelect.Option>
+                  <TagSelect.Option value="3">多次跟进</TagSelect.Option>
+                </TagSelect>
+              </StandardFormRow>
+            </div>
             <div className={styles.tableListOperator}>
               <Button icon="form" type="primary" onClick={() => this.handleSignModalVisible(true)}>
                 签合同
@@ -271,7 +228,7 @@ class List extends PureComponent {
           signModalVisible={signModalVisible}
           values={signFormValues}
         />
-      </PageHeaderWrapper>
+      </Fragment>
     );
   }
 }

@@ -271,11 +271,100 @@ export default [
         path: '/test',
         routes: [
           {
-            path: '/test/clue',
             name: 'clue',
-            component: './Test/Clue/List',
+            path: '/test/clue',
+            component: './Test/Clue',
+            hideChildrenInMenu: true,
+            routes: [
+              {
+                path: '/test/clue',
+                component: './Test/Clue/List',
+              },
+              {
+                name: 'sign',
+                path: '/test/clue/sign',
+                component: './Test/Clue/Sign',
+              },
+            ],
+          },
+          {
+            name: 'pending',
+            path: '/test/pending',
+            component: './Test/Work/Pending/PendingList',
           },
         ]
+      },
+      {
+        name: 'productSys',
+        icon: 'contacts',
+        path: '/productSys',
+        routes: [
+          {
+            name: 'productType',
+            path: '/productSys/productType',
+            component: './ProductSys/ProductType',
+          },
+          {
+            name: 'product',
+            path: '/productSys/product',
+            hideChildrenInMenu: true,
+            routes: [
+              {
+                path: '/productSys/product',
+                component: './ProductSys/Product',
+              },
+              {
+                path: '/productSys/product/create',
+                component: './ProductSys/Product/Create',
+              }
+            ]
+          },
+          {
+            name: 'productAssocType',
+            path: '/productSys/productAssocType',
+            component: './ProductSys/ProductAssocType',
+          },
+          {
+            name: 'productCategoryType',
+            path: '/productSys/productCategoryType',
+            component: './ProductSys/ProductCategoryType',
+          },
+          {
+            name: 'productCategory',
+            path: '/productSys/productCategory',
+            component: './ProductSys/ProductCategory',
+          },
+          {
+            name: 'productFeatureType',
+            path: '/productSys/productFeatureType',
+            component: './ProductSys/ProductFeatureType',
+          },
+          {
+            name: 'productFeature',
+            path: '/productSys/productFeature',
+            component: './ProductSys/ProductFeature',
+          },
+          {
+            name: 'productFeatureIactnType',
+            path: '/productSys/productFeatureIactnType',
+            component: './ProductSys/ProductFeatureIactnType',
+          },
+          {
+            name: 'productFeatureApplType',
+            path: '/productSys/productFeatureApplType',
+            component: './ProductSys/ProductFeatureApplType',
+          },
+          {
+            name: 'productPriceType',
+            path: '/productSys/productPriceType',
+            component: './ProductSys/ProductPriceType',
+          },
+          {
+            name: 'productPricePurpose',
+            path: '/productSys/productPricePurpose',
+            component: './ProductSys/ProductPricePurpose',
+          },
+        ],
       },
       {
         component: '404',

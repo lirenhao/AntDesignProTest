@@ -1,7 +1,8 @@
-import { queryClue, addClue } from '@/services/api';
+import { queryProductCategoryType, addProductCategoryType } from '@/services/api';
+import { message } from 'antd';
 
 export default {
-  namespace: 'clue',
+  namespace: 'productCategoryType',
 
   state: {
     data: {
@@ -12,18 +13,19 @@ export default {
 
   effects: {
     *fetch({ payload }, { call, put }) {
-      const response = yield call(queryClue, payload);
+      const response = yield call(queryProductCategoryType, payload);
       yield put({
         type: 'save',
         payload: response,
       });
     },
-    *add({ payload, callback }, { call, put }) {
-      const response = yield call(addClue, payload);
+    *submitAddForm({ payload, callback }, { call, put }) {
+      const response = yield call(addProductCategoryType, payload);
       yield put({
         type: 'save',
         payload: response,
       });
+      message.success('提交成功');
       if (callback) callback();
     },
   },
