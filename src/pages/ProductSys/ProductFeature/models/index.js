@@ -9,6 +9,7 @@ export default {
       list: [],
       pagination: {},
     },
+    info: {},
   },
 
   effects: {
@@ -19,7 +20,7 @@ export default {
         payload: response,
       });
     },
-    *submitAddForm({ payload, callback }, { call, put }) {
+    *submitCreateForm({ payload, callback }, { call, put }) {
       const response = yield call(addProductFeature, payload);
       yield put({
         type: 'save',
@@ -35,6 +36,12 @@ export default {
       return {
         ...state,
         data: action.payload,
+      };
+    },
+    info(state, action) {
+      return {
+        ...state,
+        info: action.payload,
       };
     },
   },

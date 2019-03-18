@@ -13,6 +13,7 @@ import {
 } from 'antd'
 import PageHeaderWrapper from '@/components/PageHeaderWrapper'
 import Create from './Create'
+import Iactn from './Iactn'
 
 import styles from '../table.less'
 
@@ -24,7 +25,8 @@ import styles from '../table.less'
 class Product extends React.Component {
 
   state = {
-    isCreateShow: false
+    isCreateShow: false,
+    isIactnShow: false,
   }
 
   columns = [
@@ -56,9 +58,9 @@ class Product extends React.Component {
       title: '操作',
       render: (text, record) => (
         <React.Fragment>
-          <a onClick={() => this.handleRemove(true, record)}>删除</a>
+          <a onClick={() => this.handleIactn(true, record)}>互作用</a>
           <Divider type="vertical" />
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>修改</a>
+          <a onClick={() => this.handleCreateModal(true, record)}>修改</a>
         </React.Fragment>
       ),
     },
@@ -71,17 +73,34 @@ class Product extends React.Component {
     });
   }
 
-  handleAddModal = (visible) => {
+  handleCreateModal = (visible) => {
     this.setState({isCreateShow: visible})
   }
 
-  handleAddForm = (values) => {
+  handleCreateForm = (values) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'productFeature/submitAddForm',
+      type: 'productFeature/submitCreateForm',
       payload: values,
-      callback: () => this.handleAddModal(false)
+      callback: () => this.handleCreateModal(false)
     });
+  }
+
+  handleIactn = (visible, record) => {
+    const { dispatch } = this.props
+    dispatch({
+      type: 'productFeature/info',
+      payload: record,
+    })
+    this.handleIactnModal(visible)
+  }
+
+  handleIactnModal = (visible) => {
+    this.setState({isIactnShow: visible})
+  }
+
+  handleIactnForm = (values) => {
+    console.log(values)
   }
 
   render() {
@@ -94,7 +113,10 @@ class Product extends React.Component {
         getFieldDecorator
       },
     } = this.props
-    const { isCreateShow } = this.state
+    const {
+      isCreateShow,
+      isIactnShow,
+    } = this.state
 
     return (
       <PageHeaderWrapper title="产品特征">
@@ -132,7 +154,7 @@ class Product extends React.Component {
               </Form>
             </div>
             <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleAddModal(true)}>
+              <Button icon="plus" type="primary" onClick={() => this.handleCreateModal(true)}>
                 新建
               </Button>
             </div>
@@ -146,8 +168,13 @@ class Product extends React.Component {
         </Card>
         <Create 
           visible={isCreateShow} 
-          hideModal={() => this.handleAddModal(false)} 
-          handleFormSubmit={this.handleAddForm}
+          hideModal={() => this.handleCreateModal(false)} 
+          handleFormSubmit={this.handleCreateForm}
+        />
+        <Iactn 
+          visible={isIactnShow} 
+          hideModal={() => this.handleIactnModal(false)} 
+          handleFormSubmit={this.handleIactnForm}
         />
       </PageHeaderWrapper>
     )
