@@ -7,7 +7,7 @@ import {
 } from 'antd'
 
 @Form.create()
-class ProductCreate extends React.Component {
+class Create extends React.Component {
 
   handleSubmit = e => {
     const { handleFormSubmit, form } = this.props;
@@ -24,6 +24,7 @@ class ProductCreate extends React.Component {
       form: { getFieldDecorator },
       visible,
       hideModal,
+      categorys,
     } = this.props;
 
     const formItemLayout = {
@@ -50,6 +51,16 @@ class ProductCreate extends React.Component {
         onCancel={hideModal}
       >
         <Form>
+          <Form.Item {...formItemLayout} label='产品类别名称'>
+            {getFieldDecorator('categoryName', {
+              rules: [
+                {
+                  required: true,
+                  message: '请输入产品类别名称',
+                },
+              ],
+              })(<Input placeholder='请输入' />)}
+          </Form.Item>
           <Form.Item {...formItemLayout} label="产品类别类型">
             {getFieldDecorator('productCategoryTypeId', {
               rules: [{ required: true, message: '请选择产品类别类型' }],
@@ -58,6 +69,14 @@ class ProductCreate extends React.Component {
                 <Select.Option value="1">产品用途类别</Select.Option>
                 <Select.Option value="2">产品行业类别</Select.Option>
                 <Select.Option value="3">产品材料类别</Select.Option>
+              </Select>
+            )}
+          </Form.Item>
+          <Form.Item {...formItemLayout} label="主父产品类别">
+            {getFieldDecorator('primaryParentCategoryId', {
+            })(
+              <Select placeholder="请选择">
+                {categorys.map(item => (<Select.Option value={item.key}>{item.title}</Select.Option>))}
               </Select>
             )}
           </Form.Item>
@@ -77,4 +96,4 @@ class ProductCreate extends React.Component {
   }
 }
 
-export default ProductCreate;
+export default Create;

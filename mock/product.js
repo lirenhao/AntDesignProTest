@@ -377,21 +377,21 @@ function getProductCategoryType(req, res, u) {
 
 const productCategory = [
   {
-    productCategoryId: 1,
+    productCategoryId: '1',
     productCategoryTypeId: '1',
     primaryParentCategoryId: '',
-    categoryName: '',
-    description: '',
+    categoryName: 'test-1',
+    description: 'description',
     lastUpdatedStamp: '2019-03-17 11:39:38',
     createdStamp: '2019-03-17 10:39:38',
     version: 'v1.0.0',
   },
   {
-    productCategoryId: 2,
+    productCategoryId: '2',
     productCategoryTypeId: '2',
     primaryParentCategoryId: '',
-    categoryName: '',
-    description: '',
+    categoryName: 'test-2',
+    description: 'description',
     lastUpdatedStamp: '2019-03-17 11:39:38',
     createdStamp: '2019-03-17 10:39:38',
     version: 'v1.0.0',
@@ -439,6 +439,22 @@ function postProductCategory(req, res, u, b) {
     version: 'v1.0.0',
   })
   return getProductCategory(req, res, u);
+}
+
+const productCategoryRollup = []
+
+function postProductCategoryRollup(req, res, u, b) {
+  const body = (b && b.body) || req.body;
+  productCategoryRollup.forEach((item, index) => {
+    productCategoryRollup.splice(index, 1)
+  })
+  body.ids.forEach(r => {
+    productCategoryRollup.push({
+      productCategoryId: body.id,
+      parentProductCategoryId: r,
+    })
+  })
+  res.send('Ok');
 }
 
 const productFeatureType = [
@@ -851,6 +867,7 @@ export default {
   'GET /api/productCategoryType': getProductCategoryType,
   'GET /api/productCategory': getProductCategory,
   'POST /api/productCategory': postProductCategory,
+  'POST /api/productCategoryRollup': postProductCategoryRollup,
   'GET /api/productFeatureType': getProductFeatureType,
   'POST /api/productFeatureType': postProductFeatureType,
   'GET /api/productFeature': getProductFeature,

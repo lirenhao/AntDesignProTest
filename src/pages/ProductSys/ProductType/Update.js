@@ -21,57 +21,10 @@ class Update extends React.Component {
     this.setState({ gData: loop(props.dataSource) })
   }
 
-  handleSubmit = e => {
-    const { handleFormSubmit, form } = this.props;
-    e.preventDefault();
-    form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        handleFormSubmit(values);
-      }
-    })
-  }
-
-  onTestDrop = (info) => {
-    console.log(info.dropToGap, info);
-    if(info.dropToGap)
-      return;
-    // 目标节点
-    const dropKey = info.node.props.eventKey
-    const drop = {
-      key: info.node.props.eventKey,
-      title: info.node.props.title,
-      children: info.node.props.children || [],
-    }
-    // 拖动的节点
-    const dragKey = info.dragNode.props.eventKey
-    const drag = {
-      key: info.dragNode.props.eventKey,
-      title: info.dragNode.props.title,
-      children: info.dragNode.props.children,
-    }
-    drop.children.push(drag)
-
-    const { gData: newData } = this.state;
-
-    const loopUpdate = (data, key, callback) => {
-      data.forEach((item, index, arr) => {
-        if (item.key === key) {
-          callback(item, index, arr);
-        }
-        if (item.children) {
-          loopUpdate(item.children, key, callback);
-        }
-      });
-    };
-    loopUpdate(newData, dropKey, (item, index, arr) => {
-      arr.splice(index, 1, drop)
-    })
-    loopUpdate(newData, dragKey, (item, index, arr) => {
-      arr.splice(index, 1)
-    })
-    this.setState({
-      gData: newData,
-    });
+  handleSubmit = () => {
+    const { handleFormSubmit } = this.props;
+    const { gData } = this.state
+    handleFormSubmit(gData)
   }
 
   onDrop = (info) => {
@@ -165,6 +118,7 @@ class Update extends React.Component {
         <Tree 
           draggable
           blockNode
+          defaultExpandAll
           onDrop={this.onDrop}
         >
           {loop(gData)}
