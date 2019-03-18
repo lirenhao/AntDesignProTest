@@ -1,0 +1,86 @@
+{
+  "1": {
+    "productTypeId": "1",
+    "parentTypeId": "",
+    "isPhysical": "0",
+    "isDigital": "0",
+    "hasTable": "0",
+    "productTypeName": "实物",
+    "descript": "实物",
+    "lastUpdatedStamp": "2019-03-17 11:39:38",
+    "createdStamp": "2019-03-17 10:39:38",
+    "version": "v1.0.0"
+  },
+  "2": {
+    "productTypeId": "2",
+    "parentTypeId": "",
+    "isPhysical": "0",
+    "isDigital": "0",
+    "hasTable": "0",
+    "productTypeName": "服务",
+    "descript": "服务",
+    "lastUpdatedStamp": "2019-03-17 11:39:38",
+    "createdStamp": "2019-03-17 10:39:38",
+    "version": "v1.0.0"
+  },
+  "3": {
+    "productTypeId": "3",
+    "parentTypeId": "",
+    "isPhysical": "0",
+    "isDigital": "0",
+    "hasTable": "0",
+    "productTypeName": "虚拟产品",
+    "descript": "虚拟产品",
+    "lastUpdatedStamp": "2019-03-17 11:39:38",
+    "createdStamp": "2019-03-17 10:39:38",
+    "version": "v1.0.0"
+  },
+  "11": {
+    "productTypeId": "11",
+    "parentTypeId": "1",
+    "isPhysical": "0",
+    "isDigital": "0",
+    "hasTable": "0",
+    "productTypeName": "制成品",
+    "descript": "制成品",
+    "lastUpdatedStamp": "2019-03-17 11:39:38",
+    "createdStamp": "2019-03-17 10:39:38",
+    "version": "v1.0.0"
+  },
+  "12": {
+    "productTypeId": "12",
+    "parentTypeId": "1",
+    "isPhysical": "0",
+    "isDigital": "0",
+    "hasTable": "0",
+    "productTypeName": "原材料",
+    "descript": "原材料",
+    "lastUpdatedStamp": "2019-03-17 11:39:38",
+    "createdStamp": "2019-03-17 10:39:38",
+    "version": "v1.0.0"
+  },
+  "13": {
+    "productTypeId": "13",
+    "parentTypeId": "1",
+    "isPhysical": "0",
+    "isDigital": "0",
+    "hasTable": "0",
+    "productTypeName": "半成品",
+    "descript": "半成品",
+    "lastUpdatedStamp": "2019-03-17 11:39:38",
+    "createdStamp": "2019-03-17 10:39:38",
+    "version": "v1.0.0"
+  },
+  "14": {
+    "productTypeId": "14",
+    "parentTypeId": "1",
+    "isPhysical": "0",
+    "isDigital": "0",
+    "hasTable": "0",
+    "productTypeName": "数字产品",
+    "descript": "数字产品",
+    "lastUpdatedStamp": "2019-03-17 11:39:38",
+    "createdStamp": "2019-03-17 10:39:38",
+    "version": "v1.0.0"
+  }
+}

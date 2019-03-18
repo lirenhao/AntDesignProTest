@@ -4,10 +4,7 @@ export default {
   namespace: 'productType',
 
   state: {
-    data: {
-      list: [],
-      pagination: {},
-    },
+    data: [],
   },
 
   effects: {

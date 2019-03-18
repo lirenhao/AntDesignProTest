@@ -1,0 +1,29 @@
+{
+  "1": {
+    "productCategoryTypeId": "1",
+    "parentTypeId": "",
+    "hasTable": "0",
+    "description": " 产品用途类别",
+    "lastUpdatedStamp": "2019-03-17 11:39:38",
+    "createdStamp": "2019-03-17 10:39:38",
+    "version": "v1.0.0"
+  },
+  "2": {
+    "productCategoryTypeId": "2",
+    "parentTypeId": "",
+    "hasTable": "0",
+    "description": " 产品行业类别",
+    "lastUpdatedStamp": "2019-03-17 11:39:38",
+    "createdStamp": "2019-03-17 10:39:38",
+    "version": "v1.0.0"
+  },
+  "3": {
+    "productCategoryTypeId": "3",
+    "parentTypeId": "",
+    "hasTable": "0",
+    "description": " 产品材料类别",
+    "lastUpdatedStamp": "2019-03-17 11:39:38",
+    "createdStamp": "2019-03-17 10:39:38",
+    "version": "v1.0.0"
+  }
+}

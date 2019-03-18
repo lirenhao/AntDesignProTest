@@ -1,0 +1,83 @@
+{
+  "1": {
+    "productFeagureTypeId": "1",
+    "parentTypeId": "",
+    "hasTable": "0",
+    "description": "产品质量",
+    "lastUpdatedStamp": "2019-03-17 11:39:38",
+    "createdStamp": "2019-03-17 10:39:38",
+    "version": "v1.0.0"
+  },
+  "2": {
+    "productFeagureTypeId": "2",
+    "parentTypeId": "",
+    "hasTable": "0",
+    "description": "颜色",
+    "lastUpdatedStamp": "2019-03-17 11:39:38",
+    "createdStamp": "2019-03-17 10:39:38",
+    "version": "v1.0.0"
+  },
+  "3": {
+    "productFeagureTypeId": "3",
+    "parentTypeId": "",
+    "hasTable": "0",
+    "description": "尺寸（指定数目）",
+    "lastUpdatedStamp": "2019-03-17 11:39:38",
+    "createdStamp": "2019-03-17 10:39:38",
+    "version": "v1.0.0"
+  },
+  "4": {
+    "productFeagureTypeId": "4",
+    "parentTypeId": "",
+    "hasTable": "0",
+    "description": "大小",
+    "lastUpdatedStamp": "2019-03-17 11:39:38",
+    "createdStamp": "2019-03-17 10:39:38",
+    "version": "v1.0.0"
+  },
+  "5": {
+    "productFeagureTypeId": "5",
+    "parentTypeId": "",
+    "hasTable": "0",
+    "description": "商标",
+    "lastUpdatedStamp": "2019-03-17 11:39:38",
+    "createdStamp": "2019-03-17 10:39:38",
+    "version": "v1.0.0"
+  },
+  "6": {
+    "productFeagureTypeId": "6",
+    "parentTypeId": "",
+    "hasTable": "0",
+    "description": "软件特征",
+    "lastUpdatedStamp": "2019-03-17 11:39:38",
+    "createdStamp": "2019-03-17 10:39:38",
+    "version": "v1.0.0"
+  },
+  "7": {
+    "productFeagureTypeId": "7",
+    "parentTypeId": "",
+    "hasTable": "0",
+    "description": "硬件特征",
+    "lastUpdatedStamp": "2019-03-17 11:39:38",
+    "createdStamp": "2019-03-17 10:39:38",
+    "version": "v1.0.0"
+  },
+  "8": {
+    "productFeagureTypeId": "8",
+    "parentTypeId": "",
+    "hasTable": "0",
+    "description": "付款特征",
+    "lastUpdatedStamp": "2019-03-17 11:39:38",
+    "createdStamp": "2019-03-17 10:39:38",
+    "version": "v1.0.0"
+  },
+  "9": {
+    "productFeagureTypeId": "9",
+    "parentTypeId": "",
+    "hasTable": "0",
+    "description": "其他特征",
+    "lastUpdatedStamp": "2019-03-17 11:39:38",
+    "createdStamp": "2019-03-17 10:39:38",
+    "version": "v1.0.0"
+  }
+}

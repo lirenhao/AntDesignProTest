@@ -1,8 +1,19 @@
 import { parse } from 'url';
 
+const objToTree = (root, data, id, pId) => {
+  const keys =  Object.keys(data)
+    .filter(key => data[key][pId] === root[id])
+  if(keys.length > 0) {
+    // eslint-disable-next-line no-param-reassign
+    root.children = []
+    keys.forEach(key => root.children.push(objToTree(data[key], data, id, pId)))
+  }
+  return root
+}
+
 const productType = [
   {
-    productTypeId: 1, 
+    productTypeId: '1', 
     parentTypeId: '', 
     isPhysical: '0', 
     isDigital: '0', 
@@ -14,9 +25,8 @@ const productType = [
     version: 'v1.0.0',
     children: [
       {
-        key: 11,
-        productTypeId: 11, 
-        parentTypeId: 1, 
+        productTypeId: '11', 
+        parentTypeId: '1', 
         isPhysical: '0', 
         isDigital: '0', 
         hasTable: '0', 
@@ -27,9 +37,8 @@ const productType = [
         version: 'v1.0.0',
       },
       {
-        key: 12,
-        productTypeId: 12, 
-        parentTypeId: 1, 
+        productTypeId: '12', 
+        parentTypeId: '1', 
         isPhysical: '0', 
         isDigital: '0', 
         hasTable: '0', 
@@ -40,9 +49,8 @@ const productType = [
         version: 'v1.0.0',
       },
       {
-        key: 13,
-        productTypeId: 13, 
-        parentTypeId: 1, 
+        productTypeId: '13', 
+        parentTypeId: '1', 
         isPhysical: '0', 
         isDigital: '0', 
         hasTable: '0', 
@@ -53,9 +61,8 @@ const productType = [
         version: 'v1.0.0',
       },
       {
-        key: 14,
-        productTypeId: 14, 
-        parentTypeId: 1, 
+        productTypeId: '14', 
+        parentTypeId: '1', 
         isPhysical: '0', 
         isDigital: '0', 
         hasTable: '0', 
@@ -68,7 +75,7 @@ const productType = [
     ],
   },
   {
-    productTypeId: 2, 
+    productTypeId: '2', 
     parentTypeId: '', 
     isPhysical: '0', 
     isDigital: '0', 
@@ -80,7 +87,7 @@ const productType = [
     version: 'v1.0.0',
   },
   {
-    productTypeId: 3, 
+    productTypeId: '3', 
     parentTypeId: '', 
     isPhysical: '0', 
     isDigital: '0', 
@@ -836,7 +843,7 @@ function getProductPricePurpose(req, res, u) {
 }
 
 export default {
-  'GET /api/productType': getProductType,
+  'GET /api/productType': objToTree({productTypeId: ''}, productType, 'productTypeId', 'parentTypeId').children,
   'POST /api/productType': postProductType,
   'GET /api/product': getProduct,
   'POST /api/product': postProduct,
