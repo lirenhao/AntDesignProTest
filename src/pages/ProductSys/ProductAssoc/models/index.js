@@ -2,7 +2,7 @@ import { queryProductAssocType, addProductAssocType } from '@/services/api';
 import { message } from 'antd';
 
 export default {
-  namespace: 'productAssocType',
+  namespace: 'productAssoc',
 
   state: {
     data: {

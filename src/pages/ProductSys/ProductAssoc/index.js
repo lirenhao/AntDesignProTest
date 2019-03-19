@@ -1,153 +1,123 @@
 import React from 'react'
 import { connect } from 'dva'
 import {
+  Layout,
   Card,
-  Table,
+  Tree,
   Form,
-  Row,
-  Col,
   Input,
-  Select,
-  Button,
-  Divider,
 } from 'antd'
 import PageHeaderWrapper from '@/components/PageHeaderWrapper'
-import Create from './Create'
+import CategoryForm from './CategoryForm'
+import FeatureForm from './FeatureForm'
 
-import styles from '../table.less'
+import styles from './index.less'
 
-@connect(({ productAssocType, loading }) => ({
-  productAssocType,
+@connect(({ productAssoc, loading }) => ({
+  productAssoc,
   loading: loading.models.product,
 }))
 @Form.create()
 class Product extends React.Component {
 
   state = {
-    isCreateShow: false
+    selectedKeys: ["1-1"],
   }
 
-  columns = [
-    {
-      title: '描述',
-      dataIndex: 'description',
-    },
-    {
-      title: '是否有表',
-      dataIndex: 'isTable',
-      render(val) {
-        return val === '0'? '无': '有';
-      },
-    },
-    {
-      title: '最后修改时间',
-      dataIndex: 'lastUpdatedStamp',
-    },
-    {
-      title: '创建时间',
-      dataIndex: 'createdStamp',
-    },
-    {
-      title: '版本',
-      dataIndex: 'version',
-    },
-    {
-      title: '操作',
-      render: (text, record) => (
-        <React.Fragment>
-          <a onClick={() => this.handleRemove(true, record)}>删除</a>
-          <Divider type="vertical" />
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>修改</a>
-        </React.Fragment>
-      ),
-    },
-  ]
-
-  componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'productAssocType/fetch',
-    });
+  handleTreeSelect = (selectedKeys, e) => {
+    console.log(selectedKeys, e)
+    if(e.selected) {
+      this.setState({ selectedKeys }) 
+    }
   }
 
-  handleAddModal = (visible) => {
-    this.setState({isCreateShow: visible})
-  }
-
-  handleAddForm = (values) => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'productAssocType/submitAddForm',
-      payload: values,
-      callback: () => this.handleAddModal(false)
-    });
+  handleRightClick = (e) => {
+    console.log(e)
   }
 
   render() {
     const {
-      loading,
-      productAssocType: {
-        data,
-      },
-      form: {
-        getFieldDecorator
-      },
+      form: { getFieldDecorator },
     } = this.props
-    const { isCreateShow } = this.state
+    const { selectedKeys } = this.state
 
     return (
-      <PageHeaderWrapper title="产品">
-        <Card bordered={false}>
-          <div className={styles.tableList}>
-            <div className={styles.tableListForm}>
-              <Form onSubmit={this.handleSearch} layout="inline">
-                <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-                  <Col md={8} sm={24}>
-                    <Form.Item label="产品类型">
-                      {getFieldDecorator('productType')(
-                        <Select placeholder="请选择" style={{ width: '100%' }}>
-                          <Select.Option value="0">无</Select.Option>
-                          <Select.Option value="1">有</Select.Option>
-                        </Select>
-                      )}
-                    </Form.Item>
-                  </Col>
-                  <Col md={8} sm={24}>
-                    <Form.Item label="产品名称">
-                      {getFieldDecorator('productName')(<Input placeholder="请输入" />)}
-                    </Form.Item>
-                  </Col>
-                  <Col md={8} sm={24}>
-                    <span className={styles.submitButtons}>
-                      <Button type="primary" htmlType="submit">
-                        查询
-                      </Button>
-                      <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
-                        重置
-                      </Button>
-                    </span>
-                  </Col>
-                </Row>
-              </Form>
-            </div>
-            <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleAddModal(true)}>
-                新建
-              </Button>
-            </div>
-            <Table
-              loading={loading}
-              dataSource={data.list}
-              pagination={data.pagination}
-              columns={this.columns}
-            />
-          </div>
-        </Card>
-        <Create 
-          visible={isCreateShow} 
-          hideModal={() => this.handleAddModal(false)} 
-          handleFormSubmit={this.handleAddForm}
-        />
+      <PageHeaderWrapper title="产品关联">
+        <Layout>
+          <Layout.Sider theme="light" width="200" className={styles.fixSiderBar}>
+            <Card bordered={false}>
+              <Input.Search style={{ marginBottom: 8 }} placeholder="Search" />
+              <Tree 
+                showLine
+                blockNode
+                defaultExpandAll
+                selectedKeys={selectedKeys}
+                onSelect={this.handleTreeSelect}
+                onRightClick={this.handleRightClick}
+              >
+                <Tree.TreeNode key="1" title="自由套餐">
+                  <Tree.TreeNode key="1-1" title="产品11"></Tree.TreeNode>
+                </Tree.TreeNode>
+                <Tree.TreeNode key="2" title="套餐A">
+                  <Tree.TreeNode key="2-1" title="产品21"></Tree.TreeNode>
+                </Tree.TreeNode>
+                <Tree.TreeNode key="3" title="套餐B">
+                  <Tree.TreeNode key="3-1" title="产品31"></Tree.TreeNode>
+                </Tree.TreeNode>
+              </Tree>
+            </Card>
+          </Layout.Sider>
+          <Layout.Content>
+            <Card title="产品类别">
+              {getFieldDecorator('members', {
+                initialValue: [{
+                  key: '1',
+                  workId: '00001',
+                  name: 'John Brown',
+                  department: 'New York No. 1 Lake Park',
+                },
+                {
+                  key: '2',
+                  workId: '00002',
+                  name: 'Jim Green',
+                  department: 'London No. 1 Lake Park',
+                },],
+              })(<CategoryForm />)}
+            </Card>
+            <Card title="产品特征">
+              {getFieldDecorator('members', {
+                initialValue: [{
+                  key: '1',
+                  workId: '00001',
+                  name: 'John Brown',
+                  department: 'New York No. 1 Lake Park',
+                },
+                {
+                  key: '2',
+                  workId: '00002',
+                  name: 'Jim Green',
+                  department: 'London No. 1 Lake Park',
+                },],
+              })(<FeatureForm />)}
+            </Card>
+            <Card title="产品价格">
+              {getFieldDecorator('members', {
+                initialValue: [{
+                  key: '1',
+                  workId: '00001',
+                  name: 'John Brown',
+                  department: 'New York No. 1 Lake Park',
+                },
+                {
+                  key: '2',
+                  workId: '00002',
+                  name: 'Jim Green',
+                  department: 'London No. 1 Lake Park',
+                },],
+              })(<FeatureForm />)}
+            </Card>
+          </Layout.Content>
+        </Layout>
       </PageHeaderWrapper>
     )
   }

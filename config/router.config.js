@@ -320,14 +320,14 @@ export default [
             ]
           },
           {
-            name: 'productAssoc',
-            path: '/productSys/productAssoc',
-            component: './ProductSys/ProductAssoc',
-          },
-          {
             name: 'productAssocType',
             path: '/productSys/productAssocType',
             component: './ProductSys/ProductAssocType',
+          },
+          {
+            name: 'productAssoc',
+            path: '/productSys/productAssoc',
+            component: './ProductSys/ProductAssoc',
           },
           {
             name: 'productCategoryType',
