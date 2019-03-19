@@ -8,7 +8,7 @@ import {
 } from 'antd'
 
 @Form.create()
-class ProductCreate extends React.Component {
+class Create extends React.Component {
 
   handleSubmit = e => {
     const { handleFormSubmit, form } = this.props;
@@ -152,4 +152,4 @@ class ProductCreate extends React.Component {
   }
 }
 
-export default ProductCreate;
+export default Create;
