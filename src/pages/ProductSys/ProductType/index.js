@@ -111,7 +111,7 @@ class ProductType extends React.Component {
               <Button icon="plus" type="primary" onClick={() => this.handleAddModal(true)}>
                 新建
               </Button>
-              <Button icon="plus" type="primary" onClick={() => this.handleUpdateModal(true)}>
+              <Button icon="drag" type="primary" onClick={() => this.handleUpdateModal(true)}>
                 排序
               </Button>
             </div>

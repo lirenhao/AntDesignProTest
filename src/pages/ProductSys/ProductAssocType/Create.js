@@ -3,8 +3,7 @@ import {
   Modal,
   Form,
   Input,
-  DatePicker,
-  Select,
+  Radio,
 } from 'antd'
 
 @Form.create()
@@ -51,100 +50,30 @@ class ProductCreate extends React.Component {
         onCancel={hideModal}
       >
         <Form>
-          <Form.Item {...formItemLayout} label='产品名称'>
-            {getFieldDecorator('productName', {
-              rules: [
-                {
-                  required: true,
-                  message: '请输入产品名称',
-                },
-              ],
-              })(<Input placeholder='请输入' />)}
-          </Form.Item>
-          <Form.Item {...formItemLayout} label="产品类型">
-            {getFieldDecorator('payAccount', {
-              rules: [{ required: true, message: '请选择产品类型' }],
-            })(
-              <Select placeholder="请选择">
-                <Select.Option value="1">实物</Select.Option>
-                <Select.Option value="2">服务</Select.Option>
-                <Select.Option value="3">虚拟产品</Select.Option>
-              </Select>
-            )}
-          </Form.Item>
-          <Form.Item {...formItemLayout} label='introductionDate'>
-            {getFieldDecorator('introductionDate', {
-              rules: [
-                {
-                  required: true,
-                  message: '请选择时间',
-                },
-              ],
-              })(<DatePicker 
-                style={{ width: '100%' }}
-                placeholder='选择时间' 
-              />)}
-          </Form.Item>
-          <Form.Item {...formItemLayout} label='relaseDate'>
-            {getFieldDecorator('relaseDate', {
-              rules: [
-                {
-                  required: true,
-                  message: '请选择时间',
-                },
-              ],
-              })(<DatePicker 
-                style={{ width: '100%' }}
-                placeholder='选择时间' 
-              />)}
-          </Form.Item>
-          <Form.Item {...formItemLayout} label='supportDiscontinuationDate'>
-            {getFieldDecorator('supportDiscontinuationDate', {
-              rules: [
-                {
-                  required: true,
-                  message: '请选择时间',
-                },
-              ],
-              })(<DatePicker 
-                style={{ width: '100%' }}
-                placeholder='选择时间' 
-              />)}
-          </Form.Item>
-          <Form.Item {...formItemLayout} label='salesDiscontinuationDate'>
-            {getFieldDecorator('salesDiscontinuationDate', {
-              rules: [
-                {
-                  required: true,
-                  message: '请选择时间',
-                },
-              ],
-              })(<DatePicker 
-                style={{ width: '100%' }}
-                placeholder='选择时间' 
-              />)}
-          </Form.Item>
-          <Form.Item {...formItemLayout} label='salesDiscWhenNotAvail'>
-            {getFieldDecorator('salesDiscWhenNotAvail', {
-              })(<Input placeholder='请输入' />)}
-          </Form.Item>
-          <Form.Item {...formItemLayout} label='InternalName'>
-            {getFieldDecorator('InternalName', {
-              })(<Input placeholder='请输入' />)}
-          </Form.Item>
-          <Form.Item {...formItemLayout} label='comments'>
-            {getFieldDecorator('comments', {
-              })(<Input placeholder='请输入' />)}
-          </Form.Item>
           <Form.Item {...formItemLayout} label='描述'>
             {getFieldDecorator('description', {
-            })(
-              <Input.TextArea
-                style={{ minHeight: 32 }}
-                placeholder='请输入'
-                rows={3}
-              />
-            )}
+              rules: [
+                {
+                  required: true,
+                  message: '请输入描述',
+                },
+              ],
+              })(<Input placeholder='请输入' />)}
+          </Form.Item>
+          <Form.Item {...formItemLayout} label='是否有表'>
+            {getFieldDecorator('hasTable', {
+              rules: [
+                {
+                  required: true,
+                  message: '请输入选择',
+                },
+              ],
+              })(
+                <Radio.Group>
+                  <Radio value="0">无</Radio>
+                  <Radio value="1">有</Radio>
+                </Radio.Group>
+              )}
           </Form.Item>
         </Form>
       </Modal>

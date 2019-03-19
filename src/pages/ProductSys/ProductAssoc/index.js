@@ -89,13 +89,47 @@ class Product extends React.Component {
       productAssocType: {
         data,
       },
+      form: {
+        getFieldDecorator
+      },
     } = this.props
     const { isCreateShow } = this.state
 
     return (
-      <PageHeaderWrapper title="产品关联类型">
+      <PageHeaderWrapper title="产品">
         <Card bordered={false}>
           <div className={styles.tableList}>
+            <div className={styles.tableListForm}>
+              <Form onSubmit={this.handleSearch} layout="inline">
+                <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+                  <Col md={8} sm={24}>
+                    <Form.Item label="产品类型">
+                      {getFieldDecorator('productType')(
+                        <Select placeholder="请选择" style={{ width: '100%' }}>
+                          <Select.Option value="0">无</Select.Option>
+                          <Select.Option value="1">有</Select.Option>
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col md={8} sm={24}>
+                    <Form.Item label="产品名称">
+                      {getFieldDecorator('productName')(<Input placeholder="请输入" />)}
+                    </Form.Item>
+                  </Col>
+                  <Col md={8} sm={24}>
+                    <span className={styles.submitButtons}>
+                      <Button type="primary" htmlType="submit">
+                        查询
+                      </Button>
+                      <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
+                        重置
+                      </Button>
+                    </span>
+                  </Col>
+                </Row>
+              </Form>
+            </div>
             <div className={styles.tableListOperator}>
               <Button icon="plus" type="primary" onClick={() => this.handleAddModal(true)}>
                 新建
@@ -104,7 +138,7 @@ class Product extends React.Component {
             <Table
               loading={loading}
               dataSource={data.list}
-              pagination={false}
+              pagination={data.pagination}
               columns={this.columns}
             />
           </div>
