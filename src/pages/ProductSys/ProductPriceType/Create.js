@@ -6,14 +6,15 @@ import {
 } from 'antd'
 
 @Form.create()
-class ProductCreate extends React.Component {
+class Create extends React.Component {
 
   handleSubmit = e => {
-    const { handleFormSubmit, form } = this.props;
+    const { handleFormSubmit, form, info } = this.props;
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        handleFormSubmit(values);
+        handleFormSubmit({ ...info,  ...values});
+        form.resetFields();
       }
     });
   };
@@ -23,6 +24,7 @@ class ProductCreate extends React.Component {
       form: { getFieldDecorator },
       visible,
       hideModal,
+      info,
     } = this.props;
 
     const formItemLayout = {
@@ -51,6 +53,7 @@ class ProductCreate extends React.Component {
         <Form>
           <Form.Item {...formItemLayout} label='描述'>
             {getFieldDecorator('description', {
+              initialValue: info.description,
               rules: [
                 {
                   required: true,
@@ -65,4 +68,4 @@ class ProductCreate extends React.Component {
   }
 }
 
-export default ProductCreate;
+export default Create;

@@ -168,7 +168,7 @@ export default {
     // 特征类型
     featureType: {
       "1": {
-        "productFeagureTypeId": "1",
+        "productFeatureTypeId": "1",
         "parentTypeId": "",
         "hasTable": "0",
         "description": "产品质量",
@@ -177,7 +177,7 @@ export default {
         "version": "v1.0.0"
       },
       "2": {
-        "productFeagureTypeId": "2",
+        "productFeatureTypeId": "2",
         "parentTypeId": "",
         "hasTable": "0",
         "description": "颜色",
@@ -186,7 +186,7 @@ export default {
         "version": "v1.0.0"
       },
       "3": {
-        "productFeagureTypeId": "3",
+        "productFeatureTypeId": "3",
         "parentTypeId": "",
         "hasTable": "0",
         "description": "尺寸（指定数目）",
@@ -195,7 +195,7 @@ export default {
         "version": "v1.0.0"
       },
       "4": {
-        "productFeagureTypeId": "4",
+        "productFeatureTypeId": "4",
         "parentTypeId": "",
         "hasTable": "0",
         "description": "大小",
@@ -204,7 +204,7 @@ export default {
         "version": "v1.0.0"
       },
       "5": {
-        "productFeagureTypeId": "5",
+        "productFeatureTypeId": "5",
         "parentTypeId": "",
         "hasTable": "0",
         "description": "商标",
@@ -213,7 +213,7 @@ export default {
         "version": "v1.0.0"
       },
       "6": {
-        "productFeagureTypeId": "6",
+        "productFeatureTypeId": "6",
         "parentTypeId": "",
         "hasTable": "0",
         "description": "软件特征",
@@ -222,7 +222,7 @@ export default {
         "version": "v1.0.0"
       },
       "7": {
-        "productFeagureTypeId": "7",
+        "productFeatureTypeId": "7",
         "parentTypeId": "",
         "hasTable": "0",
         "description": "硬件特征",
@@ -231,7 +231,7 @@ export default {
         "version": "v1.0.0"
       },
       "8": {
-        "productFeagureTypeId": "8",
+        "productFeatureTypeId": "8",
         "parentTypeId": "",
         "hasTable": "0",
         "description": "付款特征",
@@ -240,7 +240,7 @@ export default {
         "version": "v1.0.0"
       },
       "9": {
-        "productFeagureTypeId": "9",
+        "productFeatureTypeId": "9",
         "parentTypeId": "",
         "hasTable": "0",
         "description": "其他特征",

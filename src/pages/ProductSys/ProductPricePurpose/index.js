@@ -4,6 +4,8 @@ import {
   Card,
   Table,
   Button,
+  Popconfirm,
+  Divider,
 } from 'antd'
 import PageHeaderWrapper from '@/components/PageHeaderWrapper'
 import Create from './Create'
@@ -12,12 +14,14 @@ import styles from '../table.less'
 
 @connect(({ productType, loading }) => ({
   list: productType.list,
+  info: productType.info,
   loading: loading.models.productPricePurpose,
 }))
 class ProductFeatureType extends React.Component {
 
   state = {
-    isCreateShow: false
+    isCreateShow: false,
+    isUpdateShow: false,
   }
 
   columns = [
@@ -36,6 +40,18 @@ class ProductFeatureType extends React.Component {
     {
       title: '版本',
       dataIndex: 'version',
+    },
+    {
+      title: '操作',
+      render: (text, record) => (
+        <React.Fragment>
+          <Popconfirm title="是否要删除此行？" onConfirm={() => this.handleRemove(record)}>
+            <a>删除</a>
+          </Popconfirm>
+          <Divider type="vertical" />
+          <a onClick={() => this.handleUpdate(record)}>修改</a>
+        </React.Fragment>
+      ),
     },
   ]
 
@@ -56,32 +72,72 @@ class ProductFeatureType extends React.Component {
   handleCreateForm = (values) => {
     const { dispatch, list } = this.props;
     dispatch({
-      type: 'productType/save',
-      payload:{
+      type: 'productType/add',
+      payload: {
         type: 'pricePurpose',
         payload: {
           ...values,
           key: (list.length + 1).toString(),
-          productAssocTypeId: (list.length + 1).toString(),
+          productPricePurposeId: (list.length + 1).toString(),
           parentTypeId: "",
         },
       },
+      callback: () => this.handleCreateModal(false),
     });
+  }
+
+  handleRemove = (record) => {
+    const { dispatch } = this.props;
     dispatch({
-      type: 'productType/find',
+      type: 'productType/remove',
       payload: {
         type: 'pricePurpose',
+        id: record.productPricePurposeId
       }
     });
-    this.handleCreateModal(false)
+  }
+
+  handleUpdate = (record) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'productType/findOne',
+      payload: {
+        type: 'pricePurpose',
+        id: record.productPricePurposeId
+      }
+    });
+    this.handleUpdateModal(true);
+  }
+
+  handleUpdateModal = (visible) => {
+    this.setState({isUpdateShow: visible})
+  }
+
+  handleUpdateForm = (values) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'productType/edit',
+      payload: {
+        type: 'pricePurpose',
+        payload: { 
+          ...values,
+          key: values.productPricePurposeId 
+        },
+      },
+      callback: () => this.handleUpdateModal(false),
+    });
   }
 
   render() {
     const {
       loading,
       list,
+      info,
     } = this.props
-    const { isCreateShow } = this.state
+    const {
+      isCreateShow,
+      isUpdateShow
+    } = this.state
 
     return (
       <PageHeaderWrapper title="产品价格用途">
@@ -104,6 +160,13 @@ class ProductFeatureType extends React.Component {
           visible={isCreateShow} 
           hideModal={() => this.handleCreateModal(false)} 
           handleFormSubmit={this.handleCreateForm}
+          info={{}}
+        />
+        <Create 
+          visible={isUpdateShow} 
+          hideModal={() => this.handleUpdateModal(false)} 
+          handleFormSubmit={this.handleUpdateForm}
+          info={info}
         />
       </PageHeaderWrapper>
     )
