@@ -4,7 +4,7 @@ import {
   Tree,
 } from 'antd'
 
-class Update extends React.Component {
+class Order extends React.Component {
 
   state = {
     gData: []
@@ -128,4 +128,4 @@ class Update extends React.Component {
   }
 }
 
-export default Update;
+export default Order;

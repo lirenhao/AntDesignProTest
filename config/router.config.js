@@ -57,39 +57,14 @@ export default [
             component: './ProductSys/ProductType',
           },
           {
-            name: 'product',
-            path: '/productSys/product',
-            hideChildrenInMenu: true,
-            routes: [
-              {
-                path: '/productSys/product',
-                component: './ProductSys/Product',
-              },
-              {
-                path: '/productSys/product/create',
-                component: './ProductSys/Product/Create',
-              }
-            ]
-          },
-          {
             name: 'productAssocType',
             path: '/productSys/productAssocType',
             component: './ProductSys/ProductAssocType',
           },
           {
-            name: 'productAssoc',
-            path: '/productSys/productAssoc',
-            component: './ProductSys/ProductAssoc',
-          },
-          {
             name: 'productCategoryType',
             path: '/productSys/productCategoryType',
             component: './ProductSys/ProductCategoryType',
-          },
-          {
-            name: 'productCategory',
-            path: '/productSys/productCategory',
-            component: './ProductSys/ProductCategory',
           },
           {
             name: 'productFeatureType',
@@ -100,11 +75,6 @@ export default [
             name: 'productFeatureIactnType',
             path: '/productSys/productFeatureIactnType',
             component: './ProductSys/ProductFeatureIactnType',
-          },
-          {
-            name: 'productFeature',
-            path: '/productSys/productFeature',
-            component: './ProductSys/ProductFeature',
           },
           {
             name: 'productFeatureApplType',
@@ -120,6 +90,36 @@ export default [
             name: 'productPricePurpose',
             path: '/productSys/productPricePurpose',
             component: './ProductSys/ProductPricePurpose',
+          },
+          {
+            name: 'product',
+            path: '/productSys/product',
+            hideChildrenInMenu: true,
+            routes: [
+              {
+                path: '/productSys/product',
+                component: './ProductSys/Product',
+              },
+              {
+                path: '/productSys/product/create',
+                component: './ProductSys/Product/Create',
+              }
+            ]
+          },
+          {
+            name: 'productCategory',
+            path: '/productSys/productCategory',
+            component: './ProductSys/ProductCategory',
+          },
+          {
+            name: 'productFeature',
+            path: '/productSys/productFeature',
+            component: './ProductSys/ProductFeature',
+          },
+          {
+            name: 'productAssoc',
+            path: '/productSys/productAssoc',
+            component: './ProductSys/ProductAssoc',
           },
         ],
       },

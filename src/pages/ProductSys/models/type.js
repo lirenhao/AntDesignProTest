@@ -382,7 +382,21 @@ export default {
     }    
   },
   effects: {
-    
+    *add({ payload, callback }, { put }) {
+      yield put({type: 'save', payload});
+      yield put({type: 'find', payload});
+      if (callback) callback();
+    },
+    *edit({ payload, callback }, { put }) {
+      yield put({type: 'update', payload});
+      yield put({type: 'find', payload});
+      if (callback) callback();
+    },
+    *remove({ payload, callback }, { put }) {
+      yield put({type: 'delete', payload});
+      yield put({type: 'find', payload});
+      if (callback) callback();
+    }
   },
   reducers: {
     tree(state, action) {

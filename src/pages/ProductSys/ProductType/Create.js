@@ -10,17 +10,19 @@ import {
 class Create extends React.Component {
 
   handleSubmit = e => {
-    const { handleFormSubmit, form } = this.props;
+    const { handleFormSubmit, form, info } = this.props;
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        handleFormSubmit(values);
+        handleFormSubmit({ ...info,  ...values});
+        form.resetFields();
       }
     });
   };
 
   render() {
     const {
+      info,
       form: { getFieldDecorator },
       visible,
       hideModal,
@@ -52,6 +54,7 @@ class Create extends React.Component {
         <Form>
           <Form.Item {...formItemLayout} label='产品类型名称'>
             {getFieldDecorator('productTypeName', {
+              initialValue: info.productTypeName,
               rules: [
                 {
                   required: true,
@@ -62,6 +65,7 @@ class Create extends React.Component {
           </Form.Item>
           <Form.Item {...formItemLayout} label='是否实物'>
             {getFieldDecorator('isPhysical', {
+              initialValue: info.isPhysical,
               rules: [
                 {
                   required: true,
@@ -77,6 +81,7 @@ class Create extends React.Component {
           </Form.Item>
           <Form.Item {...formItemLayout} label='是否虚拟'>
             {getFieldDecorator('isDigital', {
+              initialValue: info.isDigital,
               rules: [
                 {
                   required: true,
@@ -92,6 +97,7 @@ class Create extends React.Component {
           </Form.Item>
           <Form.Item {...formItemLayout} label='是否有表'>
             {getFieldDecorator('hasTable', {
+              initialValue: info.hasTable,
               rules: [
                 {
                   required: true,
@@ -107,6 +113,7 @@ class Create extends React.Component {
           </Form.Item>
           <Form.Item {...formItemLayout} label='描述'>
             {getFieldDecorator('descript', {
+              initialValue: info.descript,
             })(
               <Input.TextArea
                 style={{ minHeight: 32 }}

@@ -4,21 +4,25 @@ import {
   Card,
   Table,
   Button,
+  Popconfirm,
+  Divider,
 } from 'antd'
 import PageHeaderWrapper from '@/components/PageHeaderWrapper'
 import Create from './Create'
-import Update from './Update'
+import Order from './Order'
 
 import styles from '../table.less'
 
 @connect(({ productType, loading }) => ({
   list: productType.list,
+  info: productType.info,
   loading: loading.models.productType,
 }))
 class ProductType extends React.Component {
 
   state = {
     isCreateShow: false,
+    isOrderShow: false,
     isUpdateShow: false,
   }
 
@@ -64,6 +68,18 @@ class ProductType extends React.Component {
       title: '版本',
       dataIndex: 'version',
     },
+    {
+      title: '操作',
+      render: (text, record) => (
+        <React.Fragment>
+          <Popconfirm title="是否要删除此行？" onConfirm={() => this.handleRemove(record)}>
+            <a>删除</a>
+          </Popconfirm>
+          <Divider type="vertical" />
+          <a onClick={() => this.handleUpdate(record)}>修改</a>
+        </React.Fragment>
+      ),
+    },
   ]
 
   componentDidMount() {
@@ -80,10 +96,6 @@ class ProductType extends React.Component {
 
   handleCreateModal = (visible) => {
     this.setState({isCreateShow: visible})
-  }
-
-  handleUpdateModal = (visible) => {
-    this.setState({isUpdateShow: visible})
   }
 
   handleCreateForm = (values) => {
@@ -111,16 +123,81 @@ class ProductType extends React.Component {
     });
   }
 
-  handleUpdateForm = (values) => {
+  handleOrderModal = (visible) => {
+    this.setState({isOrderShow: visible})
+  }
+
+  handleOrderForm = (values) => {
     console.log(values)
+  }
+
+
+  handleUpdateModal = (visible) => {
+    this.setState({isUpdateShow: visible})
+  }
+
+  handleUpdateForm = (values) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'productType/update',
+      payload: {
+        type: 'type',
+        payload: values,
+      },
+    });
+    this.handleUpdateModal(false);
+    dispatch({
+      type: 'productType/tree',
+      payload: {
+        type: 'type',
+        id: 'productTypeId',
+        pId: 'parentTypeId',
+      }
+    });
+  }
+
+  handleUpdate = (record) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'productType/findOne',
+      payload: {
+        type: 'type',
+        id: record.productTypeId
+      }
+    });
+    this.handleUpdateModal(true);
+  }
+
+  handleRemove = (record) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'productType/delete',
+      payload: {
+        type: 'type',
+        id: record.productTypeId
+      }
+    });
+    dispatch({
+      type: 'productType/tree',
+      payload: {
+        type: 'type',
+        id: 'productTypeId',
+        pId: 'parentTypeId',
+      }
+    });
   }
 
   render() {
     const {
       loading,
       list,
+      info,
     } = this.props
-    const { isCreateShow, isUpdateShow } = this.state
+    const { 
+      isCreateShow, 
+      isUpdateShow,
+      isOrderShow,
+     } = this.state
     return (
       <PageHeaderWrapper title="产品类型">
         <Card bordered={false}>
@@ -129,7 +206,7 @@ class ProductType extends React.Component {
               <Button icon="plus" type="primary" onClick={() => this.handleCreateModal(true)}>
                 新建
               </Button>
-              <Button icon="drag" type="primary" onClick={() => this.handleUpdateModal(true)}>
+              <Button icon="ordered-list" type="primary" onClick={() => this.handleOrderModal(true)}>
                 排序
               </Button>
             </div>
@@ -146,11 +223,18 @@ class ProductType extends React.Component {
           visible={isCreateShow} 
           hideModal={() => this.handleCreateModal(false)} 
           handleFormSubmit={this.handleCreateForm}
+          info={{}}
         />
-        <Update 
+        <Create 
           visible={isUpdateShow} 
           hideModal={() => this.handleUpdateModal(false)} 
           handleFormSubmit={this.handleUpdateForm}
+          info={info}
+        />
+        <Order 
+          visible={isOrderShow} 
+          hideModal={() => this.handleOrderModal(false)} 
+          handleFormSubmit={this.handleOrderForm}
           dataSource={list}
         />
       </PageHeaderWrapper>
