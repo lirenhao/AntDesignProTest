@@ -106,7 +106,7 @@ class Create extends React.Component {
               )}
           </Form.Item>
           <Form.Item {...formItemLayout} label='描述'>
-            {getFieldDecorator('description', {
+            {getFieldDecorator('descript', {
             })(
               <Input.TextArea
                 style={{ minHeight: 32 }}

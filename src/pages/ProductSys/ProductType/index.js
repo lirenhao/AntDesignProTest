@@ -9,10 +9,10 @@ import PageHeaderWrapper from '@/components/PageHeaderWrapper'
 import Create from './Create'
 import Update from './Update'
 
-import styles from './index.less'
+import styles from '../table.less'
 
 @connect(({ productType, loading }) => ({
-  productType,
+  list: productType.list,
   loading: loading.models.productType,
 }))
 class ProductType extends React.Component {
@@ -69,11 +69,16 @@ class ProductType extends React.Component {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'productType/fetch',
+      type: 'productType/tree',
+      payload: {
+        type: 'type',
+        id: 'productTypeId',
+        pId: 'parentTypeId',
+      }
     });
   }
 
-  handleAddModal = (visible) => {
+  handleCreateModal = (visible) => {
     this.setState({isCreateShow: visible})
   }
 
@@ -81,12 +86,28 @@ class ProductType extends React.Component {
     this.setState({isUpdateShow: visible})
   }
 
-  handleAddForm = (values) => {
-    const { dispatch } = this.props;
+  handleCreateForm = (values) => {
+    const { list, dispatch } = this.props;
     dispatch({
-      type: 'productType/submitAddForm',
-      payload: values,
-      callback: () => this.handleAddModal(false)
+      type: 'productType/save',
+      payload: {
+        type: 'type',
+        payload: {
+          ...values,
+          key: list.length + 1,
+          productTypeId: list.length + 1,
+          parentTypeId: "",
+        },
+      },
+    });
+    this.handleCreateModal(false);
+    dispatch({
+      type: 'productType/tree',
+      payload: {
+        type: 'type',
+        id: 'productTypeId',
+        pId: 'parentTypeId',
+      }
     });
   }
 
@@ -97,18 +118,15 @@ class ProductType extends React.Component {
   render() {
     const {
       loading,
-      productType: {
-        data,
-      },
+      list,
     } = this.props
     const { isCreateShow, isUpdateShow } = this.state
-
     return (
       <PageHeaderWrapper title="产品类型">
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleAddModal(true)}>
+              <Button icon="plus" type="primary" onClick={() => this.handleCreateModal(true)}>
                 新建
               </Button>
               <Button icon="drag" type="primary" onClick={() => this.handleUpdateModal(true)}>
@@ -117,7 +135,7 @@ class ProductType extends React.Component {
             </div>
             <Table
               loading={loading}
-              dataSource={data}
+              dataSource={list}
               pagination={false}
               columns={this.columns}
               rowKey={record => record.productTypeId}
@@ -126,14 +144,14 @@ class ProductType extends React.Component {
         </Card>
         <Create 
           visible={isCreateShow} 
-          hideModal={() => this.handleAddModal(false)} 
-          handleFormSubmit={this.handleAddForm}
+          hideModal={() => this.handleCreateModal(false)} 
+          handleFormSubmit={this.handleCreateForm}
         />
         <Update 
           visible={isUpdateShow} 
           hideModal={() => this.handleUpdateModal(false)} 
           handleFormSubmit={this.handleUpdateForm}
-          dataSource={data}
+          dataSource={list}
         />
       </PageHeaderWrapper>
     )

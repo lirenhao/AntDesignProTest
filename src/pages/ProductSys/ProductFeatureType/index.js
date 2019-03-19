@@ -10,8 +10,8 @@ import Create from './Create'
 
 import styles from '../table.less'
 
-@connect(({ productFeatureType, loading }) => ({
-  productFeatureType,
+@connect(({ productType, loading }) => ({
+  list: productType.list,
   loading: loading.models.productFeatureType,
 }))
 class ProductFeatureType extends React.Component {
@@ -49,29 +49,44 @@ class ProductFeatureType extends React.Component {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'productFeatureType/fetch',
+      type: 'productType/find',
+      payload: {
+        type: 'featureType',
+      }
     });
   }
 
-  handleAddModal = (visible) => {
+  handleCreateModal = (visible) => {
     this.setState({isCreateShow: visible})
   }
 
-  handleAddForm = (values) => {
-    const { dispatch } = this.props;
+  handleCreateForm = (values) => {
+    const { dispatch, list } = this.props;
     dispatch({
-      type: 'productFeatureType/submitAddForm',
-      payload: values,
-      callback: () => this.handleAddModal(false)
+      type: 'productType/save',
+      payload:{
+        type: 'featureType',
+        payload: {
+          ...values,
+          key: list.length + 1,
+          productFeatureTypeId: list.length + 1,
+          parentTypeId: "",
+        },
+      },
     });
+    dispatch({
+      type: 'productType/find',
+      payload: {
+        type: 'featureType',
+      }
+    });
+    this.handleCreateModal(false)
   }
 
   render() {
     const {
       loading,
-      productFeatureType: {
-        data,
-      },
+      list,
     } = this.props
     const { isCreateShow } = this.state
 
@@ -80,22 +95,22 @@ class ProductFeatureType extends React.Component {
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleAddModal(true)}>
+              <Button icon="plus" type="primary" onClick={() => this.handleCreateModal(true)}>
                 新建
               </Button>
             </div>
             <Table
               loading={loading}
-              dataSource={data.list}
-              pagination={data.pagination}
+              dataSource={list}
+              pagination={false}
               columns={this.columns}
             />
           </div>
         </Card>
         <Create 
           visible={isCreateShow} 
-          hideModal={() => this.handleAddModal(false)} 
-          handleFormSubmit={this.handleAddForm}
+          hideModal={() => this.handleCreateModal(false)} 
+          handleFormSubmit={this.handleCreateForm}
         />
       </PageHeaderWrapper>
     )

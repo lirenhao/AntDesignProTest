@@ -11,8 +11,8 @@ import Create from './Create'
 
 import styles from '../table.less'
 
-@connect(({ productPriceType, loading }) => ({
-  productPriceType,
+@connect(({ productType, loading }) => ({
+  list: productType.list,
   loading: loading.models.productPriceType,
 }))
 @Form.create()
@@ -44,29 +44,44 @@ class ProductFeatureType extends React.Component {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'productPriceType/fetch',
+      type: 'productType/find',
+      payload: {
+        type: 'priceType',
+      }
     });
   }
 
-  handleAddModal = (visible) => {
+  handleCreateModal = (visible) => {
     this.setState({isCreateShow: visible})
   }
 
-  handleAddForm = (values) => {
-    const { dispatch } = this.props;
+  handleCreateForm = (values) => {
+    const { dispatch, list } = this.props;
     dispatch({
-      type: 'productPriceType/submitAddForm',
-      payload: values,
-      callback: () => this.handleAddModal(false)
+      type: 'productType/save',
+      payload:{
+        type: 'priceType',
+        payload: {
+          ...values,
+          key: list.length + 1,
+          productAssocTypeId: list.length + 1,
+          parentTypeId: "",
+        },
+      },
     });
+    dispatch({
+      type: 'productType/find',
+      payload: {
+        type: 'priceType',
+      }
+    });
+    this.handleCreateModal(false)
   }
 
   render() {
     const {
       loading,
-      productPriceType: {
-        data,
-      },
+      list,
     } = this.props
     const { isCreateShow } = this.state
 
@@ -75,13 +90,13 @@ class ProductFeatureType extends React.Component {
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleAddModal(true)}>
+              <Button icon="plus" type="primary" onClick={() => this.handleCreateModal(true)}>
                 新建
               </Button>
             </div>
             <Table
               loading={loading}
-              dataSource={data.list}
+              dataSource={list}
               pagination={false}
               columns={this.columns}
             />
@@ -89,8 +104,8 @@ class ProductFeatureType extends React.Component {
         </Card>
         <Create 
           visible={isCreateShow} 
-          hideModal={() => this.handleAddModal(false)} 
-          handleFormSubmit={this.handleAddForm}
+          hideModal={() => this.handleCreateModal(false)} 
+          handleFormSubmit={this.handleCreateForm}
         />
       </PageHeaderWrapper>
     )
