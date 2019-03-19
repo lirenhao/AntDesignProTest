@@ -45,6 +45,114 @@ export default [
           },
         ],
       },
+      // productSys
+      {
+        name: 'productSys',
+        icon: 'contacts',
+        path: '/productSys',
+        routes: [
+          {
+            name: 'productType',
+            path: '/productSys/productType',
+            component: './ProductSys/ProductType',
+          },
+          {
+            name: 'product',
+            path: '/productSys/product',
+            hideChildrenInMenu: true,
+            routes: [
+              {
+                path: '/productSys/product',
+                component: './ProductSys/Product',
+              },
+              {
+                path: '/productSys/product/create',
+                component: './ProductSys/Product/Create',
+              }
+            ]
+          },
+          {
+            name: 'productAssocType',
+            path: '/productSys/productAssocType',
+            component: './ProductSys/ProductAssocType',
+          },
+          {
+            name: 'productAssoc',
+            path: '/productSys/productAssoc',
+            component: './ProductSys/ProductAssoc',
+          },
+          {
+            name: 'productCategoryType',
+            path: '/productSys/productCategoryType',
+            component: './ProductSys/ProductCategoryType',
+          },
+          {
+            name: 'productCategory',
+            path: '/productSys/productCategory',
+            component: './ProductSys/ProductCategory',
+          },
+          {
+            name: 'productFeatureType',
+            path: '/productSys/productFeatureType',
+            component: './ProductSys/ProductFeatureType',
+          },
+          {
+            name: 'productFeatureIactnType',
+            path: '/productSys/productFeatureIactnType',
+            component: './ProductSys/ProductFeatureIactnType',
+          },
+          {
+            name: 'productFeature',
+            path: '/productSys/productFeature',
+            component: './ProductSys/ProductFeature',
+          },
+          {
+            name: 'productFeatureApplType',
+            path: '/productSys/productFeatureApplType',
+            component: './ProductSys/ProductFeatureApplType',
+          },
+          {
+            name: 'productPriceType',
+            path: '/productSys/productPriceType',
+            component: './ProductSys/ProductPriceType',
+          },
+          {
+            name: 'productPricePurpose',
+            path: '/productSys/productPricePurpose',
+            component: './ProductSys/ProductPricePurpose',
+          },
+        ],
+      },
+      // test
+      {
+        name: 'test',
+        icon: 'contacts',
+        path: '/test',
+        routes: [
+          {
+            name: 'clue',
+            path: '/test/clue',
+            component: './Test/Clue',
+            hideChildrenInMenu: true,
+            routes: [
+              {
+                path: '/test/clue',
+                component: './Test/Clue/List',
+              },
+              {
+                name: 'sign',
+                path: '/test/clue/sign',
+                component: './Test/Clue/Sign',
+              },
+            ],
+          },
+          {
+            name: 'pending',
+            path: '/test/pending',
+            component: './Test/Work/Pending/PendingList',
+          },
+        ]
+      },
       // forms
       {
         path: '/form',
@@ -165,49 +273,49 @@ export default [
           },
         ],
       },
-      // {
-      //   name: 'result',
-      //   icon: 'check-circle-o',
-      //   path: '/result',
-      //   routes: [
-      //     // result
-      //     {
-      //       path: '/result/success',
-      //       name: 'success',
-      //       component: './Result/Success',
-      //     },
-      //     { path: '/result/fail', name: 'fail', component: './Result/Error' },
-      //   ],
-      // },
-      // {
-      //   name: 'exception',
-      //   icon: 'warning',
-      //   path: '/exception',
-      //   routes: [
-      //     // exception
-      //     {
-      //       path: '/exception/403',
-      //       name: 'not-permission',
-      //       component: './Exception/403',
-      //     },
-      //     {
-      //       path: '/exception/404',
-      //       name: 'not-find',
-      //       component: './Exception/404',
-      //     },
-      //     {
-      //       path: '/exception/500',
-      //       name: 'server-error',
-      //       component: './Exception/500',
-      //     },
-      //     {
-      //       path: '/exception/trigger',
-      //       name: 'trigger',
-      //       hideInMenu: true,
-      //       component: './Exception/TriggerException',
-      //     },
-      //   ],
-      // },
+      {
+        name: 'result',
+        icon: 'check-circle-o',
+        path: '/result',
+        routes: [
+          // result
+          {
+            path: '/result/success',
+            name: 'success',
+            component: './Result/Success',
+          },
+          { path: '/result/fail', name: 'fail', component: './Result/Error' },
+        ],
+      },
+      {
+        name: 'exception',
+        icon: 'warning',
+        path: '/exception',
+        routes: [
+          // exception
+          {
+            path: '/exception/403',
+            name: 'not-permission',
+            component: './Exception/403',
+          },
+          {
+            path: '/exception/404',
+            name: 'not-find',
+            component: './Exception/404',
+          },
+          {
+            path: '/exception/500',
+            name: 'server-error',
+            component: './Exception/500',
+          },
+          {
+            path: '/exception/trigger',
+            name: 'trigger',
+            hideInMenu: true,
+            component: './Exception/TriggerException',
+          },
+        ],
+      },
       {
         name: 'account',
         icon: 'user',
@@ -262,112 +370,6 @@ export default [
                 component: './Account/Settings/NotificationView',
               },
             ],
-          },
-        ],
-      },
-      {
-        name: 'test',
-        icon: 'contacts',
-        path: '/test',
-        routes: [
-          {
-            name: 'clue',
-            path: '/test/clue',
-            component: './Test/Clue',
-            hideChildrenInMenu: true,
-            routes: [
-              {
-                path: '/test/clue',
-                component: './Test/Clue/List',
-              },
-              {
-                name: 'sign',
-                path: '/test/clue/sign',
-                component: './Test/Clue/Sign',
-              },
-            ],
-          },
-          {
-            name: 'pending',
-            path: '/test/pending',
-            component: './Test/Work/Pending/PendingList',
-          },
-        ]
-      },
-      {
-        name: 'productSys',
-        icon: 'contacts',
-        path: '/productSys',
-        routes: [
-          {
-            name: 'productType',
-            path: '/productSys/productType',
-            component: './ProductSys/ProductType',
-          },
-          {
-            name: 'product',
-            path: '/productSys/product',
-            hideChildrenInMenu: true,
-            routes: [
-              {
-                path: '/productSys/product',
-                component: './ProductSys/Product',
-              },
-              {
-                path: '/productSys/product/create',
-                component: './ProductSys/Product/Create',
-              }
-            ]
-          },
-          {
-            name: 'productAssocType',
-            path: '/productSys/productAssocType',
-            component: './ProductSys/ProductAssocType',
-          },
-          {
-            name: 'productAssoc',
-            path: '/productSys/productAssoc',
-            component: './ProductSys/ProductAssoc',
-          },
-          {
-            name: 'productCategoryType',
-            path: '/productSys/productCategoryType',
-            component: './ProductSys/ProductCategoryType',
-          },
-          {
-            name: 'productCategory',
-            path: '/productSys/productCategory',
-            component: './ProductSys/ProductCategory',
-          },
-          {
-            name: 'productFeatureType',
-            path: '/productSys/productFeatureType',
-            component: './ProductSys/ProductFeatureType',
-          },
-          {
-            name: 'productFeatureIactnType',
-            path: '/productSys/productFeatureIactnType',
-            component: './ProductSys/ProductFeatureIactnType',
-          },
-          {
-            name: 'productFeature',
-            path: '/productSys/productFeature',
-            component: './ProductSys/ProductFeature',
-          },
-          {
-            name: 'productFeatureApplType',
-            path: '/productSys/productFeatureApplType',
-            component: './ProductSys/ProductFeatureApplType',
-          },
-          {
-            name: 'productPriceType',
-            path: '/productSys/productPriceType',
-            component: './ProductSys/ProductPriceType',
-          },
-          {
-            name: 'productPricePurpose',
-            path: '/productSys/productPricePurpose',
-            component: './ProductSys/ProductPricePurpose',
           },
         ],
       },

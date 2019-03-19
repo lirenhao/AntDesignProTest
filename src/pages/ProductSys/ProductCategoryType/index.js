@@ -87,7 +87,7 @@ class Product extends React.Component {
             <Table
               loading={loading}
               dataSource={data.list}
-              pagination={data.pagination}
+              pagination={false}
               columns={this.columns}
             />
           </div>

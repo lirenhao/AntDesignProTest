@@ -4,12 +4,7 @@ import {
   Card,
   Table,
   Form,
-  Row,
-  Col,
-  Input,
-  Select,
   Button,
-  Divider,
 } from 'antd'
 import PageHeaderWrapper from '@/components/PageHeaderWrapper'
 import Create from './Create'
@@ -44,16 +39,6 @@ class ProductFeatureType extends React.Component {
       title: '版本',
       dataIndex: 'version',
     },
-    {
-      title: '操作',
-      render: (text, record) => (
-        <React.Fragment>
-          <a onClick={() => this.handleRemove(true, record)}>删除</a>
-          <Divider type="vertical" />
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>修改</a>
-        </React.Fragment>
-      ),
-    },
   ]
 
   componentDidMount() {
@@ -82,9 +67,6 @@ class ProductFeatureType extends React.Component {
       productPriceType: {
         data,
       },
-      form: {
-        getFieldDecorator
-      },
     } = this.props
     const { isCreateShow } = this.state
 
@@ -92,37 +74,6 @@ class ProductFeatureType extends React.Component {
       <PageHeaderWrapper title="产品价格类型">
         <Card bordered={false}>
           <div className={styles.tableList}>
-            <div className={styles.tableListForm}>
-              <Form onSubmit={this.handleSearch} layout="inline">
-                <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-                  <Col md={8} sm={24}>
-                    <Form.Item label="产品类型">
-                      {getFieldDecorator('productPriceTypeType')(
-                        <Select placeholder="请选择" style={{ width: '100%' }}>
-                          <Select.Option value="0">无</Select.Option>
-                          <Select.Option value="1">有</Select.Option>
-                        </Select>
-                      )}
-                    </Form.Item>
-                  </Col>
-                  <Col md={8} sm={24}>
-                    <Form.Item label="产品名称">
-                      {getFieldDecorator('productPriceTypeName')(<Input placeholder="请输入" />)}
-                    </Form.Item>
-                  </Col>
-                  <Col md={8} sm={24}>
-                    <span className={styles.submitButtons}>
-                      <Button type="primary" htmlType="submit">
-                        查询
-                      </Button>
-                      <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
-                        重置
-                      </Button>
-                    </span>
-                  </Col>
-                </Row>
-              </Form>
-            </div>
             <div className={styles.tableListOperator}>
               <Button icon="plus" type="primary" onClick={() => this.handleAddModal(true)}>
                 新建
@@ -131,7 +82,7 @@ class ProductFeatureType extends React.Component {
             <Table
               loading={loading}
               dataSource={data.list}
-              pagination={data.pagination}
+              pagination={false}
               columns={this.columns}
             />
           </div>

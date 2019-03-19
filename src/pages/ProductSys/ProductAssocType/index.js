@@ -5,7 +5,6 @@ import {
   Table,
   Form,
   Button,
-  Divider,
 } from 'antd'
 import PageHeaderWrapper from '@/components/PageHeaderWrapper'
 import Create from './Create'
@@ -46,16 +45,6 @@ class Product extends React.Component {
     {
       title: '版本',
       dataIndex: 'version',
-    },
-    {
-      title: '操作',
-      render: (text, record) => (
-        <React.Fragment>
-          <a onClick={() => this.handleRemove(true, record)}>删除</a>
-          <Divider type="vertical" />
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>修改</a>
-        </React.Fragment>
-      ),
     },
   ]
 
