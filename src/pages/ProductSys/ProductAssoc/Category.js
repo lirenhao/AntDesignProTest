@@ -1,5 +1,16 @@
-import React, { PureComponent, Fragment } from 'react';
-import { Table, Button, Input, message, Popconfirm, Divider } from 'antd';
+import React, {
+  PureComponent,
+  Fragment
+} from 'react';
+import {
+  Table,
+  Button,
+  Input,
+  message,
+  Popconfirm,
+  Divider
+} from 'antd';
+import isEqual from 'lodash/isEqual';
 
 class CategoryForm extends PureComponent {
   index = 0;
@@ -17,7 +28,10 @@ class CategoryForm extends PureComponent {
     };
   }
 
-  static getDerivedStateFromProps(nextProps) {
+  static getDerivedStateFromProps(nextProps, preState) {
+    if (isEqual(nextProps.value, preState.value)) {
+      return null;
+    }
     return {
       data: nextProps.value,
       value: nextProps.value,
@@ -94,8 +108,8 @@ class CategoryForm extends PureComponent {
         return;
       }
       const target = this.getRowByKey(key) || {};
-      if (!target.workId || !target.name || !target.department) {
-        message.error('请填写完整成员信息。');
+      if (!target.productCategoryId || !target.fromDate || !target.thruDate) {
+        message.error('请填写完整类别信息');
         e.target.focus();
         this.setState({
           loading: false,
@@ -131,19 +145,18 @@ class CategoryForm extends PureComponent {
   render() {
     const columns = [
       {
-        title: '成员姓名',
-        dataIndex: 'name',
-        key: 'name',
-        width: '20%',
+        title: '产品类别',
+        dataIndex: 'productCategoryId',
+        key: 'productCategoryId',
         render: (text, record) => {
           if (record.editable) {
             return (
               <Input
                 value={text}
                 autoFocus
-                onChange={e => this.handleFieldChange(e, 'name', record.key)}
+                onChange={e => this.handleFieldChange(e, 'productCategoryId', record.key)}
                 onKeyPress={e => this.handleKeyPress(e, record.key)}
-                placeholder="成员姓名"
+                placeholder="产品类别"
               />
             );
           }
@@ -151,18 +164,17 @@ class CategoryForm extends PureComponent {
         },
       },
       {
-        title: '工号',
-        dataIndex: 'workId',
-        key: 'workId',
-        width: '20%',
+        title: '开始日期',
+        dataIndex: 'fromDate',
+        key: 'fromDate',
         render: (text, record) => {
           if (record.editable) {
             return (
               <Input
                 value={text}
-                onChange={e => this.handleFieldChange(e, 'workId', record.key)}
+                onChange={e => this.handleFieldChange(e, 'fromDate', record.key)}
                 onKeyPress={e => this.handleKeyPress(e, record.key)}
-                placeholder="工号"
+                placeholder="开始日期"
               />
             );
           }
@@ -170,18 +182,71 @@ class CategoryForm extends PureComponent {
         },
       },
       {
-        title: '所属部门',
-        dataIndex: 'department',
-        key: 'department',
-        width: '40%',
+        title: '结束日期',
+        dataIndex: 'thruDate',
+        key: 'thruDate',
         render: (text, record) => {
           if (record.editable) {
             return (
               <Input
                 value={text}
-                onChange={e => this.handleFieldChange(e, 'department', record.key)}
+                onChange={e => this.handleFieldChange(e, 'thruDate', record.key)}
                 onKeyPress={e => this.handleKeyPress(e, record.key)}
-                placeholder="所属部门"
+                placeholder="结束日期"
+              />
+            );
+          }
+          return text;
+        },
+      },
+      {
+        title: '评论',
+        dataIndex: 'comments',
+        key: 'comments',
+        render: (text, record) => {
+          if (record.editable) {
+            return (
+              <Input
+                value={text}
+                onChange={e => this.handleFieldChange(e, 'comments', record.key)}
+                onKeyPress={e => this.handleKeyPress(e, record.key)}
+                placeholder="评论"
+              />
+            );
+          }
+          return text;
+        },
+      },
+      {
+        title: '序列号',
+        dataIndex: 'sequenceNum',
+        key: 'sequenceNum',
+        render: (text, record) => {
+          if (record.editable) {
+            return (
+              <Input
+                value={text}
+                onChange={e => this.handleFieldChange(e, 'sequenceNum', record.key)}
+                onKeyPress={e => this.handleKeyPress(e, record.key)}
+                placeholder="序列号"
+              />
+            );
+          }
+          return text;
+        },
+      },
+      {
+        title: '数量',
+        dataIndex: 'quantity',
+        key: 'quantity',
+        render: (text, record) => {
+          if (record.editable) {
+            return (
+              <Input
+                value={text}
+                onChange={e => this.handleFieldChange(e, 'quantity', record.key)}
+                onKeyPress={e => this.handleKeyPress(e, record.key)}
+                placeholder="数量"
               />
             );
           }
@@ -245,7 +310,7 @@ class CategoryForm extends PureComponent {
           onClick={this.newMember}
           icon="plus"
         >
-          新增成员
+          添加类别
         </Button>
       </Fragment>
     );

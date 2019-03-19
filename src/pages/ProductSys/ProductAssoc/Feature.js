@@ -1,5 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import { Table, Button, Input, message, Popconfirm, Divider } from 'antd';
+import isEqual from 'lodash/isEqual';
 
 class FeatureForm extends PureComponent {
   index = 0;
@@ -17,7 +18,10 @@ class FeatureForm extends PureComponent {
     };
   }
 
-  static getDerivedStateFromProps(nextProps) {
+  static getDerivedStateFromProps(nextProps, preState) {
+    if (isEqual(nextProps.value, preState.value)) {
+      return null;
+    }
     return {
       data: nextProps.value,
       value: nextProps.value,
@@ -94,8 +98,8 @@ class FeatureForm extends PureComponent {
         return;
       }
       const target = this.getRowByKey(key) || {};
-      if (!target.workId || !target.name || !target.department) {
-        message.error('请填写完整成员信息。');
+      if (!target.productFeatureId || !target.fromDate || !target.thruDate) {
+        message.error('请填写完整特征信息');
         e.target.focus();
         this.setState({
           loading: false,
@@ -131,19 +135,18 @@ class FeatureForm extends PureComponent {
   render() {
     const columns = [
       {
-        title: '成员姓名',
-        dataIndex: 'name',
-        key: 'name',
-        width: '20%',
+        title: '产品特征',
+        dataIndex: 'productFeatureId',
+        key: 'productFeatureId',
         render: (text, record) => {
           if (record.editable) {
             return (
               <Input
                 value={text}
                 autoFocus
-                onChange={e => this.handleFieldChange(e, 'name', record.key)}
+                onChange={e => this.handleFieldChange(e, 'productFeatureId', record.key)}
                 onKeyPress={e => this.handleKeyPress(e, record.key)}
-                placeholder="成员姓名"
+                placeholder="产品特征"
               />
             );
           }
@@ -151,18 +154,17 @@ class FeatureForm extends PureComponent {
         },
       },
       {
-        title: '工号',
-        dataIndex: 'workId',
-        key: 'workId',
-        width: '20%',
+        title: '特征适用性',
+        dataIndex: 'productFeatureApplTypeId',
+        key: 'productFeatureApplTypeId',
         render: (text, record) => {
           if (record.editable) {
             return (
               <Input
                 value={text}
-                onChange={e => this.handleFieldChange(e, 'workId', record.key)}
+                onChange={e => this.handleFieldChange(e, 'productFeatureApplTypeId', record.key)}
                 onKeyPress={e => this.handleKeyPress(e, record.key)}
-                placeholder="工号"
+                placeholder="特征适用性"
               />
             );
           }
@@ -170,18 +172,71 @@ class FeatureForm extends PureComponent {
         },
       },
       {
-        title: '所属部门',
-        dataIndex: 'department',
-        key: 'department',
-        width: '40%',
+        title: '开始日期',
+        dataIndex: 'fromDate',
+        key: 'fromDate',
         render: (text, record) => {
           if (record.editable) {
             return (
               <Input
                 value={text}
-                onChange={e => this.handleFieldChange(e, 'department', record.key)}
+                onChange={e => this.handleFieldChange(e, 'fromDate', record.key)}
                 onKeyPress={e => this.handleKeyPress(e, record.key)}
-                placeholder="所属部门"
+                placeholder="开始日期"
+              />
+            );
+          }
+          return text;
+        },
+      },
+      {
+        title: '结束日期',
+        dataIndex: 'thruDate',
+        key: 'thruDate',
+        render: (text, record) => {
+          if (record.editable) {
+            return (
+              <Input
+                value={text}
+                onChange={e => this.handleFieldChange(e, 'thruDate', record.key)}
+                onKeyPress={e => this.handleKeyPress(e, record.key)}
+                placeholder="结束日期"
+              />
+            );
+          }
+          return text;
+        },
+      },
+      {
+        title: '序列号',
+        dataIndex: 'sequenceNum',
+        key: 'sequenceNum',
+        render: (text, record) => {
+          if (record.editable) {
+            return (
+              <Input
+                value={text}
+                onChange={e => this.handleFieldChange(e, 'sequenceNum', record.key)}
+                onKeyPress={e => this.handleKeyPress(e, record.key)}
+                placeholder="序列号"
+              />
+            );
+          }
+          return text;
+        },
+      },
+      {
+        title: '金额',
+        dataIndex: 'amount',
+        key: 'amount',
+        render: (text, record) => {
+          if (record.editable) {
+            return (
+              <Input
+                value={text}
+                onChange={e => this.handleFieldChange(e, 'amount', record.key)}
+                onKeyPress={e => this.handleKeyPress(e, record.key)}
+                placeholder="金额"
               />
             );
           }
@@ -245,7 +300,7 @@ class FeatureForm extends PureComponent {
           onClick={this.newMember}
           icon="plus"
         >
-          新增成员
+          添加特征
         </Button>
       </Fragment>
     );

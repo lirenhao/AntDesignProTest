@@ -8,8 +8,8 @@ import {
   Input,
 } from 'antd'
 import PageHeaderWrapper from '@/components/PageHeaderWrapper'
-import CategoryForm from './CategoryForm'
-import FeatureForm from './FeatureForm'
+import Category from './Category'
+import Feature from './Feature'
 
 import styles from './index.less'
 
@@ -42,7 +42,7 @@ class Product extends React.Component {
     const { selectedKeys } = this.state
 
     return (
-      <PageHeaderWrapper title="产品关联">
+      <PageHeaderWrapper>
         <Layout>
           <Layout.Sider theme="light" width="200" className={styles.fixSiderBar}>
             <Card bordered={false}>
@@ -69,36 +69,58 @@ class Product extends React.Component {
           </Layout.Sider>
           <Layout.Content>
             <Card title="产品类别">
-              {getFieldDecorator('members', {
+              {getFieldDecorator('categorys', {
                 initialValue: [{
                   key: '1',
-                  workId: '00001',
-                  name: 'John Brown',
-                  department: 'New York No. 1 Lake Park',
+                  productCategoryId: '1',
+                  productId: '1',
+                  fromDate: '2019-03-19',
+                  thruDate: '2019-03-19',
+                  comments: 'comments',
+                  sequenceNum: '1',
+                  quantity: '1',
                 },
                 {
                   key: '2',
-                  workId: '00002',
-                  name: 'Jim Green',
-                  department: 'London No. 1 Lake Park',
+                  productCategoryId: '2',
+                  productId: '1',
+                  fromDate: '2019-03-19',
+                  thruDate: '2019-03-19',
+                  comments: 'comments',
+                  sequenceNum: '2',
+                  quantity: '1',
                 },],
-              })(<CategoryForm />)}
+              })(<Category />)}
             </Card>
             <Card title="产品特征">
-              {getFieldDecorator('members', {
+              {getFieldDecorator('features', {
                 initialValue: [{
                   key: '1',
+                  productId: '1',
+                  productFeatureId: '颜色',
+                  productFeatureApplTypeId: '必备特征',
+                  fromDate: '2019-03-19',
+                  thruDate: '2019-03-19',
+                  sequenceNum: '1',
+                  amount: '1.00',
                   workId: '00001',
                   name: 'John Brown',
                   department: 'New York No. 1 Lake Park',
                 },
                 {
                   key: '2',
+                  productId: '1',
+                  productFeatureId: '大小',
+                  productFeatureApplTypeId: '必备特征',
+                  fromDate: '2019-03-19',
+                  thruDate: '2019-03-19',
+                  sequenceNum: '2',
+                  amount: '1.00',
                   workId: '00002',
                   name: 'Jim Green',
                   department: 'London No. 1 Lake Park',
                 },],
-              })(<FeatureForm />)}
+              })(<Feature />)}
             </Card>
             <Card title="产品价格">
               {getFieldDecorator('members', {
@@ -114,7 +136,7 @@ class Product extends React.Component {
                   name: 'Jim Green',
                   department: 'London No. 1 Lake Park',
                 },],
-              })(<FeatureForm />)}
+              })(<Feature />)}
             </Card>
           </Layout.Content>
         </Layout>

@@ -345,14 +345,14 @@ export default [
             component: './ProductSys/ProductFeatureType',
           },
           {
-            name: 'productFeature',
-            path: '/productSys/productFeature',
-            component: './ProductSys/ProductFeature',
-          },
-          {
             name: 'productFeatureIactnType',
             path: '/productSys/productFeatureIactnType',
             component: './ProductSys/ProductFeatureIactnType',
+          },
+          {
+            name: 'productFeature',
+            path: '/productSys/productFeature',
+            component: './ProductSys/ProductFeature',
           },
           {
             name: 'productFeatureApplType',
