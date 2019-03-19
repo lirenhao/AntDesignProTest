@@ -68,8 +68,8 @@ class Product extends React.Component {
         type: 'categoryType',
         payload: {
           ...values,
-          key: list.length + 1,
-          productCategoryTypeId: list.length + 1,
+          key: (list.length + 1).toString(),
+          productCategoryTypeId: (list.length + 1).toString(),
           parentTypeId: "",
         },
       },

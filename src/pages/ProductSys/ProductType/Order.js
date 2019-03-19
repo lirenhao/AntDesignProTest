@@ -104,7 +104,6 @@ class Order extends React.Component {
       }
       return <Tree.TreeNode key={item.key} title={item.title} />;
     });
-
     return (
       <Modal
         bodyStyle={{ padding: '32px 40px 48px' }}

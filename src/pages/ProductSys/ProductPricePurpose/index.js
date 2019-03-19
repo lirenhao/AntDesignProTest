@@ -61,8 +61,8 @@ class ProductFeatureType extends React.Component {
         type: 'pricePurpose',
         payload: {
           ...values,
-          key: list.length + 1,
-          productAssocTypeId: list.length + 1,
+          key: (list.length + 1).toString(),
+          productAssocTypeId: (list.length + 1).toString(),
           parentTypeId: "",
         },
       },
