@@ -4,6 +4,8 @@ import {
   Card,
   Table,
   Button,
+  Popconfirm,
+  Divider,
 } from 'antd'
 import PageHeaderWrapper from '@/components/PageHeaderWrapper'
 import Create from './Create'
@@ -12,12 +14,14 @@ import styles from '../table.less'
 
 @connect(({ productType, loading }) => ({
   list: productType.list,
+  info: productType.info,
   loading: loading.models.productAssocType,
 }))
 class Product extends React.Component {
 
   state = {
-    isCreateShow: false
+    isCreateShow: false,
+    isUpdateShow: false,
   }
 
   columns = [
@@ -44,6 +48,18 @@ class Product extends React.Component {
       title: '版本',
       dataIndex: 'version',
     },
+    {
+      title: '操作',
+      render: (text, record) => (
+        <React.Fragment>
+          <Popconfirm title="是否要删除此行？" onConfirm={() => this.handleRemove(record)}>
+            <a>删除</a>
+          </Popconfirm>
+          <Divider type="vertical" />
+          <a onClick={() => this.handleUpdate(record)}>修改</a>
+        </React.Fragment>
+      ),
+    },
   ]
 
   componentDidMount() {
@@ -63,8 +79,8 @@ class Product extends React.Component {
   handleCreateForm = (values) => {
     const { dispatch, list } = this.props;
     dispatch({
-      type: 'productType/save',
-      payload:{
+      type: 'productType/add',
+      payload: {
         type: 'assocType',
         payload: {
           ...values,
@@ -73,22 +89,62 @@ class Product extends React.Component {
           parentTypeId: "",
         },
       },
+      callback: () => this.handleCreateModal(false),
     });
+  }
+
+  handleRemove = (record) => {
+    const { dispatch } = this.props;
     dispatch({
-      type: 'productType/find',
+      type: 'productType/remove',
       payload: {
         type: 'assocType',
+        id: record.productAssocTypeId
       }
     });
-    this.handleCreateModal(false)
+  }
+
+  handleUpdate = (record) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'productType/findOne',
+      payload: {
+        type: 'assocType',
+        id: record.productAssocTypeId
+      }
+    });
+    this.handleUpdateModal(true);
+  }
+
+  handleUpdateModal = (visible) => {
+    this.setState({isUpdateShow: visible})
+  }
+
+  handleUpdateForm = (values) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'productType/edit',
+      payload: {
+        type: 'assocType',
+        payload: { 
+          ...values,
+          key: values.productAssocTypeId 
+        },
+      },
+      callback: () => this.handleUpdateModal(false),
+    });
   }
 
   render() {
     const {
       loading,
       list,
+      info,
     } = this.props
-    const { isCreateShow } = this.state
+    const {
+      isCreateShow,
+      isUpdateShow
+    } = this.state
 
     return (
       <PageHeaderWrapper title="产品关联类型">
@@ -111,6 +167,13 @@ class Product extends React.Component {
           visible={isCreateShow} 
           hideModal={() => this.handleCreateModal(false)} 
           handleFormSubmit={this.handleCreateForm}
+          info={{}}
+        />
+        <Create 
+          visible={isUpdateShow} 
+          hideModal={() => this.handleUpdateModal(false)} 
+          handleFormSubmit={this.handleUpdateForm}
+          info={info}
         />
       </PageHeaderWrapper>
     )

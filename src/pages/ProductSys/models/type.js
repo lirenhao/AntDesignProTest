@@ -104,8 +104,7 @@ export default {
         "createdStamp": "2019-03-17 10:39:38",
         "version": "v1.0.0"
       }
-    }
-    ,
+    },
     // 关联类型
     assocType: {
       "1": {
@@ -118,7 +117,7 @@ export default {
         "version": "v1.0.0"
       },
       "2": {
-        "productAssocTypeId": 2,
+        "productAssocTypeId": "2",
         "parentTypeId": "",
         "isTable": "0",
         "description": " 套餐A",
@@ -127,7 +126,7 @@ export default {
         "version": "v1.0.0"
       },
       "3": {
-        "productAssocTypeId": 3,
+        "productAssocTypeId": "3",
         "parentTypeId": "",
         "isTable": "0",
         "description": " 套餐B",
@@ -135,8 +134,7 @@ export default {
         "createdStamp": "2019-03-17 10:39:38",
         "version": "v1.0.0"
       }
-    }
-    ,
+    },
     // 类别类型
     categoryType: {
       "1": {

@@ -22,10 +22,10 @@ class Create extends React.Component {
 
   render() {
     const {
-      info,
       form: { getFieldDecorator },
       visible,
       hideModal,
+      info,
     } = this.props;
 
     const formItemLayout = {

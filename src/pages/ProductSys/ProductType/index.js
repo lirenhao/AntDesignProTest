@@ -131,7 +131,6 @@ class ProductType extends React.Component {
     console.log(values)
   }
 
-
   handleUpdateModal = (visible) => {
     this.setState({isUpdateShow: visible})
   }
@@ -142,7 +141,10 @@ class ProductType extends React.Component {
       type: 'productType/update',
       payload: {
         type: 'type',
-        payload: values,
+        payload: { 
+          ...values,
+          key: values.productTypeId 
+        },
       },
     });
     this.handleUpdateModal(false);
