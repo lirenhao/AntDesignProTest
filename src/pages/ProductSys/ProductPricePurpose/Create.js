@@ -22,6 +22,7 @@ class Create extends React.Component {
   render() {
     const {
       form: { getFieldDecorator },
+      title,
       visible,
       hideModal,
       info,
@@ -43,7 +44,7 @@ class Create extends React.Component {
       <Modal 
         width="60%"
         bodyStyle={{ padding: '32px 40px 48px' }}
-        title='新建'
+        title={title}
         maskClosable={false}
         visible={visible}
         okText="提交"

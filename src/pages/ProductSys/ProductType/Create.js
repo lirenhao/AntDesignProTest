@@ -2,6 +2,7 @@ import React from 'react'
 import {
   Modal,
   Form,
+  TreeSelect,
   Input,
   Radio,
 } from 'antd'
@@ -26,6 +27,7 @@ class Create extends React.Component {
       visible,
       hideModal,
       info,
+      tree,
     } = this.props;
 
     const formItemLayout = {
@@ -52,6 +54,18 @@ class Create extends React.Component {
         onCancel={hideModal}
       >
         <Form>
+          <Form.Item {...formItemLayout} label='所属父级'>
+            {getFieldDecorator('parentTypeId', {
+              initialValue: info.parentTypeId,
+              })(
+                <TreeSelect
+                  dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                  placeholder="请选择"
+                  treeDefaultExpandAll
+                  treeData={tree}
+                />
+              )}
+          </Form.Item>
           <Form.Item {...formItemLayout} label='产品类型名称'>
             {getFieldDecorator('productTypeName', {
               initialValue: info.productTypeName,
@@ -114,6 +128,12 @@ class Create extends React.Component {
           <Form.Item {...formItemLayout} label='描述'>
             {getFieldDecorator('descript', {
               initialValue: info.descript,
+              rules: [
+                {
+                  required: true,
+                  message: '请输入描述',
+                },
+              ],
             })(
               <Input.TextArea
                 style={{ minHeight: 32 }}

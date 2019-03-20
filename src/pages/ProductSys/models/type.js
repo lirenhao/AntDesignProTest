@@ -1,14 +1,20 @@
 import moment from 'moment'
 
-const objToTree = (root, data, id, pId) => {
+let index = 100
+
+const objToTree = (root, data, id, pId, title) => {
   const keys =  Object.keys(data)
     .filter(key => data[key][pId] === root[id])
   if(keys.length > 0) {
     // eslint-disable-next-line no-param-reassign
     root.children = []
-    keys.forEach(key => root.children.push(objToTree(data[key], data, id, pId)))
+    keys.forEach(key => root.children.push(objToTree(data[key], data, id, pId, title)))
   }
-  return root
+  return {
+    value: root[id],
+    title: root[title],
+    children: root.children
+  }
 }
 
 export default {
@@ -16,7 +22,8 @@ export default {
   namespace: 'productType',
 
   state: {
-    list: [],
+    tree: {},
+    list: {},
     info: {},
     // 类型
     type: {
@@ -110,7 +117,7 @@ export default {
       "1": {
         "productAssocTypeId": "1",
         "parentTypeId": "",
-        "isTable": "0",
+        "hasTable": "0",
         "description": "自由套餐",
         "lastUpdatedStamp": "2019-03-17 11:39:38",
         "createdStamp": "2019-03-17 10:39:38",
@@ -119,7 +126,7 @@ export default {
       "2": {
         "productAssocTypeId": "2",
         "parentTypeId": "",
-        "isTable": "0",
+        "hasTable": "0",
         "description": " 套餐A",
         "lastUpdatedStamp": "2019-03-17 11:39:38",
         "createdStamp": "2019-03-17 10:39:38",
@@ -128,7 +135,7 @@ export default {
       "3": {
         "productAssocTypeId": "3",
         "parentTypeId": "",
-        "isTable": "0",
+        "hasTable": "0",
         "description": " 套餐B",
         "lastUpdatedStamp": "2019-03-17 11:39:38",
         "createdStamp": "2019-03-17 10:39:38",
@@ -379,53 +386,73 @@ export default {
       }
     }    
   },
+
   effects: {
     *add({ payload, callback }, { put }) {
       yield put({type: 'save', payload});
-      yield put({type: 'find', payload});
+      if (payload.isTree) {
+        yield put({type: 'tree', payload});
+      } else {
+        yield put({type: 'find', payload});
+      }
       if (callback) callback();
     },
     *edit({ payload, callback }, { put }) {
       yield put({type: 'update', payload});
-      yield put({type: 'find', payload});
+      if (payload.isTree) {
+        yield put({type: 'tree', payload});
+      } else {
+        yield put({type: 'find', payload});
+      }
+      yield put({type: 'findOne', payload});
       if (callback) callback();
     },
     *remove({ payload, callback }, { put }) {
       yield put({type: 'delete', payload});
-      yield put({type: 'find', payload});
+      if (payload.isTree) {
+        yield put({type: 'tree', payload});
+      } else {
+        yield put({type: 'find', payload});
+      }
       if (callback) callback();
     }
   },
+
   reducers: {
     tree(state, action) {
-      const { type, id, pId } = action.payload
+      const { type, id, pId, title } = action.payload
       const data = state[type] || {}
-      return {
-        ...state,
-        list: objToTree({productTypeId: ''}, data, id, pId).children,
-      };
+      const tree = {
+        ...state.tree,
+        [type]: [objToTree({[id]: "", [title]: "父级节点"}, data, id, pId, title)],
+      }
+      return {...state, tree};
     },
     find(state, action) {
       const { type } = action.payload
       const data = state[type] || {}
-      return {
-        ...state,
-        list: Object.keys(data).map(key => data[key]),
-      };
+      const list = {
+        ...state.list,
+        [type]: Object.keys(data).map(key => data[key]),
+      }
+      return { ...state, list, };
     },
     findOne(state, action) {
-      const { type, id } = action.payload
+      const { type, key } = action.payload
       const data = state[type] || {}
       return {
         ...state,
-        info: data[id],
+        info: data[key] || {},
       };
     },
     save(state, action) {
-      const { type, payload } = action.payload
+      const { type, id, payload } = action.payload
       const data = state[type] || {}
-      data[payload.key] = { 
+      const key = index.toString()
+      index += 1
+      data[key] = { 
         ...payload,
+        [id]: key,
         lastUpdatedStamp: moment().format('YYYY-MM-DD HH:mm:ss'),
         createdStamp: moment().format('YYYY-MM-DD HH:mm:ss'),
         version: "v1.0.0",
@@ -436,10 +463,10 @@ export default {
       };
     },
     update(state, action) {
-      const { type, payload } = action.payload
+      const { type, key, payload } = action.payload
       const data = state[type] || {}
-      data[payload.key] = { 
-        ...data[payload.key],
+      data[key] = { 
+        ...data[key],
         ...payload,
         lastUpdatedStamp: moment().format('YYYY-MM-DD HH:mm:ss'),
       }
@@ -449,9 +476,9 @@ export default {
       };
     },
     delete(state, action) {
-      const { type, id } = action.payload
+      const { type, key } = action.payload
       const data = state[type] || {}
-      delete data[id]
+      delete data[key]
       return {
         ...state,
         [type]: data,

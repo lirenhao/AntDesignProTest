@@ -2,6 +2,7 @@ import React from 'react'
 import {
   Modal,
   Form,
+  TreeSelect,
   Input,
   Radio,
 } from 'antd'
@@ -26,6 +27,7 @@ class Create extends React.Component {
       visible,
       hideModal,
       info,
+      tree,
     } = this.props;
 
     const formItemLayout = {
@@ -52,6 +54,34 @@ class Create extends React.Component {
         onCancel={hideModal}
       >
         <Form>
+          <Form.Item {...formItemLayout} label='所属父级'>
+            {getFieldDecorator('parentTypeId', {
+              initialValue: info.parentTypeId,
+              })(
+                <TreeSelect
+                  dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                  placeholder="请选择"
+                  treeDefaultExpandAll
+                  treeData={tree}
+                />
+              )}
+          </Form.Item>
+          <Form.Item {...formItemLayout} label='是否有表'>
+            {getFieldDecorator('hasTable', {
+              initialValue: info.hasTable,
+              rules: [
+                {
+                  required: true,
+                  message: '请选择',
+                },
+              ],
+              })(
+                <Radio.Group>
+                  <Radio value="0">无</Radio>
+                  <Radio value="1">有</Radio>
+                </Radio.Group>
+              )}
+          </Form.Item>
           <Form.Item {...formItemLayout} label='描述'>
             {getFieldDecorator('description', {
               initialValue: info.description,
@@ -61,23 +91,13 @@ class Create extends React.Component {
                   message: '请输入描述',
                 },
               ],
-              })(<Input placeholder='请输入' />)}
-          </Form.Item>
-          <Form.Item {...formItemLayout} label='是否有表'>
-            {getFieldDecorator('isTable', {
-              initialValue: info.isTable,
-              rules: [
-                {
-                  required: true,
-                  message: '请输入选择',
-                },
-              ],
-              })(
-                <Radio.Group>
-                  <Radio value="0">无</Radio>
-                  <Radio value="1">有</Radio>
-                </Radio.Group>
-              )}
+            })(
+              <Input.TextArea
+                style={{ minHeight: 32 }}
+                placeholder='请输入'
+                rows={3}
+              />
+            )}
           </Form.Item>
         </Form>
       </Modal>

@@ -13,17 +13,21 @@ import Create from './Create'
 
 import styles from '../table.less'
 
+const type = 'priceType'
+const id = 'productPriceTypeId'
+const header = '产品价格类型'
+
 @connect(({ productType, loading }) => ({
-  list: productType.list,
-  info: productType.info,
-  loading: loading.models.productPriceType,
+  list: productType.list[type],
+  loading: loading.models[`product${type}`],
 }))
 @Form.create()
-class ProductPriceType extends React.Component {
+class Type extends React.Component {
 
   state = {
     isCreateShow: false,
     isUpdateShow: false,
+    info: {},
   }
 
   columns = [
@@ -62,7 +66,7 @@ class ProductPriceType extends React.Component {
     dispatch({
       type: 'productType/find',
       payload: {
-        type: 'priceType',
+        type,
       }
     });
   }
@@ -72,17 +76,13 @@ class ProductPriceType extends React.Component {
   }
 
   handleCreateForm = (values) => {
-    const { dispatch, list } = this.props;
+    const { dispatch } = this.props;
     dispatch({
       type: 'productType/add',
       payload: {
-        type: 'priceType',
-        payload: {
-          ...values,
-          key: (list.length + 100).toString(),
-          productPriceTypeId: (list.length + 100).toString(),
-          parentTypeId: "",
-        },
+        type,
+        id,
+        payload: values,
       },
       callback: () => this.handleCreateModal(false),
     });
@@ -93,38 +93,28 @@ class ProductPriceType extends React.Component {
     dispatch({
       type: 'productType/remove',
       payload: {
-        type: 'priceType',
-        id: record.productPriceTypeId
+        type,
+        key: record[id]
       }
     });
   }
 
   handleUpdate = (record) => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'productType/findOne',
-      payload: {
-        type: 'priceType',
-        id: record.productPriceTypeId
-      }
-    });
-    this.handleUpdateModal(true);
+    this.setState({isUpdateShow: true, info: record})
   }
 
   handleUpdateModal = (visible) => {
     this.setState({isUpdateShow: visible})
   }
 
-  handleUpdateForm = (values) => {
+  handleUpdateForm = (record) => {
     const { dispatch } = this.props;
     dispatch({
       type: 'productType/edit',
       payload: {
-        type: 'priceType',
-        payload: { 
-          ...values,
-          key: values.productPriceTypeId 
-        },
+        type,
+        key: record[id],
+        payload: record,
       },
       callback: () => this.handleUpdateModal(false),
     });
@@ -134,15 +124,15 @@ class ProductPriceType extends React.Component {
     const {
       loading,
       list,
-      info,
     } = this.props
     const {
       isCreateShow,
-      isUpdateShow
+      isUpdateShow,
+      info,
     } = this.state
 
     return (
-      <PageHeaderWrapper title="产品价格类型">
+      <PageHeaderWrapper title={header}>
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListOperator}>
@@ -159,12 +149,14 @@ class ProductPriceType extends React.Component {
           </div>
         </Card>
         <Create 
+          title="新建"
           visible={isCreateShow} 
           hideModal={() => this.handleCreateModal(false)} 
           handleFormSubmit={this.handleCreateForm}
           info={{}}
         />
         <Create 
+          title="修改"
           visible={isUpdateShow} 
           hideModal={() => this.handleUpdateModal(false)} 
           handleFormSubmit={this.handleUpdateForm}
@@ -175,4 +167,4 @@ class ProductPriceType extends React.Component {
   }
 }
 
-export default ProductPriceType
+export default Type

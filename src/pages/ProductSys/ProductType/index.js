@@ -1,247 +1,206 @@
 import React from 'react'
 import { connect } from 'dva'
 import {
+  Layout,
   Card,
-  Table,
-  Button,
-  Popconfirm,
-  Divider,
+  Tree,
+  Menu,
+  Dropdown,
+  Input,
+  message,
 } from 'antd'
 import PageHeaderWrapper from '@/components/PageHeaderWrapper'
+import Form from './Form'
 import Create from './Create'
-import Order from './Order'
 
-import styles from '../table.less'
+const type = 'type'
+const id = 'productTypeId'
+const pId = 'parentTypeId'
+const title = 'productTypeName'
+const header = '产品类型'
 
 @connect(({ productType, loading }) => ({
-  list: productType.list,
-  info: productType.info,
-  loading: loading.models.productType,
+  productType,
+  tree: productType.tree[type] || [],
+  loading: loading.models[type],
 }))
-class ProductType extends React.Component {
+class Type extends React.Component {
 
   state = {
+    expandedKeys: ["0-0"],
+    selectedKeys: [],
     isCreateShow: false,
-    isOrderShow: false,
-    isUpdateShow: false,
+    parentTypeId: "",
+    info: {},
   }
-
-  columns = [
-    {
-      title: '产品类型名称',
-      dataIndex: 'productTypeName',
-    },
-    {
-      title: '是否实物',
-      dataIndex: 'isPhysical',
-      render(val) {
-        return val === '0'? '否': '是';
-      },
-    },
-    {
-      title: '是否虚拟',
-      dataIndex: 'isDigital',
-      render(val) {
-        return val === '0'? '否': '是';
-      },
-    },
-    {
-      title: '是否有表',
-      dataIndex: 'hasTable',
-      render(val) {
-        return val === '0'? '无': '有';
-      },
-    },
-    {
-      title: '描述',
-      dataIndex: 'descript',
-    },
-    {
-      title: '最后修改时间',
-      dataIndex: 'lastUpdatedStamp',
-    },
-    {
-      title: '创建时间',
-      dataIndex: 'createdStamp',
-    },
-    {
-      title: '版本',
-      dataIndex: 'version',
-    },
-    {
-      title: '操作',
-      render: (text, record) => (
-        <React.Fragment>
-          <Popconfirm title="是否要删除此行？" onConfirm={() => this.handleRemove(record)}>
-            <a>删除</a>
-          </Popconfirm>
-          <Divider type="vertical" />
-          <a onClick={() => this.handleUpdate(record)}>修改</a>
-        </React.Fragment>
-      ),
-    },
-  ]
 
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
       type: 'productType/tree',
       payload: {
-        type: 'type',
-        id: 'productTypeId',
-        pId: 'parentTypeId',
+        type,
+        id,
+        pId,
+        title,
       }
     });
   }
 
-  handleCreateModal = (visible) => {
-    this.setState({isCreateShow: visible})
+  handleCreateModal = (visible, parentTypeId = "") => {
+    this.setState({isCreateShow: visible, parentTypeId})
   }
 
   handleCreateForm = (values) => {
-    const { list, dispatch } = this.props;
+    const { dispatch } = this.props;
     dispatch({
-      type: 'productType/save',
+      type: 'productType/add',
       payload: {
-        type: 'type',
-        payload: {
-          ...values,
-          key: (list.length + 100).toString(),
-          productTypeId: (list.length + 100).toString(),
-          parentTypeId: "",
-        },
+        type,
+        id,
+        pId,
+        title,
+        isTree: true,
+        payload: values,
+      },
+      callback: () =>  {
+        this.handleCreateModal(false)
       },
     });
-    this.handleCreateModal(false);
+  }
+
+  handleTreeSelect = (selectedKeys, e) => {
+    const { productType } = this.props
+    const key = e.node.props.eventKey
+    this.setState({selectedKeys, info: { ...productType[type][key], key }})
+  }
+
+  handleTreeExpand = (expandedKeys) => {
+    this.setState({expandedKeys})
+  }
+
+  handleUpdateForm = (record) => {
+    const { dispatch } = this.props
     dispatch({
-      type: 'productType/tree',
+      type: 'productType/edit',
       payload: {
-        type: 'type',
-        id: 'productTypeId',
-        pId: 'parentTypeId',
-      }
-    });
-  }
-
-  handleOrderModal = (visible) => {
-    this.setState({isOrderShow: visible})
-  }
-
-  handleOrderForm = (values) => {
-    console.log(values)
-  }
-
-  handleUpdateModal = (visible) => {
-    this.setState({isUpdateShow: visible})
-  }
-
-  handleUpdateForm = (values) => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'productType/update',
-      payload: {
-        type: 'type',
-        payload: { 
-          ...values,
-          key: values.productTypeId 
-        },
+        isTree: true,
+        type,
+        id,
+        pId,
+        title,
+        key: record.key,
+        payload: record,
+      },
+      callback: () => {
+        this.setState({ info: record})
+        message.success('提交成功')
       },
     });
-    this.handleUpdateModal(false);
+  }
+
+  handleRemove = (key) => {
+    const { dispatch } = this.props;
     dispatch({
-      type: 'productType/tree',
+      type: 'productType/remove',
       payload: {
-        type: 'type',
-        id: 'productTypeId',
-        pId: 'parentTypeId',
-      }
+        type,
+        id,
+        pId,
+        title,
+        key,
+        isTree: true,
+      },
+      callback: () => {
+        message.success('删除成功')
+      },
     });
   }
 
-  handleUpdate = (record) => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'productType/findOne',
-      payload: {
-        type: 'type',
-        id: record.productTypeId
-      }
-    });
-    this.handleUpdateModal(true);
+  renderRightMenu(record) {
+    if(record.children && record.children.length){
+      return (
+        <Menu>
+          <Menu.Item onClick={() => this.handleCreateModal(true, record.value)}>添加节点</Menu.Item>
+        </Menu>
+      )
+    }
+    return (
+      <Menu>
+        <Menu.Item onClick={() => this.handleCreateModal(true, record.value)}>添加节点</Menu.Item>
+        <Menu.Item onClick={() => this.handleRemove(record.value)}>删除节点</Menu.Item>
+      </Menu>
+    )
   }
 
-  handleRemove = (record) => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'productType/delete',
-      payload: {
-        type: 'type',
-        id: record.productTypeId
-      }
-    });
-    dispatch({
-      type: 'productType/tree',
-      payload: {
-        type: 'type',
-        id: 'productTypeId',
-        pId: 'parentTypeId',
-      }
-    });
+  renderTreeTitle(record) {
+    return (
+      <Dropdown overlay={this.renderRightMenu(record)} trigger={['contextMenu']}>
+        <span>{record.title}</span>
+      </Dropdown>
+    )
   }
 
   render() {
     const {
-      loading,
-      list,
-      info,
+      tree,
     } = this.props
     const { 
-      isCreateShow, 
-      isUpdateShow,
-      isOrderShow,
-     } = this.state
+      expandedKeys,
+      selectedKeys,
+      isCreateShow,
+      parentTypeId,
+      info,
+    } = this.state
+
+    const loop = data => data.map((item) => {
+      if (item.children && item.children.length) {
+        return (
+          <Tree.TreeNode key={item.value} title={this.renderTreeTitle(item)} info={item}>
+            {loop(item.children)}
+          </Tree.TreeNode>
+        );
+      }
+      return <Tree.TreeNode key={item.value} title={this.renderTreeTitle(item)} info={item} />;
+    })
+    
     return (
-      <PageHeaderWrapper title="产品类型">
-        <Card bordered={false}>
-          <div className={styles.tableList}>
-            <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleCreateModal(true)}>
-                新建
-              </Button>
-              <Button icon="ordered-list" type="primary" onClick={() => this.handleOrderModal(true)}>
-                排序
-              </Button>
-            </div>
-            <Table
-              loading={loading}
-              dataSource={list}
-              pagination={false}
-              columns={this.columns}
-              rowKey={record => record.productTypeId}
+      <PageHeaderWrapper title={header}>
+        <Layout>
+          <Layout.Sider theme="light" width="200">
+            <Card bordered={false}>
+              <Input.Search style={{ marginBottom: 8 }} placeholder="Search" />
+              <Tree 
+                showLine
+                expandedKeys={expandedKeys}
+                selectedKeys={selectedKeys}
+                onExpand={this.handleTreeExpand}
+                onSelect={this.handleTreeSelect}
+              >
+                {loop(tree)}
+              </Tree>
+            </Card>
+          </Layout.Sider>
+          <Layout.Content>
+            <Card title={`${header}编辑`}>
+              <Form 
+                info={info}
+                tree={tree}
+                handleFormSubmit={this.handleUpdateForm}
+              />
+            </Card>
+            <Create 
+              visible={isCreateShow} 
+              hideModal={() => this.handleCreateModal(false)} 
+              handleFormSubmit={this.handleCreateForm}
+              info={{parentTypeId}}
+              tree={tree}
             />
-          </div>
-        </Card>
-        <Create 
-          visible={isCreateShow} 
-          hideModal={() => this.handleCreateModal(false)} 
-          handleFormSubmit={this.handleCreateForm}
-          info={{}}
-        />
-        <Create 
-          visible={isUpdateShow} 
-          hideModal={() => this.handleUpdateModal(false)} 
-          handleFormSubmit={this.handleUpdateForm}
-          info={info}
-        />
-        <Order 
-          visible={isOrderShow} 
-          hideModal={() => this.handleOrderModal(false)} 
-          handleFormSubmit={this.handleOrderForm}
-          dataSource={list}
-        />
+          </Layout.Content>
+        </Layout>
       </PageHeaderWrapper>
     )
   }
 }
 
-export default ProductType
+export default Type
