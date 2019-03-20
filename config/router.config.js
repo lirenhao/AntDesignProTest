@@ -128,6 +128,23 @@ export default [
           },
         ],
       },
+      {
+        name: 'partySys',
+        icon: 'contacts',
+        path: '/partySys',
+        routes: [
+          {
+            name: 'partyType',
+            path: '/partySys/partyType',
+            component: './PartySys/PartyType',
+          },
+          {
+            name: 'roleType',
+            path: '/partySys/roleType',
+            component: './PartySys/RoleType',
+          },
+        ],
+      },
       // test
       {
         name: 'test',
