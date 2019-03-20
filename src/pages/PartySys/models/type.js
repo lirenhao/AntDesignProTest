@@ -1,14 +1,20 @@
 import moment from 'moment'
 
-const objToTree = (root, data, id, pId) => {
+let index = 100
+
+const objToTree = (root, data, id, pId, title) => {
   const keys =  Object.keys(data)
     .filter(key => data[key][pId] === root[id])
   if(keys.length > 0) {
     // eslint-disable-next-line no-param-reassign
     root.children = []
-    keys.forEach(key => root.children.push(objToTree(data[key], data, id, pId)))
+    keys.forEach(key => root.children.push(objToTree(data[key], data, id, pId, title)))
   }
-  return root
+  return {
+    value: root[id],
+    title: root[title],
+    children: root.children
+  }
 }
 
 export default {
@@ -16,6 +22,7 @@ export default {
   namespace: 'partyType',
 
   state: {
+    tree: {},
     list: {},
     info: {},
     partyType: {
@@ -390,13 +397,13 @@ export default {
 
   reducers: {
     tree(state, action) {
-      const { type, id, pId } = action.payload
+      const { type, id, pId, title } = action.payload
       const data = state[type] || {}
-      const list = {
-        ...state.list,
-        [type]: objToTree({[id]: ''}, data, id, pId).children,
+      const tree = {
+        ...state.tree,
+        [type]: [objToTree({[id]: "", [title]: "父级节点"}, data, id, pId, title)],
       }
-      return { ...state, list, };
+      return {...state, tree};
     },
     find(state, action) {
       const { type } = action.payload
@@ -416,10 +423,13 @@ export default {
       };
     },
     save(state, action) {
-      const { type, payload } = action.payload
+      const { type, id, payload } = action.payload
       const data = state[type] || {}
-      data[payload.key] = { 
+      const key = index.toString()
+      index += 1
+      data[key] = { 
         ...payload,
+        [id]: key,
         lastUpdatedStamp: moment().format('YYYY-MM-DD HH:mm:ss'),
         createdStamp: moment().format('YYYY-MM-DD HH:mm:ss'),
         version: "v1.0.0",

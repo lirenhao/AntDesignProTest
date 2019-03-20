@@ -6,31 +6,27 @@ import {
   Tree,
   Menu,
   Dropdown,
-  Form,
   Input,
-  Radio,
-  Button,
   message,
 } from 'antd'
 import PageHeaderWrapper from '@/components/PageHeaderWrapper'
+import Form from './Form'
+import Create from './Create'
 
 @connect(({ partyType, loading }) => ({
-  list: partyType.list.roleType || [],
-  info: partyType.info || {},
-  loading: loading.models.partyType,
+  tree: partyType.tree.roleType || [],
+  roleType: partyType.roleType,
+  loading: loading.models.roleType,
 }))
-@Form.create()
-class Product extends React.Component {
+class RoleType extends React.Component {
 
   state = {
-    selectedKeys: ["1"],
+    expandedKeys: ["0-0"],
+    selectedKeys: [],
+    isCreateShow: false,
+    parentTypeId: "",
+    info: {},
   }
-
-  menu = (
-    <Menu>
-      <Menu.Item>添加</Menu.Item>
-    </Menu>
-  );
 
   componentDidMount() {
     const { dispatch } = this.props;
@@ -40,164 +36,160 @@ class Product extends React.Component {
         type: 'roleType',
         id: 'roleTypeId',
         pId: 'parentTypeId',
+        title: 'description',
       }
     });
+  }
+
+  handleCreateModal = (visible, parentTypeId = "") => {
+    this.setState({isCreateShow: visible, parentTypeId})
+  }
+
+  handleCreateForm = (values) => {
+    const { dispatch } = this.props;
     dispatch({
-      type: 'partyType/findOne',
+      type: 'partyType/add',
       payload: {
         type: 'roleType',
-        key: '1',
-      }
+        isTree: true,
+        id: 'roleTypeId',
+        pId: 'parentTypeId',
+        title: 'description',
+        payload: values,
+      },
+      callback: () =>  {
+        this.handleCreateModal(false)
+      },
     });
   }
 
   handleTreeSelect = (selectedKeys, e) => {
-    const { dispatch } = this.props;
-    if(e.selected) {
-      this.setState({ selectedKeys })
-      dispatch({
-        type: 'partyType/findOne',
-        payload: {
-          type: 'roleType',
-          key: selectedKeys[0],
-        }
-      });
-    }
+    const { roleType } = this.props
+    const key = e.node.props.eventKey
+    this.setState({selectedKeys, info: { ...roleType[key], key }})
   }
 
-  handleRightClick = (e) => {
-    console.log(e)
+  handleTreeExpand = (expandedKeys) => {
+    this.setState({expandedKeys})
   }
 
-  handleFormSubmit = (e) => {
-    const { dispatch, form, info } = this.props;
-    e.preventDefault();
-    form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        dispatch({
-          type: 'partyType/edit',
-          payload: {
-            type: 'roleType',
-            id: 'roleTypeId',
-            pId: 'parentTypeId',
-            isTree: true,
-            key: info.roleTypeId,
-            payload: values,
-          },
-          callback: () => {
-            message.success('提交成功');
-            form.resetFields();
-          },
-        });
-      }
+  handleUpdateForm = (record) => {
+    const { dispatch } = this.props
+    dispatch({
+      type: 'partyType/edit',
+      payload: {
+        type: 'roleType',
+        isTree: true,
+        id: 'roleTypeId',
+        pId: 'parentTypeId',
+        title: 'description',
+        key: record.key,
+        payload: record,
+      },
+      callback: () => {
+        this.setState({ info: record})
+        message.success('提交成功')
+      },
     });
-  };
+  }
 
-  renderRightMenu(title) {
+  handleRemove = (key) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'partyType/remove',
+      payload: {
+        type: 'roleType',
+        key,
+        isTree: true,
+        id: 'roleTypeId',
+        pId: 'parentTypeId',
+        title: 'description',
+      },
+      callback: () => {
+        message.success('删除成功')
+      },
+    });
+  }
+
+  renderRightMenu(record) {
+    if(record.children && record.children.length){
+      return (
+        <Menu>
+          <Menu.Item onClick={() => this.handleCreateModal(true, record.value)}>添加节点</Menu.Item>
+        </Menu>
+      )
+    }
     return (
-      <Dropdown overlay={this.menu}>
-        <span>{title}</span>
+      <Menu>
+        <Menu.Item onClick={() => this.handleCreateModal(true, record.value)}>添加节点</Menu.Item>
+        <Menu.Item onClick={() => this.handleRemove(record.value)}>删除节点</Menu.Item>
+      </Menu>
+    )
+  }
+
+  renderTreeTitle(record) {
+    return (
+      <Dropdown overlay={this.renderRightMenu(record)} trigger={['contextMenu']}>
+        <span>{record.title}</span>
       </Dropdown>
     )
   }
 
   render() {
     const {
-      form: { 
-        getFieldDecorator,
-      },
-      list,
-      info,
+      tree,
     } = this.props
     const { 
+      expandedKeys,
       selectedKeys,
+      isCreateShow,
+      parentTypeId,
+      info,
     } = this.state
 
     const loop = data => data.map((item) => {
       if (item.children && item.children.length) {
-        return <Tree.TreeNode key={item.roleTypeId} title={item.description}>{loop(item.children)}</Tree.TreeNode>;
+        return (
+          <Tree.TreeNode key={item.value} title={this.renderTreeTitle(item)} info={item}>
+            {loop(item.children)}
+          </Tree.TreeNode>
+        );
       }
-      return <Tree.TreeNode key={item.roleTypeId} title={item.description} />;
+      return <Tree.TreeNode key={item.value} title={this.renderTreeTitle(item)} info={item} />;
     })
 
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 7 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 12 },
-        md: { span: 10 },
-      },
-    };
-    
-    const submitFormLayout = {
-      wrapperCol: {
-        xs: { span: 24, offset: 0 },
-        sm: { span: 10, offset: 7 },
-      },
-    };
-    
     return (
-      <PageHeaderWrapper>
+      <PageHeaderWrapper title="角色类型">
         <Layout>
           <Layout.Sider theme="light" width="200">
             <Card bordered={false}>
               <Input.Search style={{ marginBottom: 8 }} placeholder="Search" />
               <Tree 
                 showLine
-                blockNode
-                onLoad={this.handleTreeLoad}
+                expandedKeys={expandedKeys}
                 selectedKeys={selectedKeys}
+                onExpand={this.handleTreeExpand}
                 onSelect={this.handleTreeSelect}
-                onRightClick={this.handleRightClick}
               >
-                {loop(list)}
+                {loop(tree)}
               </Tree>
             </Card>
           </Layout.Sider>
           <Layout.Content>
-            <Card title="角色类型">
-              <Form onSubmit={this.handleFormSubmit} style={{ marginTop: 8 }}>
-                <Form.Item {...formItemLayout} label='是否有表'>
-                  {getFieldDecorator('hasTable', {
-                    initialValue: info.hasTable,
-                    rules: [
-                      {
-                        required: true,
-                        message: '请选择',
-                      },
-                    ],
-                    })(
-                      <Radio.Group>
-                        <Radio value="0">无</Radio>
-                        <Radio value="1">有</Radio>
-                      </Radio.Group>
-                    )}
-                </Form.Item>
-                <Form.Item {...formItemLayout} label='描述'>
-                  {getFieldDecorator('description', {
-                    initialValue: info.description,
-                    rules: [
-                      {
-                        required: true,
-                        message: '请输入描述',
-                      },
-                    ],
-                  })(
-                    <Input.TextArea
-                      style={{ minHeight: 32 }}
-                      placeholder='请输入'
-                      rows={3}
-                    />
-                  )}
-                </Form.Item>
-                <Form.Item {...submitFormLayout} style={{ marginTop: 32 }}>
-                  <Button type="primary" htmlType="submit">提交</Button>
-                </Form.Item>
-              </Form>
+            <Card title="角色类型编辑">
+              <Form 
+                info={info}
+                tree={tree}
+                handleFormSubmit={this.handleUpdateForm}
+              />
             </Card>
+            <Create 
+              visible={isCreateShow} 
+              hideModal={() => this.handleCreateModal(false)} 
+              handleFormSubmit={this.handleCreateForm}
+              info={{parentTypeId}}
+              tree={tree}
+            />
           </Layout.Content>
         </Layout>
       </PageHeaderWrapper>
@@ -205,4 +197,4 @@ class Product extends React.Component {
   }
 }
 
-export default Product
+export default RoleType

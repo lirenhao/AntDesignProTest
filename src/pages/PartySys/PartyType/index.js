@@ -1,210 +1,202 @@
 import React from 'react'
 import { connect } from 'dva'
 import {
+  Layout,
   Card,
-  Table,
-  Button,
-  Popconfirm,
-  Divider,
+  Tree,
+  Menu,
+  Dropdown,
+  Input,
+  message,
 } from 'antd'
 import PageHeaderWrapper from '@/components/PageHeaderWrapper'
+import Form from './Form'
 import Create from './Create'
-import Order from './Order'
 
-import styles from '../table.less'
+const type = 'partyType'
+const id = 'partyTypeId'
+const pId = 'parentTypeId'
+const title = 'description'
 
 @connect(({ partyType, loading }) => ({
-  list: partyType.list.partyType || [],
-  info: partyType.info || {},
+  tree: partyType.tree.partyType || [],
+  partyType: partyType.partyType,
   loading: loading.models.partyType,
 }))
 class PartyType extends React.Component {
 
   state = {
+    expandedKeys: ["0-0"],
+    selectedKeys: [],
     isCreateShow: false,
-    isOrderShow: false,
-    isUpdateShow: false,
+    parentTypeId: "",
+    info: {},
   }
-
-  columns = [
-    {
-      title: '描述',
-      dataIndex: 'description',
-    },
-    {
-      title: '是否有表',
-      dataIndex: 'hasTable',
-      render(val) {
-        return val === '0'? '无': '有';
-      },
-    },
-    {
-      title: '最后修改时间',
-      dataIndex: 'lastUpdatedStamp',
-    },
-    {
-      title: '创建时间',
-      dataIndex: 'createdStamp',
-    },
-    {
-      title: '版本',
-      dataIndex: 'version',
-    },
-    {
-      title: '操作',
-      render: (text, record) => (
-        <React.Fragment>
-          <Popconfirm title="是否要删除此行？" onConfirm={() => this.handleRemove(record)}>
-            <a>删除</a>
-          </Popconfirm>
-          <Divider type="vertical" />
-          <a onClick={() => this.handleUpdate(record)}>修改</a>
-        </React.Fragment>
-      ),
-    },
-  ]
 
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
       type: 'partyType/tree',
       payload: {
-        type: 'partyType',
-        id: 'partyTypeId',
-        pId: 'parentTypeId',
+        type,
+        id,
+        pId,
+        title,
       }
     });
   }
 
-  handleCreateModal = (visible) => {
-    this.setState({isCreateShow: visible})
+  handleCreateModal = (visible, parentTypeId = "") => {
+    this.setState({isCreateShow: visible, parentTypeId})
   }
 
   handleCreateForm = (values) => {
-    const { list, dispatch } = this.props;
+    const { dispatch } = this.props;
     dispatch({
       type: 'partyType/add',
       payload: {
-        type: 'partyType',
-        id: 'partyTypeId',
-        pId: 'parentTypeId',
+        type,
+        id,
+        pId,
+        title,
         isTree: true,
-        payload: {
-          ...values,
-          key: (list.length + 100).toString(),
-          partyTypeId: (list.length + 100).toString(),
-          parentTypeId: "",
-        },
+        payload: values,
       },
-      callback: () =>  this.handleCreateModal(false),
+      callback: () =>  {
+        this.handleCreateModal(false)
+      },
     });
   }
 
-  handleOrderModal = (visible) => {
-    this.setState({isOrderShow: visible})
+  handleTreeSelect = (selectedKeys, e) => {
+    const { partyType } = this.props
+    const key = e.node.props.eventKey
+    this.setState({selectedKeys, info: { ...partyType[key], key }})
   }
 
-  handleOrderForm = (values) => {
-    console.log(values)
+  handleTreeExpand = (expandedKeys) => {
+    this.setState({expandedKeys})
   }
 
-  handleUpdateModal = (visible) => {
-    this.setState({isUpdateShow: visible})
-  }
-
-  handleUpdateForm = (values) => {
-    const { dispatch } = this.props;
+  handleUpdateForm = (record) => {
+    const { dispatch } = this.props
     dispatch({
       type: 'partyType/edit',
       payload: {
-        type: 'partyType',
-        id: 'partyTypeId',
-        pId: 'parentTypeId',
         isTree: true,
-        key: values.partyTypeId,
-        payload: values,
+        type,
+        id,
+        pId,
+        title,
+        key: record.key,
+        payload: record,
       },
-      callback: () =>  this.handleUpdateModal(false),
+      callback: () => {
+        this.setState({ info: record})
+        message.success('提交成功')
+      },
     });
   }
 
-  handleUpdate = (record) => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'partyType/findOne',
-      payload: {
-        type: 'partyType',
-        key: record.partyTypeId
-      }
-    });
-    this.handleUpdateModal(true);
-  }
-
-  handleRemove = (record) => {
+  handleRemove = (key) => {
     const { dispatch } = this.props;
     dispatch({
       type: 'partyType/remove',
       payload: {
-        type: 'partyType',
-        key: record.partyTypeId,
-        id: 'partyTypeId',
-        pId: 'parentTypeId',
+        type,
+        id,
+        pId,
+        title,
+        key,
         isTree: true,
-      }
+      },
+      callback: () => {
+        message.success('删除成功')
+      },
     });
+  }
+
+  renderRightMenu(record) {
+    if(record.children && record.children.length){
+      return (
+        <Menu>
+          <Menu.Item onClick={() => this.handleCreateModal(true, record.value)}>添加节点</Menu.Item>
+        </Menu>
+      )
+    }
+    return (
+      <Menu>
+        <Menu.Item onClick={() => this.handleCreateModal(true, record.value)}>添加节点</Menu.Item>
+        <Menu.Item onClick={() => this.handleRemove(record.value)}>删除节点</Menu.Item>
+      </Menu>
+    )
+  }
+
+  renderTreeTitle(record) {
+    return (
+      <Dropdown overlay={this.renderRightMenu(record)} trigger={['contextMenu']}>
+        <span>{record.title}</span>
+      </Dropdown>
+    )
   }
 
   render() {
     const {
-      loading,
-      list,
-      info,
+      tree,
     } = this.props
     const { 
-      isCreateShow, 
-      isUpdateShow,
-      isOrderShow,
+      expandedKeys,
+      selectedKeys,
+      isCreateShow,
+      parentTypeId,
+      info,
     } = this.state
-    
+
+    const loop = data => data.map((item) => {
+      if (item.children && item.children.length) {
+        return (
+          <Tree.TreeNode key={item.value} title={this.renderTreeTitle(item)} info={item}>
+            {loop(item.children)}
+          </Tree.TreeNode>
+        );
+      }
+      return <Tree.TreeNode key={item.value} title={this.renderTreeTitle(item)} info={item} />;
+    })
+    console.log(tree)
     return (
       <PageHeaderWrapper title="当事人类型">
-        <Card bordered={false}>
-          <div className={styles.tableList}>
-            <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleCreateModal(true)}>
-                新建
-              </Button>
-              <Button icon="ordered-list" type="primary" onClick={() => this.handleOrderModal(true)}>
-                排序
-              </Button>
-            </div>
-            <Table
-              loading={loading}
-              dataSource={list}
-              pagination={false}
-              columns={this.columns}
-              rowKey={record => record.partyTypeId}
+        <Layout>
+          <Layout.Sider theme="light" width="200">
+            <Card bordered={false}>
+              <Input.Search style={{ marginBottom: 8 }} placeholder="Search" />
+              <Tree 
+                showLine
+                expandedKeys={expandedKeys}
+                selectedKeys={selectedKeys}
+                onExpand={this.handleTreeExpand}
+                onSelect={this.handleTreeSelect}
+              >
+                {loop(tree)}
+              </Tree>
+            </Card>
+          </Layout.Sider>
+          <Layout.Content>
+            <Card title="当事人类型编辑">
+              <Form 
+                info={info}
+                tree={tree}
+                handleFormSubmit={this.handleUpdateForm}
+              />
+            </Card>
+            <Create 
+              visible={isCreateShow} 
+              hideModal={() => this.handleCreateModal(false)} 
+              handleFormSubmit={this.handleCreateForm}
+              info={{parentTypeId}}
+              tree={tree}
             />
-          </div>
-        </Card>
-        <Create 
-          visible={isCreateShow} 
-          hideModal={() => this.handleCreateModal(false)} 
-          handleFormSubmit={this.handleCreateForm}
-          info={{}}
-        />
-        <Create 
-          visible={isUpdateShow} 
-          hideModal={() => this.handleUpdateModal(false)} 
-          handleFormSubmit={this.handleUpdateForm}
-          info={info}
-        />
-        <Order 
-          visible={isOrderShow} 
-          hideModal={() => this.handleOrderModal(false)} 
-          handleFormSubmit={this.handleOrderForm}
-          dataSource={list}
-        />
+          </Layout.Content>
+        </Layout>
       </PageHeaderWrapper>
     )
   }
