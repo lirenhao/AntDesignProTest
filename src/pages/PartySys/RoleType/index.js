@@ -24,7 +24,7 @@ const header = '角色类型'
   tree: partyType.tree[type] || [],
   loading: loading.models[type],
 }))
-class RoleType extends React.Component {
+class Type extends React.Component {
 
   state = {
     expandedKeys: ["0-0"],
@@ -203,4 +203,4 @@ class RoleType extends React.Component {
   }
 }
 
-export default RoleType
+export default Type
