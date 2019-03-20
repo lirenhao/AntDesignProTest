@@ -84,8 +84,8 @@ class Product extends React.Component {
         type: 'assocType',
         payload: {
           ...values,
-          key: (list.length + 1).toString(),
-          productAssocTypeId: (list.length + 1).toString(),
+          key: (list.length + 100).toString(),
+          productAssocTypeId: (list.length + 100).toString(),
           parentTypeId: "",
         },
       },

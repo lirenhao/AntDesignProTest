@@ -79,8 +79,8 @@ class ProductPriceType extends React.Component {
         type: 'priceType',
         payload: {
           ...values,
-          key: (list.length + 1).toString(),
-          productPriceTypeId: (list.length + 1).toString(),
+          key: (list.length + 100).toString(),
+          productPriceTypeId: (list.length + 100).toString(),
           parentTypeId: "",
         },
       },
