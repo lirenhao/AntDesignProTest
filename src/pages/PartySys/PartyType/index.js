@@ -17,11 +17,12 @@ const type = 'partyType'
 const id = 'partyTypeId'
 const pId = 'parentTypeId'
 const title = 'description'
+const header = '当事人类型'
 
 @connect(({ partyType, loading }) => ({
-  tree: partyType.tree.partyType || [],
-  partyType: partyType.partyType,
-  loading: loading.models.partyType,
+  partyType,
+  tree: partyType.tree[type] || [],
+  loading: loading.models[type],
 }))
 class PartyType extends React.Component {
 
@@ -71,7 +72,7 @@ class PartyType extends React.Component {
   handleTreeSelect = (selectedKeys, e) => {
     const { partyType } = this.props
     const key = e.node.props.eventKey
-    this.setState({selectedKeys, info: { ...partyType[key], key }})
+    this.setState({selectedKeys, info: { ...partyType[type][key], key }})
   }
 
   handleTreeExpand = (expandedKeys) => {
@@ -162,9 +163,9 @@ class PartyType extends React.Component {
       }
       return <Tree.TreeNode key={item.value} title={this.renderTreeTitle(item)} info={item} />;
     })
-    console.log(tree)
+    
     return (
-      <PageHeaderWrapper title="当事人类型">
+      <PageHeaderWrapper title={header}>
         <Layout>
           <Layout.Sider theme="light" width="200">
             <Card bordered={false}>
@@ -181,7 +182,7 @@ class PartyType extends React.Component {
             </Card>
           </Layout.Sider>
           <Layout.Content>
-            <Card title="当事人类型编辑">
+            <Card title={`${header}编辑`}>
               <Form 
                 info={info}
                 tree={tree}

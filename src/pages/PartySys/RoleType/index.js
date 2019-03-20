@@ -13,10 +13,16 @@ import PageHeaderWrapper from '@/components/PageHeaderWrapper'
 import Form from './Form'
 import Create from './Create'
 
+const type = 'roleType'
+const id = 'roleTypeId'
+const pId = 'parentTypeId'
+const title = 'description'
+const header = '角色类型'
+
 @connect(({ partyType, loading }) => ({
-  tree: partyType.tree.roleType || [],
-  roleType: partyType.roleType,
-  loading: loading.models.roleType,
+  partyType,
+  tree: partyType.tree[type] || [],
+  loading: loading.models[type],
 }))
 class RoleType extends React.Component {
 
@@ -33,10 +39,10 @@ class RoleType extends React.Component {
     dispatch({
       type: 'partyType/tree',
       payload: {
-        type: 'roleType',
-        id: 'roleTypeId',
-        pId: 'parentTypeId',
-        title: 'description',
+        type,
+        id,
+        pId,
+        title,
       }
     });
   }
@@ -50,11 +56,11 @@ class RoleType extends React.Component {
     dispatch({
       type: 'partyType/add',
       payload: {
-        type: 'roleType',
+        type,
+        id,
+        pId,
+        title,
         isTree: true,
-        id: 'roleTypeId',
-        pId: 'parentTypeId',
-        title: 'description',
         payload: values,
       },
       callback: () =>  {
@@ -64,9 +70,9 @@ class RoleType extends React.Component {
   }
 
   handleTreeSelect = (selectedKeys, e) => {
-    const { roleType } = this.props
+    const { partyType } = this.props
     const key = e.node.props.eventKey
-    this.setState({selectedKeys, info: { ...roleType[key], key }})
+    this.setState({selectedKeys, info: { ...partyType[type][key], key }})
   }
 
   handleTreeExpand = (expandedKeys) => {
@@ -78,11 +84,11 @@ class RoleType extends React.Component {
     dispatch({
       type: 'partyType/edit',
       payload: {
-        type: 'roleType',
         isTree: true,
-        id: 'roleTypeId',
-        pId: 'parentTypeId',
-        title: 'description',
+        type,
+        id,
+        pId,
+        title,
         key: record.key,
         payload: record,
       },
@@ -98,12 +104,12 @@ class RoleType extends React.Component {
     dispatch({
       type: 'partyType/remove',
       payload: {
-        type: 'roleType',
+        type,
+        id,
+        pId,
+        title,
         key,
         isTree: true,
-        id: 'roleTypeId',
-        pId: 'parentTypeId',
-        title: 'description',
       },
       callback: () => {
         message.success('删除成功')
@@ -157,9 +163,9 @@ class RoleType extends React.Component {
       }
       return <Tree.TreeNode key={item.value} title={this.renderTreeTitle(item)} info={item} />;
     })
-
+    
     return (
-      <PageHeaderWrapper title="角色类型">
+      <PageHeaderWrapper title={header}>
         <Layout>
           <Layout.Sider theme="light" width="200">
             <Card bordered={false}>
@@ -176,7 +182,7 @@ class RoleType extends React.Component {
             </Card>
           </Layout.Sider>
           <Layout.Content>
-            <Card title="角色类型编辑">
+            <Card title={`${header}编辑`}>
               <Form 
                 info={info}
                 tree={tree}
