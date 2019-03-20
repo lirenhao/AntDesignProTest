@@ -16,7 +16,7 @@ export default {
   namespace: 'partyType',
 
   state: {
-    list: [],
+    list: {},
     info: {},
     partyType: {
       "1": {
@@ -392,18 +392,20 @@ export default {
     tree(state, action) {
       const { type, id, pId } = action.payload
       const data = state[type] || {}
-      return {
-        ...state,
-        list: objToTree({[id]: ''}, data, id, pId).children,
-      };
+      const list = {
+        ...state.list,
+        [type]: objToTree({[id]: ''}, data, id, pId).children,
+      }
+      return { ...state, list, };
     },
     find(state, action) {
       const { type } = action.payload
       const data = state[type] || {}
-      return {
-        ...state,
-        list: Object.keys(data).map(key => data[key]),
-      };
+      const list = {
+        ...state.list,
+        [type]: Object.keys(data).map(key => data[key]),
+      }
+      return { ...state, list, };
     },
     findOne(state, action) {
       const { type, key } = action.payload

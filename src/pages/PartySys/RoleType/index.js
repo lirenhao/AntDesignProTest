@@ -15,8 +15,8 @@ import {
 import PageHeaderWrapper from '@/components/PageHeaderWrapper'
 
 @connect(({ partyType, loading }) => ({
-  list: partyType.list,
-  info: partyType.info,
+  list: partyType.list.roleType || [],
+  info: partyType.info || {},
   loading: loading.models.partyType,
 }))
 @Form.create()

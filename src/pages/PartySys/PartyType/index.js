@@ -14,8 +14,8 @@ import Order from './Order'
 import styles from '../table.less'
 
 @connect(({ partyType, loading }) => ({
-  list: partyType.list,
-  info: partyType.info,
+  list: partyType.list.partyType || [],
+  info: partyType.info || {},
   loading: loading.models.partyType,
 }))
 class PartyType extends React.Component {
