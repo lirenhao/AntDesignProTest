@@ -8,7 +8,8 @@ import {
 } from 'antd'
 
 @connect(({ productType }) => ({
-  categoryType: productType.categoryType,
+  priceType: productType.priceType,
+  pricePurpose: productType.pricePurpose,
 }))
 @Form.create()
 class Create extends React.Component {
@@ -19,6 +20,7 @@ class Create extends React.Component {
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         handleFormSubmit(values);
+        form.resetFields();
       }
     });
   };
@@ -28,8 +30,8 @@ class Create extends React.Component {
       form: { getFieldDecorator },
       visible,
       hideModal,
-      categorys,
-      categoryType,
+      priceType,
+      pricePurpose,
     } = this.props;
 
     const formItemLayout = {
@@ -56,32 +58,25 @@ class Create extends React.Component {
         onCancel={hideModal}
       >
         <Form>
-          <Form.Item {...formItemLayout} label='产品类别名称'>
-            {getFieldDecorator('productCategoryName', {
-              rules: [
-                {
-                  required: true,
-                  message: '请输入产品类别名称',
-                },
-              ],
-              })(<Input placeholder='请输入' />)}
-          </Form.Item>
-          <Form.Item {...formItemLayout} label="产品类别类型">
-            {getFieldDecorator('productCategoryTypeId', {
-              rules: [{ required: true, message: '请选择产品类别类型' }],
+          <Form.Item {...formItemLayout} label="产品价格类型">
+            {getFieldDecorator('productPriceTypeId', {
+              rules: [{ required: true, message: '请选择产品价格类型' }],
             })(
               <Select placeholder="请选择">
-                {Object.keys(categoryType).map(key => (
-                  <Select.Option value={key}>{categoryType[key].description}</Select.Option>
+                {Object.keys(priceType).map(key => (
+                  <Select.Option value={key}>{priceType[key].description}</Select.Option>
                 ))}
               </Select>
             )}
           </Form.Item>
-          <Form.Item {...formItemLayout} label="主父产品类别">
-            {getFieldDecorator('primaryParentCategoryId', {
+          <Form.Item {...formItemLayout} label="产品价格用途">
+            {getFieldDecorator('productPricePurposeId', {
+              rules: [{ required: true, message: '请选择产品价格用途' }],
             })(
               <Select placeholder="请选择">
-                {categorys.map(item => (<Select.Option value={item.key}>{item.title}</Select.Option>))}
+                {Object.keys(pricePurpose).map(key => (
+                  <Select.Option value={key}>{pricePurpose[key].description}</Select.Option>
+                ))}
               </Select>
             )}
           </Form.Item>

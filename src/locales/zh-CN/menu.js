@@ -59,4 +59,5 @@ export default {
   'menu.productSys.productFeatureAppl': '产品特征适用性',
   'menu.productSys.productPriceType': '产品价格类型',
   'menu.productSys.productPricePurpose': '产品价格用途',
+  'menu.productSys.productPrice': '产品价格',
 };

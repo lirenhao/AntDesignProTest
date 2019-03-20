@@ -6,46 +6,48 @@ import {
   Form,
   Row,
   Col,
-  Input,
   Select,
   Button,
   Divider,
 } from 'antd'
 import PageHeaderWrapper from '@/components/PageHeaderWrapper'
 import Create from './Create'
-import Iactn from './Iactn'
 
 import styles from '../table.less'
 
-@connect(({ productFeature, productType, loading }) => ({
-  productFeature,
-  featureType: productType.featureType,
-  loading: loading.models.productFeature,
+@connect(({ productPrice, productType, loading }) => ({
+  productPrice,
+  priceType: productType.priceType,
+  pricePurpose: productType.pricePurpose,
+  loading: loading.models.productPrice,
 }))
 @Form.create()
 class Product extends React.Component {
 
   state = {
     isCreateShow: false,
-    isIactnShow: false,
   }
 
   columns = [
     {
       title: '产品特征类型',
-      dataIndex: 'productFeatureTypeId',
+      dataIndex: 'productPriceTypeId',
       render: (id) => {
-        const { featureType } = this.props
-        return featureType[id] ? featureType[id].description : null
+        const { priceType } = this.props
+        return priceType[id] ? priceType[id].description : null
+      },
+    },
+    {
+      title: '产品价格用途',
+      dataIndex: 'productPricePurposeId',
+      render: (id) => {
+        const { pricePurpose } = this.props
+        return pricePurpose[id] ? pricePurpose[id].description : null
       },
     },
     {
       title: '描述',
       dataIndex: 'description',
-    },
-    {
-      title: 'uomId',
-      dataIndex: 'uomId',
     },
     {
       title: '最后修改时间',
@@ -63,7 +65,7 @@ class Product extends React.Component {
       title: '操作',
       render: (text, record) => (
         <React.Fragment>
-          <a onClick={() => this.handleIactn(true, record)}>互作用</a>
+          <a onClick={() => {}}>删除</a>
           <Divider type="vertical" />
           <a onClick={() => this.handleCreateModal(true, record)}>修改</a>
         </React.Fragment>
@@ -74,7 +76,7 @@ class Product extends React.Component {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'productFeature/fetch',
+      type: 'productPrice/fetch',
     });
   }
 
@@ -85,66 +87,55 @@ class Product extends React.Component {
   handleCreateForm = (values) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'productFeature/submitCreateForm',
+      type: 'productPrice/submitCreateForm',
       payload: values,
       callback: () => this.handleCreateModal(false)
     });
   }
 
-  handleIactn = (visible, record) => {
-    const { dispatch } = this.props
-    dispatch({
-      type: 'productFeature/info',
-      payload: record,
-    })
-    this.handleIactnModal(visible)
-  }
-
-  handleIactnModal = (visible) => {
-    this.setState({isIactnShow: visible})
-  }
-
-  handleIactnForm = (values) => {
-    console.log(values)
-  }
-
   render() {
     const {
       loading,
-      productFeature: {
+      priceType,
+      pricePurpose,
+      productPrice: {
         data,
       },
       form: {
         getFieldDecorator
       },
-      featureType,
     } = this.props
     const {
       isCreateShow,
-      isIactnShow,
     } = this.state
-
+    
     return (
-      <PageHeaderWrapper title="产品特征">
+      <PageHeaderWrapper title="产品价格">
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>
               <Form onSubmit={this.handleSearch} layout="inline">
                 <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
                   <Col md={8} sm={24}>
-                    <Form.Item label="产品特征类型">
-                      {getFieldDecorator('productFeatureTypeId')(
+                    <Form.Item label="产品价格类型">
+                      {getFieldDecorator('productPriceTypeId')(
                         <Select placeholder="请选择" style={{ width: '100%' }}>
-                          {Object.keys(featureType).map(key => (
-                            <Select.Option value={key}>{featureType[key].description}</Select.Option>
+                          {Object.keys(priceType).map(key => (
+                            <Select.Option value={key}>{priceType[key].description}</Select.Option>
                           ))}
                         </Select>
                       )}
                     </Form.Item>
                   </Col>
                   <Col md={8} sm={24}>
-                    <Form.Item label="描述">
-                      {getFieldDecorator('description')(<Input placeholder="请输入" />)}
+                    <Form.Item label="产品价格用途">
+                      {getFieldDecorator('productPricePurposeId')(
+                        <Select placeholder="请选择" style={{ width: '100%' }}>
+                          {Object.keys(pricePurpose).map(key => (
+                            <Select.Option value={key}>{pricePurpose[key].description}</Select.Option>
+                          ))}
+                        </Select>
+                      )}
                     </Form.Item>
                   </Col>
                   <Col md={8} sm={24}>
@@ -177,11 +168,6 @@ class Product extends React.Component {
           visible={isCreateShow} 
           hideModal={() => this.handleCreateModal(false)} 
           handleFormSubmit={this.handleCreateForm}
-        />
-        <Iactn 
-          visible={isIactnShow} 
-          hideModal={() => this.handleIactnModal(false)} 
-          handleFormSubmit={this.handleIactnForm}
         />
       </PageHeaderWrapper>
     )

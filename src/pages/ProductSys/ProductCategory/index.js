@@ -17,8 +17,9 @@ import Rollup from './Rollup'
 
 import styles from '../table.less'
 
-@connect(({ productCategory, loading }) => ({
+@connect(({ productCategory, productType, loading }) => ({
   productCategory,
+  categoryType: productType.categoryType,
   loading: loading.models.productCategory,
 }))
 @Form.create()
@@ -36,7 +37,11 @@ class Product extends React.Component {
     },
     {
       title: '产品类别类型',
-      dataIndex: 'productCategoryType.description',
+      dataIndex: 'productCategoryTypeId',
+      render: (id) => {
+        const { categoryType } = this.props
+        return categoryType[id] ? categoryType[id].description : null
+      },
     },
     {
       title: '描述',
@@ -112,6 +117,7 @@ class Product extends React.Component {
       form: {
         getFieldDecorator
       },
+      categoryType,
     } = this.props
     const { isCreateShow, isRollupShow } = this.state
 
@@ -123,17 +129,18 @@ class Product extends React.Component {
               <Form onSubmit={this.handleSearch} layout="inline">
                 <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
                   <Col md={8} sm={24}>
-                    <Form.Item label="产品类型">
-                      {getFieldDecorator('productCategoryType')(
+                    <Form.Item label="产品类别类型">
+                      {getFieldDecorator('productCategoryTypeId')(
                         <Select placeholder="请选择" style={{ width: '100%' }}>
-                          <Select.Option value="0">无</Select.Option>
-                          <Select.Option value="1">有</Select.Option>
+                          {Object.keys(categoryType).map(key => (
+                            <Select.Option value={key}>{categoryType[key].description}</Select.Option>
+                          ))}
                         </Select>
                       )}
                     </Form.Item>
                   </Col>
                   <Col md={8} sm={24}>
-                    <Form.Item label="产品名称">
+                    <Form.Item label="产品类别名称">
                       {getFieldDecorator('productCategoryName')(<Input placeholder="请输入" />)}
                     </Form.Item>
                   </Col>

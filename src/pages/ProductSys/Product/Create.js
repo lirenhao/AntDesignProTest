@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'dva'
 import {
   Modal,
   Form,
@@ -7,6 +8,9 @@ import {
   Select,
 } from 'antd'
 
+@connect(({ productType }) => ({
+  type: productType.type,
+}))
 @Form.create()
 class Create extends React.Component {
 
@@ -25,6 +29,7 @@ class Create extends React.Component {
       form: { getFieldDecorator },
       visible,
       hideModal,
+      type,
     } = this.props;
 
     const formItemLayout = {
@@ -62,13 +67,13 @@ class Create extends React.Component {
               })(<Input placeholder='请输入' />)}
           </Form.Item>
           <Form.Item {...formItemLayout} label="产品类型">
-            {getFieldDecorator('payAccount', {
+            {getFieldDecorator('productTypeId', {
               rules: [{ required: true, message: '请选择产品类型' }],
             })(
               <Select placeholder="请选择">
-                <Select.Option value="1">实物</Select.Option>
-                <Select.Option value="2">服务</Select.Option>
-                <Select.Option value="3">虚拟产品</Select.Option>
+                {Object.keys(type).map(key => (
+                  <Select.Option value={key}>{type[key].productTypeName}</Select.Option>
+                ))}
               </Select>
             )}
           </Form.Item>

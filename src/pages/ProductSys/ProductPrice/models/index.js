@@ -1,26 +1,27 @@
-import { queryProductAssoc, addProductAssoc } from '@/services/api';
+import { queryProductPrice, addProductPrice } from '@/services/api';
 import { message } from 'antd';
 
 export default {
-  namespace: 'productAssoc',
+  namespace: 'productPrice',
 
   state: {
     data: {
       list: [],
       pagination: {},
     },
+    info: {},
   },
 
   effects: {
     *fetch({ payload }, { call, put }) {
-      const response = yield call(queryProductAssoc, payload);
+      const response = yield call(queryProductPrice, payload);
       yield put({
         type: 'save',
         payload: response,
       });
     },
-    *submitAddForm({ payload, callback }, { call, put }) {
-      const response = yield call(addProductAssoc, payload);
+    *submitCreateForm({ payload, callback }, { call, put }) {
+      const response = yield call(addProductPrice, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -35,6 +36,12 @@ export default {
       return {
         ...state,
         data: action.payload,
+      };
+    },
+    info(state, action) {
+      return {
+        ...state,
+        info: action.payload,
       };
     },
   },

@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'dva'
 import {
   Modal,
   Form,
@@ -6,6 +7,9 @@ import {
   Select,
 } from 'antd'
 
+@connect(({ productType }) => ({
+  featureType: productType.featureType,
+}))
 @Form.create()
 class Create extends React.Component {
 
@@ -24,6 +28,7 @@ class Create extends React.Component {
       form: { getFieldDecorator },
       visible,
       hideModal,
+      featureType,
     } = this.props;
 
     const formItemLayout = {
@@ -55,15 +60,9 @@ class Create extends React.Component {
               rules: [{ required: true, message: '请选择产品特征类型' }],
             })(
               <Select placeholder="请选择">
-                <Select.Option value="1">产品质量</Select.Option>
-                <Select.Option value="2">颜色</Select.Option>
-                <Select.Option value="3">尺寸（指定数目）</Select.Option>
-                <Select.Option value="4">大小</Select.Option>
-                <Select.Option value="5">商标</Select.Option>
-                <Select.Option value="6">软件特征</Select.Option>
-                <Select.Option value="7">硬件特征</Select.Option>
-                <Select.Option value="8">付款特征</Select.Option>
-                <Select.Option value="9">其他特征</Select.Option>
+                {Object.keys(featureType).map(key => (
+                  <Select.Option value={key}>{featureType[key].description}</Select.Option>
+                ))}
               </Select>
             )}
           </Form.Item>

@@ -139,20 +139,6 @@ export async function addClue(params) {
   });
 }
 
-export async function queryProductType(params) {
-  return request(`/api/productType?${stringify(params)}`);
-}
-
-export async function addProductType(params) {
-  return request('/api/productType', {
-    method: 'POST',
-    body: {
-      ...params,
-      method: 'post',
-    },
-  });
-}
-
 export async function queryProduct(params) {
   return request(`/api/product?${stringify(params)}`);
 }
@@ -167,44 +153,12 @@ export async function addProduct(params) {
   });
 }
 
-export async function queryProductAssocType(params) {
-  return request(`/api/productAssocType?${stringify(params)}`);
-}
-
-export async function addProductAssocType(params) {
-  return request('/api/productAssocType', {
-    method: 'POST',
-    body: {
-      ...params,
-      method: 'post',
-    },
-  });
-}
-
-export async function queryProductCategoryType(params) {
-  return request(`/api/productCategoryType?${stringify(params)}`);
-}
-
 export async function queryProductCategory(params) {
   return request(`/api/productCategory?${stringify(params)}`);
 }
 
 export async function addProductCategory(params) {
   return request('/api/productCategory', {
-    method: 'POST',
-    body: {
-      ...params,
-      method: 'post',
-    },
-  });
-}
-
-export async function queryProductFeatureType(params) {
-  return request(`/api/productFeatureType?${stringify(params)}`);
-}
-
-export async function addProductFeatureType(params) {
-  return request('/api/productFeatureType', {
     method: 'POST',
     body: {
       ...params,
@@ -227,18 +181,16 @@ export async function addProductFeature(params) {
   });
 }
 
-export async function queryProductFeatureIactnType(params) {
-  return request(`/api/productFeatureIactnType?${stringify(params)}`);
+export async function queryProductPrice(params) {
+  return request(`/api/productPrice?${stringify(params)}`);
 }
 
-export async function queryProductFeatureApplType(params) {
-  return request(`/api/productFeatureApplType?${stringify(params)}`);
-}
-
-export async function queryProductPriceType(params) {
-  return request(`/api/productPriceType?${stringify(params)}`);
-}
-
-export async function queryProductPricePurpose(params) {
-  return request(`/api/productPricePurpose?${stringify(params)}`);
+export async function addProductPrice(params) {
+  return request('/api/productPrice', {
+    method: 'POST',
+    body: {
+      ...params,
+      method: 'post',
+    },
+  });
 }

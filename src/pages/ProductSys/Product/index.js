@@ -16,8 +16,9 @@ import Create from './Create'
 
 import styles from '../table.less'
 
-@connect(({ product, loading }) => ({
+@connect(({ product, productType, loading }) => ({
   product,
+  type: productType.type,
   loading: loading.models.product,
 }))
 @Form.create()
@@ -34,7 +35,11 @@ class Product extends React.Component {
     },
     {
       title: '产品类型',
-      dataIndex: 'productType.productTypeName',
+      dataIndex: 'productTypeId',
+      render: (id) => {
+        const { type } = this.props
+        return type[id] ? type[id].productTypeName : null
+      },
     },
     {
       title: '描述',
@@ -93,6 +98,7 @@ class Product extends React.Component {
       form: {
         getFieldDecorator
       },
+      type,
     } = this.props
     const { isCreateShow } = this.state
 
@@ -105,10 +111,11 @@ class Product extends React.Component {
                 <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
                   <Col md={8} sm={24}>
                     <Form.Item label="产品类型">
-                      {getFieldDecorator('productType')(
+                      {getFieldDecorator('productTypeId')(
                         <Select placeholder="请选择" style={{ width: '100%' }}>
-                          <Select.Option value="0">无</Select.Option>
-                          <Select.Option value="1">有</Select.Option>
+                          {Object.keys(type).map(key => (
+                            <Select.Option value={key}>{type[key].productTypeName}</Select.Option>
+                          ))}
                         </Select>
                       )}
                     </Form.Item>
