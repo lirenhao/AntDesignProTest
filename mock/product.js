@@ -161,6 +161,33 @@ const dataSource = {
   priceComponent: {
 
   },
+  // 产品类别分类/产品类别成员表
+  categoryMember: {
+    "1-1": {
+      productCategoryId: '1',
+      productId: '1',
+      fromDate: '2019-03-17',
+      thruDate: '2019-10-17',
+      comments: 'comments',
+      sequenceNum: '1',
+      quantity: '10',
+      lastUpdatedStamp: '2019-03-17 11:39:38',
+      createdStamp: '2019-03-17 10:39:38',
+      version: 'v1.0.0',
+    },
+    "1-2": {
+      productCategoryId: '1',
+      productId: '2',
+      fromDate: '2019-03-17',
+      thruDate: '2019-10-17',
+      comments: 'comments',
+      sequenceNum: '2',
+      quantity: '10',
+      lastUpdatedStamp: '2019-03-17 11:39:38',
+      createdStamp: '2019-03-17 10:39:38',
+      version: 'v1.0.0',
+    },
+  },
 }
 
 function findAll(req, res, u) {
@@ -227,7 +254,20 @@ function remove(req, res, u) {
   return findAll(req, res, u)
 }
 
+function findMember(req, res) {
+  const { key } = req.params
+  const data = dataSource.categoryMember
+  const result = Object.keys(data)
+    .filter(v => v.split('-')[0] === key)
+    .map(v => ({
+      ...data[v],
+      productName: dataSource.product[data[v].productId].productName,
+    }))
+  res.json(result)
+}
+
 export default {
+  'GET /api/product/member/:key': findMember,
   'GET /api/product/:type': findAll,
   'GET /api/product/:type/:key': findOne,
   'POST /api/product/:type': save,

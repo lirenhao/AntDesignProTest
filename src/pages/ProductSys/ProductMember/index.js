@@ -4,27 +4,62 @@ import {
   Layout,
   Card,
   Tree,
-  Tabs,
-  Form,
+  Table,
   Input,
+  Divider,
 } from 'antd'
 import PageHeaderWrapper from '@/components/PageHeaderWrapper'
-import DescriptionList from '@/components/DescriptionList'
-import Category from './Category'
-import Feature from './Feature'
+import Manager from './Manager'
 
-const { Description } = DescriptionList
-
-@connect(({ productCategory, loading }) => ({
+@connect(({ productCategory, productMember, loading }) => ({
   categoryTree: productCategory.tree,
-  loading: loading.models.productAssoc,
+  list: productMember.list,
+  loading: loading.models.productMember,
 }))
-@Form.create()
 class Assoc extends React.Component {
 
   state = {
     selectedKeys: [],
+    title: '',
+    isManagerShow: false,
   }
+
+  columns = [
+    {
+      title: '产品名称',
+      dataIndex: 'productName',
+    },
+    {
+      title: '开始日期',
+      dataIndex: 'fromDate',
+    },
+    {
+      title: '结束日期',
+      dataIndex: 'thruDate',
+    },
+    {
+      title: '评论',
+      dataIndex: 'comments',
+    },
+    {
+      title: '序列',
+      dataIndex: 'sequenceNum',
+    },
+    {
+      title: '数量',
+      dataIndex: 'quantity',
+    },
+    {
+      title: '操作',
+      render: (text, record) => (
+        <React.Fragment>
+          <a onClick={() => this.handleRemove(record)}>删除</a>
+          <Divider type="vertical" />
+          <a onClick={() => this.handleManager(record)}>管理</a>
+        </React.Fragment>
+      ),
+    },
+  ]
 
   componentDidMount() {
     const { dispatch } = this.props;
@@ -40,18 +75,39 @@ class Assoc extends React.Component {
   }
 
   handleTreeSelect = (selectedKeys, e) => {
-    console.log(selectedKeys, e)
-    this.setState({ selectedKeys })
+    const { dispatch } = this.props;
+    const { eventKey: key, title} = e.node.props
+    this.setState({ selectedKeys, title })
+    dispatch({
+      type: 'productMember/fetch',
+      payload: key,
+    });
+  }
+
+  handleManagerModal = (visible) => {
+    this.setState({isManagerShow: visible})
+  }
+
+  handleMemberRow = (record) => {
+    this.handleManager(record)
+  }
+
+  handleManager = (record) => {
+    console.log(record)
+    this.handleManagerModal(true)
   }
 
   render() {
     const {
-      form: { 
-        getFieldDecorator 
-      },
       categoryTree,
+      list,
+      loading,
     } = this.props
-    const { selectedKeys } = this.state
+    const { 
+      selectedKeys,
+      title,
+      isManagerShow,
+    } = this.state
 
     const loop = data => data.map((item) => {
       if (item.children && item.children.length) {
@@ -76,83 +132,20 @@ class Assoc extends React.Component {
             </Card>
           </Layout.Sider>
           <Layout.Content>
-            <Card title="产品类别成员">
-              <DescriptionList>
-                <Description term="产品类型">服务</Description>
-                <Description term="产品主类别">产品用途类别</Description>
-                <Description term="产品描述">公司新设立</Description>
-              </DescriptionList>
-            </Card>
-            <Card>
-              <Tabs>
-                <Tabs.TabPane tab="产品类别" key="1">
-                  <Card title="产品类别" bordered={false}>
-                    {getFieldDecorator('categorys', {
-                      initialValue: [{
-                        key: '1',
-                        productCategoryId: '1',
-                        productId: '1',
-                        fromDate: '2019-03-19',
-                        thruDate: '2019-03-19',
-                        comments: 'comments',
-                        sequenceNum: '1',
-                        quantity: '1',
-                      },
-                      {
-                        key: '2',
-                        productCategoryId: '2',
-                        productId: '1',
-                        fromDate: '2019-03-19',
-                        thruDate: '2019-03-19',
-                        comments: 'comments',
-                        sequenceNum: '2',
-                        quantity: '1',
-                      },],
-                    })(<Category />)}
-                  </Card>
-                </Tabs.TabPane>
-                <Tabs.TabPane tab="产品特征" key="2">
-                  <Card title="产品特征" bordered={false}>
-                    {getFieldDecorator('features', {
-                      initialValue: [{
-                        key: '1',
-                        productId: '1',
-                        productFeatureId: '颜色',
-                        productFeatureApplTypeId: '必备特征',
-                        fromDate: '2019-03-19',
-                        thruDate: '2019-03-19',
-                        sequenceNum: '1',
-                        amount: '1.00',
-                        workId: '00001',
-                        name: 'John Brown',
-                        department: 'New York No. 1 Lake Park',
-                      },
-                      {
-                        key: '2',
-                        productId: '1',
-                        productFeatureId: '大小',
-                        productFeatureApplTypeId: '必备特征',
-                        fromDate: '2019-03-19',
-                        thruDate: '2019-03-19',
-                        sequenceNum: '2',
-                        amount: '1.00',
-                        workId: '00002',
-                        name: 'Jim Green',
-                        department: 'London No. 1 Lake Park',
-                      },],
-                    })(<Feature />)}
-                  </Card>
-                </Tabs.TabPane>
-                <Tabs.TabPane tab="产品价格" key="3">
-                  <Card title="产品价格" bordered={false}>
-                    {getFieldDecorator('prices', {
-                      initialValue: [],
-                    })(<Feature />)}
-                  </Card>
-                </Tabs.TabPane>
-              </Tabs>
+            <Card title={title ? `【${title}】类别成员` : "产品类别成员"}>
+              <Table
+                loading={loading}
+                dataSource={list}
+                pagination={false}
+                columns={this.columns}
+                onRow={record => ({onClick: () => this.handleMemberRow(record)})}
+              />
             </Card>
           </Layout.Content>
+          <Manager 
+            visible={isManagerShow} 
+            hideModal={() => this.handleManagerModal(false)} 
+          />
         </Layout>
       </PageHeaderWrapper>
     )

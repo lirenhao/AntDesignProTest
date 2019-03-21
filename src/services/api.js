@@ -172,3 +172,7 @@ export async function deleteProduct(type, key) {
     method: 'DELETE',
   });
 }
+
+export async function getProductCategoryMember(key) {
+  return request(`/api/product/member/${key}`);
+}
