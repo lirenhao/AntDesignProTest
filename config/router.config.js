@@ -52,6 +52,11 @@ export default [
         path: '/productSys',
         routes: [
           {
+            name: 'productMember',
+            path: '/productSys/productMember',
+            component: './ProductSys/ProductMember',
+          },
+          {
             name: 'productType',
             path: '/productSys/productType',
             component: './ProductSys/ProductType',

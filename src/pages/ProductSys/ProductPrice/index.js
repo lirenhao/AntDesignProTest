@@ -9,6 +9,7 @@ import {
   Select,
   Button,
   Divider,
+  message,
 } from 'antd'
 import PageHeaderWrapper from '@/components/PageHeaderWrapper'
 import Create from './Create'
@@ -16,7 +17,7 @@ import Create from './Create'
 import styles from '../table.less'
 
 @connect(({ productPrice, productType, loading }) => ({
-  productPrice,
+  data: productPrice.data,
   priceType: productType.priceType,
   pricePurpose: productType.pricePurpose,
   loading: loading.models.productPrice,
@@ -26,6 +27,8 @@ class Product extends React.Component {
 
   state = {
     isCreateShow: false,
+    isUpdateShow: false,
+    info: {},
   }
 
   columns = [
@@ -65,9 +68,9 @@ class Product extends React.Component {
       title: '操作',
       render: (text, record) => (
         <React.Fragment>
-          <a onClick={() => {}}>删除</a>
+          <a onClick={() => this.handleRemove(record)}>删除</a>
           <Divider type="vertical" />
-          <a onClick={() => this.handleCreateModal(true, record)}>修改</a>
+          <a onClick={() => this.handleUpdate(record)}>修改</a>
         </React.Fragment>
       ),
     },
@@ -76,20 +79,60 @@ class Product extends React.Component {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'productPrice/fetch',
+      type: 'productPrice/findAll',
+      payload: {
+        type: 'price',
+      }
     });
   }
 
-  handleCreateModal = (visible) => {
+  handleAddModal = (visible) => {
     this.setState({isCreateShow: visible})
   }
 
-  handleCreateForm = (values) => {
+  handleAddForm = (record) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'productPrice/submitCreateForm',
-      payload: values,
-      callback: () => this.handleCreateModal(false)
+      type: 'productPrice/save',
+      payload: {
+        type: 'price',
+        payload: {id: 'productPriceId', ...record},
+      },
+      callback: () => this.handleAddModal(false)
+    });
+  }
+
+  handleUpdateModal = (visible) => {
+    this.setState({isUpdateShow: visible})
+  }
+
+  handleUpdate = (record) => {
+    this.setState({info: record})
+    this.handleUpdateModal(true);
+  }
+
+  handleUpdateForm = (record) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'productPrice/update',
+      payload: {
+        type: 'price',
+        key: record.productPriceId,
+        payload: record,
+      },
+      callback: () => this.handleUpdateModal(false)
+    });
+  }
+
+  handleRemove = (record) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'productPrice/remove',
+      payload: {
+        type: 'price',
+        key: record.productPriceId,
+      },
+      callback: () => message.success('删除成功'),
     });
   }
 
@@ -98,15 +141,18 @@ class Product extends React.Component {
       loading,
       priceType,
       pricePurpose,
-      productPrice: {
-        data,
+      data: {
+        list,
+        pagination,
       },
       form: {
         getFieldDecorator
       },
     } = this.props
-    const {
-      isCreateShow,
+    const { 
+      isCreateShow, 
+      isUpdateShow,
+      info,
     } = this.state
     
     return (
@@ -152,22 +198,29 @@ class Product extends React.Component {
               </Form>
             </div>
             <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleCreateModal(true)}>
+              <Button icon="plus" type="primary" onClick={() => this.handleAddModal(true)}>
                 新建
               </Button>
             </div>
             <Table
               loading={loading}
-              dataSource={data.list}
-              pagination={data.pagination}
+              dataSource={list}
+              pagination={pagination}
               columns={this.columns}
             />
           </div>
         </Card>
         <Create 
           visible={isCreateShow} 
-          hideModal={() => this.handleCreateModal(false)} 
-          handleFormSubmit={this.handleCreateForm}
+          hideModal={() => this.handleAddModal(false)} 
+          handleFormSubmit={this.handleAddForm}
+          info={{}}
+        />
+        <Create 
+          visible={isUpdateShow} 
+          hideModal={() => this.handleUpdateModal(false)} 
+          handleFormSubmit={this.handleUpdateForm}
+          info={info}
         />
       </PageHeaderWrapper>
     )

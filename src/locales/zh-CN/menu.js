@@ -43,6 +43,7 @@ export default {
   'menu.test.clue.sign': '签合同',
   'menu.test.pending': '待分配',
   'menu.productSys': '产品系统',
+  'menu.productSys.productMember': '产品管理',
   'menu.productSys.productType': '产品类型',
   'menu.productSys.product': '产品管理',
   'menu.productSys.productAssocType': '产品关联类型',
