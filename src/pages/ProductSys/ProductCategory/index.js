@@ -1,190 +1,203 @@
 import React from 'react'
 import { connect } from 'dva'
 import {
+  Layout,
   Card,
-  Table,
-  Form,
-  Row,
-  Col,
+  Tree,
+  Menu,
+  Dropdown,
   Input,
-  Select,
-  Button,
-  Divider,
+  message,
 } from 'antd'
 import PageHeaderWrapper from '@/components/PageHeaderWrapper'
+import Form from './Form'
 import Create from './Create'
-import Rollup from './Rollup'
 
-import styles from '../table.less'
+const type = 'category'
+const id = 'productCategoryId'
+const pId = 'primaryParentCategoryId'
+const title = 'categoryName'
+const header = '产品类别'
 
 @connect(({ productCategory, productType, loading }) => ({
-  productCategory,
+  tree: productCategory.tree,
+  info: productCategory.info || {},
   categoryType: productType.categoryType,
   loading: loading.models.productCategory,
 }))
-@Form.create()
-class Product extends React.Component {
+class Category extends React.Component {
 
   state = {
+    expandedKeys: ["0-0"],
+    selectedKeys: [],
     isCreateShow: false,
-    isRollupShow: false,
+    parentId: "",
   }
-
-  columns = [
-    {
-      title: '产品类别名称',
-      dataIndex: 'categoryName',
-    },
-    {
-      title: '产品类别类型',
-      dataIndex: 'productCategoryTypeId',
-      render: (id) => {
-        const { categoryType } = this.props
-        return categoryType[id] ? categoryType[id].description : null
-      },
-    },
-    {
-      title: '描述',
-      dataIndex: 'description',
-    },
-    {
-      title: '最后修改时间',
-      dataIndex: 'lastUpdatedStamp',
-    },
-    {
-      title: '创建时间',
-      dataIndex: 'createdStamp',
-    },
-    {
-      title: '版本',
-      dataIndex: 'version',
-    },
-    {
-      title: '操作',
-      render: (text, record) => (
-        <React.Fragment>
-          <a onClick={() => this.handleRollup(true, record)}>隶属</a>
-          <Divider type="vertical" />
-          <a onClick={() => this.handleCreateModal(true)}>修改</a>
-        </React.Fragment>
-      ),
-    },
-  ]
 
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'productCategory/fetch',
+      type: 'productCategory/tree',
+      payload: {
+        type, 
+        id, 
+        pId, 
+        title
+      },
     });
   }
 
-  handleCreateModal = (visible) => {
-    this.setState({isCreateShow: visible})
+  handleCreateModal = (visible, parentId = "") => {
+    this.setState({isCreateShow: visible, parentId})
   }
 
-  handleCreateForm = (values) => {
+  handleCreateForm = (record) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'productCategory/submitCreateForm',
-      payload: values,
-      callback: () => this.handleCreateModal(false)
+      type: 'productCategory/save',
+      payload: {
+        type,
+        id,
+        pId,
+        title,
+        payload: {id, ...record},
+      },
+      callback: () =>  this.handleCreateModal(false),
     });
   }
 
-  handleRollup = (visible, record) => {
+  handleTreeSelect = (selectedKeys, e) => {
+    const { dispatch } = this.props;
+    const key = e.node.props.eventKey
+    this.setState({selectedKeys})
+    dispatch({
+      type: 'productCategory/findOne',
+      payload: {type, key},
+      callback: () => message.success('添加成功'),
+    });
+  }
+
+  handleTreeExpand = (expandedKeys) => {
+    this.setState({expandedKeys})
+  }
+
+  handleUpdateForm = (record) => {
     const { dispatch } = this.props
     dispatch({
-      type: 'productCategory/info',
-      payload: record
-    })
-    this.handleRollupModal(visible)
+      type: 'productCategory/update',
+      payload: {
+        type,
+        id,
+        pId,
+        title,
+        key: record[id],
+        payload: record,
+      },
+      callback: () => message.success('编辑成功'),
+    });
   }
 
-  handleRollupModal = (visible) => {
-    this.setState({isRollupShow: visible})
+  handleRemove = (key) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'productCategory/remove',
+      payload: {
+        type,
+        id,
+        pId,
+        title,
+        key,
+      },
+      callback: () => {
+        message.success('删除成功')
+      },
+    });
   }
 
-  handleRollupForm = (values) => {
-    console.log(values)
+  renderRightMenu(record) {
+    if(record.children && record.children.length){
+      return (
+        <Menu>
+          <Menu.Item onClick={() => this.handleCreateModal(true, record.value)}>添加节点</Menu.Item>
+        </Menu>
+      )
+    }
+    return (
+      <Menu>
+        <Menu.Item onClick={() => this.handleCreateModal(true, record.value)}>添加节点</Menu.Item>
+        <Menu.Item onClick={() => this.handleRemove(record.value)}>删除节点</Menu.Item>
+      </Menu>
+    )
+  }
+
+  renderTreeTitle(record) {
+    return (
+      <Dropdown overlay={this.renderRightMenu(record)} trigger={['contextMenu']}>
+        <span>{record.title}</span>
+      </Dropdown>
+    )
   }
 
   render() {
     const {
-      loading,
-      productCategory: {
-        data,
-      },
-      form: {
-        getFieldDecorator
-      },
-      categoryType,
+      tree,
+      info,
     } = this.props
-    const { isCreateShow, isRollupShow } = this.state
+    const { 
+      expandedKeys,
+      selectedKeys,
+      isCreateShow,
+      parentId,
+    } = this.state
 
+    const loop = data => data.map((item) => {
+      if (item.children && item.children.length) {
+        return (
+          <Tree.TreeNode key={item.value} title={this.renderTreeTitle(item)} info={item}>
+            {loop(item.children)}
+          </Tree.TreeNode>
+        );
+      }
+      return <Tree.TreeNode key={item.value} title={this.renderTreeTitle(item)} info={item} />;
+    })
+    
     return (
-      <PageHeaderWrapper title="产品类别">
-        <Card bordered={false}>
-          <div className={styles.tableList}>
-            <div className={styles.tableListForm}>
-              <Form onSubmit={this.handleSearch} layout="inline">
-                <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-                  <Col md={8} sm={24}>
-                    <Form.Item label="产品类别类型">
-                      {getFieldDecorator('productCategoryTypeId')(
-                        <Select placeholder="请选择" style={{ width: '100%' }}>
-                          {Object.keys(categoryType).map(key => (
-                            <Select.Option value={key}>{categoryType[key].description}</Select.Option>
-                          ))}
-                        </Select>
-                      )}
-                    </Form.Item>
-                  </Col>
-                  <Col md={8} sm={24}>
-                    <Form.Item label="产品类别名称">
-                      {getFieldDecorator('productCategoryName')(<Input placeholder="请输入" />)}
-                    </Form.Item>
-                  </Col>
-                  <Col md={8} sm={24}>
-                    <span className={styles.submitButtons}>
-                      <Button type="primary" htmlType="submit">
-                        查询
-                      </Button>
-                      <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
-                        重置
-                      </Button>
-                    </span>
-                  </Col>
-                </Row>
-              </Form>
-            </div>
-            <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleCreateModal(true)}>
-                新建
-              </Button>
-            </div>
-            <Table
-              loading={loading}
-              dataSource={data.list}
-              pagination={data.pagination}
-              columns={this.columns}
+      <PageHeaderWrapper title={header}>
+        <Layout>
+          <Layout.Sider theme="light" width="200">
+            <Card bordered={false}>
+              <Input.Search style={{ marginBottom: 8 }} placeholder="Search" />
+              <Tree 
+                showLine
+                expandedKeys={expandedKeys}
+                selectedKeys={selectedKeys}
+                onExpand={this.handleTreeExpand}
+                onSelect={this.handleTreeSelect}
+              >
+                {loop(tree)}
+              </Tree>
+            </Card>
+          </Layout.Sider>
+          <Layout.Content>
+            <Card title={`${header}编辑`}>
+              <Form 
+                info={info}
+                tree={tree}
+                handleFormSubmit={this.handleUpdateForm}
+              />
+            </Card>
+            <Create 
+              visible={isCreateShow} 
+              hideModal={() => this.handleCreateModal(false)} 
+              handleFormSubmit={this.handleCreateForm}
+              info={{[pId]: parentId}}
+              tree={tree}
             />
-          </div>
-        </Card>
-        <Create 
-          visible={isCreateShow} 
-          hideModal={() => this.handleCreateModal(false)} 
-          handleFormSubmit={this.handleCreateForm}
-          categorys={data.list.map(item => ({key: item.productCategoryId, title: item.categoryName}))}
-        />
-        <Rollup
-          visible={isRollupShow} 
-          hideModal={() => this.handleRollupModal(false)} 
-          handleFormSubmit={this.handleRollupForm}
-          categorys={data.list.map(item => ({key: item.productCategoryId, title: item.categoryName}))}
-        />
+          </Layout.Content>
+        </Layout>
       </PageHeaderWrapper>
     )
   }
 }
 
-export default Product
+export default Category

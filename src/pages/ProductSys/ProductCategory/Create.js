@@ -4,21 +4,35 @@ import {
   Modal,
   Form,
   Input,
-  Select,
+  TreeSelect,
 } from 'antd'
 
 @connect(({ productType }) => ({
-  categoryType: productType.categoryType,
+  categoryTypeTree: productType.tree.categoryType || [{}],
 }))
 @Form.create()
 class Create extends React.Component {
 
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'productType/tree',
+      payload: {
+        type: 'categoryType',
+        id: 'productCategoryTypeId',
+        pId: 'parentTypeId',
+        title: 'description',
+      }
+    });
+  }
+
   handleSubmit = e => {
-    const { handleFormSubmit, form } = this.props;
+    const { handleFormSubmit, form, info } = this.props;
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        handleFormSubmit(values);
+        handleFormSubmit({ ...info,  ...values});
+        form.resetFields();
       }
     });
   };
@@ -28,8 +42,9 @@ class Create extends React.Component {
       form: { getFieldDecorator },
       visible,
       hideModal,
-      categorys,
-      categoryType,
+      tree,
+      info,
+      categoryTypeTree,
     } = this.props;
 
     const formItemLayout = {
@@ -43,7 +58,7 @@ class Create extends React.Component {
         md: { span: 10 },
       },
     }
-
+    
     return (
       <Modal 
         width="60%"
@@ -57,7 +72,8 @@ class Create extends React.Component {
       >
         <Form>
           <Form.Item {...formItemLayout} label='产品类别名称'>
-            {getFieldDecorator('productCategoryName', {
+            {getFieldDecorator('categoryName', {
+              initialValue: info.categoryName,
               rules: [
                 {
                   required: true,
@@ -68,25 +84,32 @@ class Create extends React.Component {
           </Form.Item>
           <Form.Item {...formItemLayout} label="产品类别类型">
             {getFieldDecorator('productCategoryTypeId', {
+              initialValue: info.productCategoryTypeId,
               rules: [{ required: true, message: '请选择产品类别类型' }],
             })(
-              <Select placeholder="请选择">
-                {Object.keys(categoryType).map(key => (
-                  <Select.Option value={key}>{categoryType[key].description}</Select.Option>
-                ))}
-              </Select>
+              <TreeSelect
+                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                placeholder="请选择"
+                treeDefaultExpandAll
+                treeData={categoryTypeTree[0].children}
+              />
             )}
           </Form.Item>
           <Form.Item {...formItemLayout} label="主父产品类别">
             {getFieldDecorator('primaryParentCategoryId', {
+              initialValue: info.primaryParentCategoryId,
             })(
-              <Select placeholder="请选择">
-                {categorys.map(item => (<Select.Option value={item.key}>{item.title}</Select.Option>))}
-              </Select>
+              <TreeSelect
+                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                placeholder="请选择"
+                treeDefaultExpandAll
+                treeData={tree}
+              />
             )}
           </Form.Item>
           <Form.Item {...formItemLayout} label='描述'>
             {getFieldDecorator('description', {
+              initialValue: info.description,
             })(
               <Input.TextArea
                 style={{ minHeight: 32 }}

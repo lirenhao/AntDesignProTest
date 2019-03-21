@@ -1,4 +1,9 @@
-import { getProductList, addProduct, updateProduct, deleteProduct } from '@/services/api';
+import {
+  getProductList,
+  addProduct,
+  updateProduct,
+  deleteProduct
+} from '@/services/api';
 
 export default {
   namespace: 'product',
@@ -15,7 +20,7 @@ export default {
       const { type, payload: params } = payload
       const response = yield call(getProductList, type, params);
       yield put({
-        type: 'refresh',
+        type: 'createData',
         payload: response,
       });
     },
@@ -23,7 +28,7 @@ export default {
       const { type, payload: params } = payload
       const response = yield call(addProduct, type, params);
       yield put({
-        type: 'refresh',
+        type: 'createData',
         payload: response,
       });
       if (callback) callback();
@@ -32,7 +37,7 @@ export default {
       const { type, key, payload: params } = payload
       const response = yield call(updateProduct, type, key, params);
       yield put({
-        type: 'refresh',
+        type: 'createData',
         payload: response,
       });
       if (callback) callback();
@@ -42,7 +47,7 @@ export default {
       yield call(deleteProduct, type, key, params);
       const response = yield call(getProductList, type, params);
       yield put({
-        type: 'refresh',
+        type: 'createData',
         payload: response,
       });
       if (callback) callback();
@@ -50,7 +55,7 @@ export default {
   },
 
   reducers: {
-    refresh(state, action) {
+    createData(state, action) {
       return {
         ...state,
         data: action.payload,
