@@ -7,7 +7,7 @@ import {
   Row,
   Col,
   Input,
-  Select,
+  TreeSelect,
   Button,
   Divider,
 } from 'antd'
@@ -19,6 +19,7 @@ import styles from '../table.less'
 @connect(({ product, productType, loading }) => ({
   product,
   type: productType.type,
+  typeTree: productType.tree.type || [{}],
   loading: loading.models.product,
 }))
 @Form.create()
@@ -61,9 +62,11 @@ class Product extends React.Component {
       title: '操作',
       render: (text, record) => (
         <React.Fragment>
-          <a onClick={() => this.handleRemove(true, record)}>删除</a>
+          <a>删除</a>
           <Divider type="vertical" />
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>修改</a>
+          <a>修改</a>
+          <Divider type="vertical" />
+          <a onClick={() => this.handleFeature(true, record)}>特征</a>
         </React.Fragment>
       ),
     },
@@ -74,19 +77,32 @@ class Product extends React.Component {
     dispatch({
       type: 'product/fetch',
     });
+    dispatch({
+      type: 'productType/tree',
+      payload: {
+        type: 'type',
+        id: 'productTypeId',
+        pId: 'parentTypeId',
+        title: 'productTypeName',
+      }
+    });
   }
 
   handleAddModal = (visible) => {
     this.setState({isCreateShow: visible})
   }
 
-  handleAddForm = (values) => {
+  handleAddForm = (record) => {
     const { dispatch } = this.props;
     dispatch({
       type: 'product/submitAddForm',
-      payload: values,
+      payload: record,
       callback: () => this.handleAddModal(false)
     });
+  }
+
+  handleFeature = (visible, record) => {
+    console.log(visible, record)
   }
 
   render() {
@@ -98,7 +114,7 @@ class Product extends React.Component {
       form: {
         getFieldDecorator
       },
-      type,
+      typeTree,
     } = this.props
     const { isCreateShow } = this.state
 
@@ -112,11 +128,12 @@ class Product extends React.Component {
                   <Col md={8} sm={24}>
                     <Form.Item label="产品类型">
                       {getFieldDecorator('productTypeId')(
-                        <Select placeholder="请选择" style={{ width: '100%' }}>
-                          {Object.keys(type).map(key => (
-                            <Select.Option value={key}>{type[key].productTypeName}</Select.Option>
-                          ))}
-                        </Select>
+                        <TreeSelect
+                          dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                          placeholder="请选择"
+                          treeDefaultExpandAll
+                          treeData={typeTree[0].children}
+                        />
                       )}
                     </Form.Item>
                   </Col>

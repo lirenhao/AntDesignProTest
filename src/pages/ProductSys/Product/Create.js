@@ -4,15 +4,28 @@ import {
   Modal,
   Form,
   Input,
+  TreeSelect,
   DatePicker,
-  Select,
 } from 'antd'
 
 @connect(({ productType }) => ({
-  type: productType.type,
+  typeTree: productType.tree.type || [{}],
 }))
 @Form.create()
 class Create extends React.Component {
+
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'productType/tree',
+      payload: {
+        type: 'type',
+        id: 'productTypeId',
+        pId: 'parentTypeId',
+        title: 'productTypeName',
+      }
+    });
+  }
 
   handleSubmit = e => {
     const { handleFormSubmit, form } = this.props;
@@ -29,7 +42,7 @@ class Create extends React.Component {
       form: { getFieldDecorator },
       visible,
       hideModal,
-      type,
+      typeTree,
     } = this.props;
 
     const formItemLayout = {
@@ -70,11 +83,12 @@ class Create extends React.Component {
             {getFieldDecorator('productTypeId', {
               rules: [{ required: true, message: '请选择产品类型' }],
             })(
-              <Select placeholder="请选择">
-                {Object.keys(type).map(key => (
-                  <Select.Option value={key}>{type[key].productTypeName}</Select.Option>
-                ))}
-              </Select>
+              <TreeSelect
+                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                placeholder="请选择"
+                treeDefaultExpandAll
+                treeData={typeTree[0].children}
+              />
             )}
           </Form.Item>
           <Form.Item {...formItemLayout} label='introductionDate'>
