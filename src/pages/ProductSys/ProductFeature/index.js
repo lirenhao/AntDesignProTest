@@ -7,19 +7,20 @@ import {
   Row,
   Col,
   Input,
-  Select,
+  TreeSelect,
   Button,
   Divider,
+  message,
 } from 'antd'
 import PageHeaderWrapper from '@/components/PageHeaderWrapper'
 import Create from './Create'
-import Iactn from './Iactn'
 
 import styles from '../table.less'
 
 @connect(({ productFeature, productType, loading }) => ({
-  productFeature,
+  data: productFeature.data,
   featureType: productType.featureType,
+  featureTypeTree: productType.tree.featureType || [{}],
   loading: loading.models.productFeature,
 }))
 @Form.create()
@@ -27,7 +28,8 @@ class Product extends React.Component {
 
   state = {
     isCreateShow: false,
-    isIactnShow: false,
+    isUpdateShow: false,
+    info: {},
   }
 
   columns = [
@@ -63,9 +65,9 @@ class Product extends React.Component {
       title: '操作',
       render: (text, record) => (
         <React.Fragment>
-          <a onClick={() => this.handleIactn(true, record)}>互作用</a>
+          <a onClick={() => this.handleRemove(record)}>删除</a>
           <Divider type="vertical" />
-          <a onClick={() => this.handleCreateModal(true, record)}>修改</a>
+          <a onClick={() => this.handleUpdate(record)}>修改</a>
         </React.Fragment>
       ),
     },
@@ -74,54 +76,88 @@ class Product extends React.Component {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'productFeature/fetch',
+      type: 'productFeature/findAll',
+      payload: {
+        type: 'feature',
+      }
+    });
+    dispatch({
+      type: 'productType/tree',
+      payload: {
+        type: 'featureType',
+        id: 'productFeatureTypeId',
+        pId: 'parentTypeId',
+        title: 'description',
+      }
     });
   }
 
-  handleCreateModal = (visible) => {
+  handleAddModal = (visible) => {
     this.setState({isCreateShow: visible})
   }
 
-  handleCreateForm = (values) => {
+  handleAddForm = (record) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'productFeature/submitCreateForm',
-      payload: values,
-      callback: () => this.handleCreateModal(false)
+      type: 'productFeature/save',
+      payload: {
+        type: 'feature',
+        payload: {id: 'productFeatureId', ...record},
+      },
+      callback: () => this.handleAddModal(false)
     });
   }
 
-  handleIactn = (visible, record) => {
-    const { dispatch } = this.props
+  handleUpdateModal = (visible) => {
+    this.setState({isUpdateShow: visible})
+  }
+
+  handleUpdate = (record) => {
+    this.setState({info: record})
+    this.handleUpdateModal(true);
+  }
+
+  handleUpdateForm = (record) => {
+    const { dispatch } = this.props;
     dispatch({
-      type: 'productFeature/info',
-      payload: record,
-    })
-    this.handleIactnModal(visible)
+      type: 'productFeature/update',
+      payload: {
+        type: 'feature',
+        key: record.productFeatureId,
+        payload: record,
+      },
+      callback: () => this.handleUpdateModal(false)
+    });
   }
 
-  handleIactnModal = (visible) => {
-    this.setState({isIactnShow: visible})
-  }
-
-  handleIactnForm = (values) => {
-    console.log(values)
+  handleRemove = (record) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'productFeature/remove',
+      payload: {
+        type: 'feature',
+        key: record.productFeatureId,
+      },
+      callback: () => message.success('删除成功'),
+    });
   }
 
   render() {
     const {
       loading,
-      productFeature: {
-        data,
+      data: {
+        list,
+        pagination,
       },
       form: {
         getFieldDecorator
       },
-      featureType,
+      featureTypeTree,
     } = this.props
-    const {
-      isCreateShow,
-      isIactnShow,
+    const { 
+      isCreateShow, 
+      isUpdateShow,
+      info,
     } = this.state
 
     return (
@@ -134,11 +170,12 @@ class Product extends React.Component {
                   <Col md={8} sm={24}>
                     <Form.Item label="产品特征类型">
                       {getFieldDecorator('productFeatureTypeId')(
-                        <Select placeholder="请选择" style={{ width: '100%' }}>
-                          {Object.keys(featureType).map(key => (
-                            <Select.Option value={key}>{featureType[key].description}</Select.Option>
-                          ))}
-                        </Select>
+                        <TreeSelect
+                          dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                          placeholder="请选择"
+                          treeDefaultExpandAll
+                          treeData={featureTypeTree[0].children}
+                        />
                       )}
                     </Form.Item>
                   </Col>
@@ -161,27 +198,29 @@ class Product extends React.Component {
               </Form>
             </div>
             <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleCreateModal(true)}>
+              <Button icon="plus" type="primary" onClick={() => this.handleAddModal(true)}>
                 新建
               </Button>
             </div>
             <Table
               loading={loading}
-              dataSource={data.list}
-              pagination={data.pagination}
+              dataSource={list}
+              pagination={pagination}
               columns={this.columns}
             />
           </div>
         </Card>
         <Create 
           visible={isCreateShow} 
-          hideModal={() => this.handleCreateModal(false)} 
-          handleFormSubmit={this.handleCreateForm}
+          hideModal={() => this.handleAddModal(false)} 
+          handleFormSubmit={this.handleAddForm}
+          info={{}}
         />
-        <Iactn 
-          visible={isIactnShow} 
-          hideModal={() => this.handleIactnModal(false)} 
-          handleFormSubmit={this.handleIactnForm}
+        <Create 
+          visible={isUpdateShow} 
+          hideModal={() => this.handleUpdateModal(false)} 
+          handleFormSubmit={this.handleUpdateForm}
+          info={info}
         />
       </PageHeaderWrapper>
     )

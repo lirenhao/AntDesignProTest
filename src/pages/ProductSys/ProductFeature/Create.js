@@ -4,21 +4,35 @@ import {
   Modal,
   Form,
   Input,
-  Select,
+  TreeSelect,
 } from 'antd'
 
 @connect(({ productType }) => ({
-  featureType: productType.featureType,
+  featureTypeTree: productType.tree.featureType || [{}],
 }))
 @Form.create()
 class Create extends React.Component {
 
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'productType/tree',
+      payload: {
+        type: 'featureType',
+        id: 'productFeatureTypeId',
+        pId: 'parentTypeId',
+        title: 'description',
+      }
+    });
+  }
+
   handleSubmit = e => {
-    const { handleFormSubmit, form } = this.props;
+    const { handleFormSubmit, form, info } = this.props;
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        handleFormSubmit(values);
+        handleFormSubmit({ ...info,  ...values});
+        form.resetFields();
       }
     });
   };
@@ -28,7 +42,8 @@ class Create extends React.Component {
       form: { getFieldDecorator },
       visible,
       hideModal,
-      featureType,
+      info,
+      featureTypeTree,
     } = this.props;
 
     const formItemLayout = {
@@ -57,17 +72,20 @@ class Create extends React.Component {
         <Form>
           <Form.Item {...formItemLayout} label="产品特征类型">
             {getFieldDecorator('productFeatureTypeId', {
+              initialValue: info.productFeatureTypeId,
               rules: [{ required: true, message: '请选择产品特征类型' }],
             })(
-              <Select placeholder="请选择">
-                {Object.keys(featureType).map(key => (
-                  <Select.Option value={key}>{featureType[key].description}</Select.Option>
-                ))}
-              </Select>
+              <TreeSelect
+                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                placeholder="请选择"
+                treeDefaultExpandAll
+                treeData={featureTypeTree[0].children}
+              />
             )}
           </Form.Item>
           <Form.Item {...formItemLayout} label='描述'>
             {getFieldDecorator('description', {
+              initialValue: info.description,
               rules: [
                 {
                   required: true,
@@ -84,6 +102,7 @@ class Create extends React.Component {
           </Form.Item>
           <Form.Item {...formItemLayout} label='uomId'>
             {getFieldDecorator('uomId', {
+              initialValue: info.uomId,
               rules: [
                 {
                   required: true,
@@ -94,22 +113,27 @@ class Create extends React.Component {
           </Form.Item>
           <Form.Item {...formItemLayout} label='numberSpecified'>
             {getFieldDecorator('numberSpecified', {
+              initialValue: info.numberSpecified,
               })(<Input placeholder='请输入' />)}
           </Form.Item>
           <Form.Item {...formItemLayout} label='defaultAmount'>
             {getFieldDecorator('defaultAmount', {
+              initialValue: info.defaultAmount,
               })(<Input placeholder='请输入' />)}
           </Form.Item>
           <Form.Item {...formItemLayout} label='defaultSequenceNum'>
             {getFieldDecorator('defaultSequenceNum', {
+              initialValue: info.defaultSequenceNum,
               })(<Input placeholder='请输入' />)}
           </Form.Item>
           <Form.Item {...formItemLayout} label='ABBREV'>
             {getFieldDecorator('ABBREV', {
+              initialValue: info.ABBREV,
               })(<Input placeholder='请输入' />)}
           </Form.Item>
           <Form.Item {...formItemLayout} label='idCode'>
             {getFieldDecorator('idCode', {
+              initialValue: info.idCode,
               })(<Input placeholder='请输入' />)}
           </Form.Item>
         </Form>

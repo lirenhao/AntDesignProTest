@@ -116,7 +116,34 @@ const dataSource = {
   },
   // 产品特征
   feature: {
-
+    "1": {
+      productFeatureId: '1',
+      productFeatureTypeId: '1',
+      description: '特征一',
+      uomId: 'uomId',
+      numberSpecified: '',
+      defaultAmount: '',
+      defaultSequenceNum: '',
+      ABBREV: '',
+      idCode: '',
+      lastUpdatedStamp: '2019-03-17 11:39:38',
+      createdStamp: '2019-03-17 10:39:38',
+      version: 'v1.0.0',
+    },
+    "2": {
+      productFeatureId: '2',
+      productFeatureTypeId: '2',
+      description: '特征二',
+      uomId: 'uomId',
+      numberSpecified: '',
+      defaultAmount: '',
+      defaultSequenceNum: '',
+      ABBREV: '',
+      idCode: '',
+      lastUpdatedStamp: '2019-03-17 11:39:38',
+      createdStamp: '2019-03-17 10:39:38',
+      version: 'v1.0.0',
+    }
   },
   // 产品特征互作用
   featureIactn: {

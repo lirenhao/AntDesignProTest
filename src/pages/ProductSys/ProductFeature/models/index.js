@@ -1,5 +1,9 @@
-import { queryProductFeature, addProductFeature } from '@/services/api';
-import { message } from 'antd';
+import {
+  getProductList,
+  addProduct,
+  updateProduct,
+  deleteProduct
+} from '@/services/api';
 
 export default {
   namespace: 'productFeature',
@@ -9,39 +13,52 @@ export default {
       list: [],
       pagination: {},
     },
-    info: {},
   },
 
   effects: {
-    *fetch({ payload }, { call, put }) {
-      const response = yield call(queryProductFeature, payload);
+    *findAll({ payload }, { call, put }) {
+      const { type, payload: params } = payload
+      const response = yield call(getProductList, type, params);
       yield put({
-        type: 'save',
+        type: 'createData',
         payload: response,
       });
     },
-    *submitCreateForm({ payload, callback }, { call, put }) {
-      const response = yield call(addProductFeature, payload);
+    *save({ payload, callback }, { call, put }) {
+      const { type, payload: params } = payload
+      const response = yield call(addProduct, type, params);
       yield put({
-        type: 'save',
+        type: 'createData',
         payload: response,
       });
-      message.success('提交成功');
+      if (callback) callback();
+    },
+    *update({ payload, callback }, { call, put }) {
+      const { type, key, payload: params } = payload
+      const response = yield call(updateProduct, type, key, params);
+      yield put({
+        type: 'createData',
+        payload: response,
+      });
+      if (callback) callback();
+    },
+    *remove({ payload, callback }, { call, put }) {
+      const { type, key, payload: params } = payload
+      yield call(deleteProduct, type, key, params);
+      const response = yield call(getProductList, type, params);
+      yield put({
+        type: 'createData',
+        payload: response,
+      });
       if (callback) callback();
     },
   },
 
   reducers: {
-    save(state, action) {
+    createData(state, action) {
       return {
         ...state,
         data: action.payload,
-      };
-    },
-    info(state, action) {
-      return {
-        ...state,
-        info: action.payload,
       };
     },
   },
