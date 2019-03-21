@@ -139,12 +139,16 @@ export async function addClue(params) {
   });
 }
 
-export async function queryProduct(params) {
-  return request(`/api/product?${stringify(params)}`);
+export async function getProductList(type, params) {
+  return request(`/api/product/${type}?${stringify(params)}`);
 }
 
-export async function addProduct(params) {
-  return request('/api/product', {
+export async function getProductInfo(type, key, params) {
+  return request(`/api/product/${type}/${key}?${stringify(params)}`);
+}
+
+export async function addProduct(type, params) {
+  return request(`/api/product/${type}`, {
     method: 'POST',
     body: {
       ...params,
@@ -153,44 +157,18 @@ export async function addProduct(params) {
   });
 }
 
-export async function queryProductCategory(params) {
-  return request(`/api/productCategory?${stringify(params)}`);
-}
-
-export async function addProductCategory(params) {
-  return request('/api/productCategory', {
-    method: 'POST',
+export async function updateProduct(type, key, params) {
+  return request(`/api/product/${type}/${key}`, {
+    method: 'PUT',
     body: {
       ...params,
-      method: 'post',
+      method: 'put',
     },
   });
 }
 
-export async function queryProductFeature(params) {
-  return request(`/api/productFeature?${stringify(params)}`);
-}
-
-export async function addProductFeature(params) {
-  return request('/api/productFeature', {
-    method: 'POST',
-    body: {
-      ...params,
-      method: 'post',
-    },
-  });
-}
-
-export async function queryProductPrice(params) {
-  return request(`/api/productPrice?${stringify(params)}`);
-}
-
-export async function addProductPrice(params) {
-  return request('/api/productPrice', {
-    method: 'POST',
-    body: {
-      ...params,
-      method: 'post',
-    },
+export async function deleteProduct(type, key) {
+  return request(`/api/product/${type}/${key}`, {
+    method: 'DELETE',
   });
 }

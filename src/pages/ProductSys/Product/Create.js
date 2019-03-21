@@ -7,6 +7,7 @@ import {
   TreeSelect,
   DatePicker,
 } from 'antd'
+import moment from 'moment'
 
 @connect(({ productType }) => ({
   typeTree: productType.tree.type || [{}],
@@ -28,11 +29,12 @@ class Create extends React.Component {
   }
 
   handleSubmit = e => {
-    const { handleFormSubmit, form } = this.props;
+    const { handleFormSubmit, form, info } = this.props;
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        handleFormSubmit(values);
+        handleFormSubmit({ ...info,  ...values});
+        form.resetFields();
       }
     });
   };
@@ -40,6 +42,7 @@ class Create extends React.Component {
   render() {
     const {
       form: { getFieldDecorator },
+      info,
       visible,
       hideModal,
       typeTree,
@@ -71,6 +74,7 @@ class Create extends React.Component {
         <Form>
           <Form.Item {...formItemLayout} label='产品名称'>
             {getFieldDecorator('productName', {
+              initialValue: info.productName,
               rules: [
                 {
                   required: true,
@@ -81,6 +85,7 @@ class Create extends React.Component {
           </Form.Item>
           <Form.Item {...formItemLayout} label="产品类型">
             {getFieldDecorator('productTypeId', {
+              initialValue: info.productTypeId,
               rules: [{ required: true, message: '请选择产品类型' }],
             })(
               <TreeSelect
@@ -93,6 +98,7 @@ class Create extends React.Component {
           </Form.Item>
           <Form.Item {...formItemLayout} label='introductionDate'>
             {getFieldDecorator('introductionDate', {
+              initialValue: moment(info.introductionDate),
               rules: [
                 {
                   required: true,
@@ -106,6 +112,7 @@ class Create extends React.Component {
           </Form.Item>
           <Form.Item {...formItemLayout} label='relaseDate'>
             {getFieldDecorator('relaseDate', {
+              initialValue: moment(info.relaseDate),
               rules: [
                 {
                   required: true,
@@ -119,6 +126,7 @@ class Create extends React.Component {
           </Form.Item>
           <Form.Item {...formItemLayout} label='supportDiscontinuationDate'>
             {getFieldDecorator('supportDiscontinuationDate', {
+              initialValue: moment(info.supportDiscontinuationDate),
               rules: [
                 {
                   required: true,
@@ -132,6 +140,7 @@ class Create extends React.Component {
           </Form.Item>
           <Form.Item {...formItemLayout} label='salesDiscontinuationDate'>
             {getFieldDecorator('salesDiscontinuationDate', {
+              initialValue: moment(info.salesDiscontinuationDate),
               rules: [
                 {
                   required: true,
@@ -145,18 +154,22 @@ class Create extends React.Component {
           </Form.Item>
           <Form.Item {...formItemLayout} label='salesDiscWhenNotAvail'>
             {getFieldDecorator('salesDiscWhenNotAvail', {
+                initialValue: info.salesDiscWhenNotAvail,
               })(<Input placeholder='请输入' />)}
           </Form.Item>
           <Form.Item {...formItemLayout} label='InternalName'>
             {getFieldDecorator('InternalName', {
+                initialValue: info.InternalName,
               })(<Input placeholder='请输入' />)}
           </Form.Item>
           <Form.Item {...formItemLayout} label='comments'>
             {getFieldDecorator('comments', {
+                initialValue: info.comments,
               })(<Input placeholder='请输入' />)}
           </Form.Item>
           <Form.Item {...formItemLayout} label='描述'>
             {getFieldDecorator('description', {
+              initialValue: info.description,
             })(
               <Input.TextArea
                 style={{ minHeight: 32 }}

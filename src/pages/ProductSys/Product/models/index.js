@@ -1,5 +1,4 @@
-import { queryProduct, addProduct } from '@/services/api';
-import { message } from 'antd';
+import { getProductList, addProduct, updateProduct, deleteProduct } from '@/services/api';
 
 export default {
   namespace: 'product',
@@ -12,26 +11,46 @@ export default {
   },
 
   effects: {
-    *fetch({ payload }, { call, put }) {
-      const response = yield call(queryProduct, payload);
+    *findAll({ payload }, { call, put }) {
+      const { type, payload: params } = payload
+      const response = yield call(getProductList, type, params);
       yield put({
-        type: 'save',
+        type: 'refresh',
         payload: response,
       });
     },
-    *submitAddForm({ payload, callback }, { call, put }) {
-      const response = yield call(addProduct, payload);
+    *save({ payload, callback }, { call, put }) {
+      const { type, payload: params } = payload
+      const response = yield call(addProduct, type, params);
       yield put({
-        type: 'save',
+        type: 'refresh',
         payload: response,
       });
-      message.success('提交成功');
+      if (callback) callback();
+    },
+    *update({ payload, callback }, { call, put }) {
+      const { type, key, payload: params } = payload
+      const response = yield call(updateProduct, type, key, params);
+      yield put({
+        type: 'refresh',
+        payload: response,
+      });
+      if (callback) callback();
+    },
+    *remove({ payload, callback }, { call, put }) {
+      const { type, key, payload: params } = payload
+      yield call(deleteProduct, type, key, params);
+      const response = yield call(getProductList, type, params);
+      yield put({
+        type: 'refresh',
+        payload: response,
+      });
       if (callback) callback();
     },
   },
 
   reducers: {
-    save(state, action) {
+    refresh(state, action) {
       return {
         ...state,
         data: action.payload,
