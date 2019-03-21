@@ -17,7 +17,7 @@ import Manager from './Manager'
 
 @connect(({ productCategory, productMember, loading }) => ({
   categoryTree: productCategory.tree,
-  list: productMember.list,
+  memberList: productMember.list,
   loading: loading.models.productMember,
 }))
 class Assoc extends React.Component {
@@ -101,23 +101,24 @@ class Assoc extends React.Component {
   handleAddForm = (record) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'productPrice/save',
+      type: 'productMember/save',
       payload: {
-        type: 'price',
-        payload: {id: 'productPriceId', ...record},
+        ...record,
+        fromDate: record.fromDate.format('YYYY-MM-DD'),
+        thruDate: record.thruDate.format('YYYY-MM-DD'),
       },
-      callback: () => this.handleAddModal(false)
+      callback: () => {
+        this.handleAddModal(false)
+        message.success('新增成功')
+      },
     });
   }
 
   handleRemove = (record) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'productPrice/remove',
-      payload: {
-        type: 'price',
-        key: record.productPriceId,
-      },
+      type: 'productMember/remove',
+      payload: record,
       callback: () => message.success('删除成功'),
     });
   }
@@ -134,13 +135,12 @@ class Assoc extends React.Component {
   handleUpdateForm = (record) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'productPrice/update',
-      payload: {
-        type: 'price',
-        key: record.productPriceId,
-        payload: record,
+      type: 'productMember/update',
+      payload: record,
+      callback: () => {
+        this.handleUpdateModal(false)
+        message.success('编辑成功')
       },
-      callback: () => this.handleUpdateModal(false)
     });
   }
 
@@ -172,7 +172,7 @@ class Assoc extends React.Component {
   render() {
     const {
       categoryTree,
-      list,
+      memberList,
       loading,
     } = this.props
     const { 
@@ -211,7 +211,7 @@ class Assoc extends React.Component {
             <Card title={title ? `【${title}】类别成员` : "产品类别成员"}>
               <Table
                 loading={loading}
-                dataSource={list}
+                dataSource={memberList}
                 pagination={false}
                 columns={this.columns}
               />

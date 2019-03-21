@@ -45,7 +45,7 @@ class Create extends React.Component {
       hideModal,
       product,
     } = this.props;
-
+    
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -70,19 +70,19 @@ class Create extends React.Component {
         onCancel={hideModal}
       >
         <Form>
-          <Form.Item {...formItemLayout} label='产品名称'>
-            {getFieldDecorator('productName', {
-              initialValue: info.productName,
+          <Form.Item {...formItemLayout} label='产品'>
+            {getFieldDecorator('productId', {
+              initialValue: info.productId,
               rules: [
                 {
                   required: true,
-                  message: '请输入产品名称',
+                  message: '请选择产品',
                 },
               ],
               })(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
-                  {Object.keys(product).map(key => (
-                    <Select.Option value={key}>{product[key].productName}</Select.Option>
+                  {product.map(item => (
+                    <Select.Option value={item.productId}>{item.productName}</Select.Option>
                   ))}
                 </Select>
               )}

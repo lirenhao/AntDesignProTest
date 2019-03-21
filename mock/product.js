@@ -266,8 +266,42 @@ function findMember(req, res) {
   res.json(result)
 }
 
+function saveMember(req, res, u, b) {
+  const body = (b && b.body) || req.body
+  const key = `${body.productCategoryId}-${body.productId}`
+  dataSource.categoryMember[key] = {
+    ...body,
+    lastUpdatedStamp: moment().format('YYYY-MM-DD HH:mm:ss'),
+    createdStamp: moment().format('YYYY-MM-DD HH:mm:ss'),
+    version: 'v1.0.0',
+  }
+  req.params.key = body.productCategoryId
+  return findMember(req, res, u)
+}
+
+function updateMember(req, res, u, b) {
+  const { key } = req.params
+  const body = (b && b.body) || req.body
+  dataSource.categoryMember[key] = {
+    ...body,
+    lastUpdatedStamp: moment().format('YYYY-MM-DD HH:mm:ss'),
+  }
+  req.params.key = key.split('-')[0] || ''
+  return findMember(req, res, u)
+}
+
+function removeMember(req, res, u) {
+  const { key } = req.params
+  delete dataSource.categoryMember[key]
+  req.params.key = key.split('-')[0] || ''
+  return findMember(req, res, u)
+}
+
 export default {
   'GET /api/product/member/:key': findMember,
+  'POST /api/product/member': saveMember,
+  'PUT /api/product/member/:key': updateMember,
+  'DELETE /api/product/member/:key': removeMember,
   'GET /api/product/:type': findAll,
   'GET /api/product/:type/:key': findOne,
   'POST /api/product/:type': save,

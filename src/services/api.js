@@ -176,3 +176,29 @@ export async function deleteProduct(type, key) {
 export async function getProductCategoryMember(key) {
   return request(`/api/product/member/${key}`);
 }
+
+export async function addProductCategoryMember(params) {
+  return request(`/api/product/member`, {
+    method: 'POST',
+    body: {
+      ...params,
+      method: 'post',
+    },
+  });
+}
+
+export async function updateProductCategoryMember(key, params) {
+  return request(`/api/product/member/${key}`, {
+    method: 'PUT',
+    body: {
+      ...params,
+      method: 'put',
+    },
+  });
+}
+
+export async function deleteProductCategoryMember(key) {
+  return request(`/api/product/member/${key}`, {
+    method: 'DELETE',
+  });
+}
