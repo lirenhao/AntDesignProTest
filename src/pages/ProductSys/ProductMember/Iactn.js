@@ -12,7 +12,6 @@ import {
   Popconfirm,
   Divider
 } from 'antd'
-import isEqual from 'lodash/isEqual'
 
 @connect(({ productFeatureIactn, productFeature, productType }) => ({
   list: productFeatureIactn.list,
@@ -23,24 +22,9 @@ import isEqual from 'lodash/isEqual'
 class Iactn extends PureComponent {
   index = 0;
 
-  cacheOriginData = {};
-
-  constructor(props) {
-    super(props)
-    this.state = {
-      loading: false,
-      list: [],
-      data: [],
-    }
-  }
-
-  static getDerivedStateFromProps(nextProps, preState) {
-    if (isEqual(nextProps.list, preState.list)) {
-      return null;
-    }
-    return {
-      list: nextProps.list
-    };
+  state = {
+    loading: false,
+    data: {},
   }
 
   componentDidMount() {
@@ -67,16 +51,11 @@ class Iactn extends PureComponent {
     });
   }
 
-  getRowByKey(key, newData) {
-    const { data } = this.state;
-    return (newData || data).filter(item => item.key === key)[0];
-  }
-
   newMember = () => {
     const { productId } = this.props;
     const { data } = this.state;
-    const newData = data.map(item => ({ ...item }));
-    newData.push({
+    const key = `new-${this.index}`;
+    const target = {
       key: `new-${this.index}`,
       productId,
       productFeatureId: '',
@@ -84,18 +63,17 @@ class Iactn extends PureComponent {
       productFeatureIactnTypeId: '',
       editable: true,
       isNew: true,
-    });
+    };
     this.index += 1;
-    this.setState({ data: newData });
+    this.setState({ data: {...data, [key]: target} });
   }
 
   remove(key) {
     const { data } = this.state;
-    if(key.split('-')[0] === 'new'){ 
-      const newData = data.filter(item => item.key !== key);
+    const newData = Object.keys(data).filter(k => k !== key).map(k => data[k]);
+    if(key.split('-')[0] === 'new'){
       this.setState({ data: newData });
     } else {
-      const newData = data.filter(item => item.key !== key);
       const { dispatch, productId } = this.props;
       dispatch({
         type: 'productFeatureIactn/remove',
@@ -104,7 +82,7 @@ class Iactn extends PureComponent {
           productId,
         },
         callback: () => {
-          this.setState({ loading: false, data: newData });
+          this.setState({ data: newData });
         }
       });
     }
@@ -112,11 +90,11 @@ class Iactn extends PureComponent {
 
   handleSelectFieldChange(value, fieldName, key) {
     const { data } = this.state;
-    const newData = data.map(item => ({ ...item }));
-    const target = this.getRowByKey(key, newData);
+    const target = data[key] || {};
     if (target) {
       target[fieldName] = value;
-      this.setState({ data: newData });
+      data[key] = target;
+      this.setState({ data: {...data} });
     }
   }
 
@@ -125,11 +103,8 @@ class Iactn extends PureComponent {
     this.setState({
       loading: true,
     });
-    if (this.clickedCancel) {
-      this.clickedCancel = false;
-      return;
-    }
-    const target = this.getRowByKey(key) || {};
+    const { data } = this.state
+    const target = data[key] ? {...data[key]} : {};
     if (!target.productFeatureId || !target.productFeatureIdTo || !target.productFeatureIactnTypeId) {
       message.error('请填写完整特征信息');
       e.target.focus();
@@ -148,7 +123,7 @@ class Iactn extends PureComponent {
       callback: () => {
         this.setState({
           loading: false,
-          data: [],
+          data: Object.keys(data).filter(k => k !== key).map(k => data[k]),
         });
       }
     });
@@ -159,7 +134,7 @@ class Iactn extends PureComponent {
     e.preventDefault();
     const { data } = this.state;
     const newData = data.map(item => ({ ...item }));
-    const target = this.getRowByKey(key, newData);
+    const target = data[key];
     if (this.cacheOriginData[key]) {
       Object.assign(target, this.cacheOriginData[key]);
       delete this.cacheOriginData[key];
@@ -186,7 +161,7 @@ class Iactn extends PureComponent {
                 style={{ width: '100%' }}
               >
                 {feature.map(item => (
-                  <Select.Option value={item.productFeatureId}>{item.description}</Select.Option>
+                  <Select.Option key={item.productFeatureId}>{item.description}</Select.Option>
                 ))}
               </Select>
             );
@@ -210,7 +185,7 @@ class Iactn extends PureComponent {
                 style={{ width: '100%' }}
               >
                 {feature.map(item => (
-                  <Select.Option value={item.productFeatureId}>{item.description}</Select.Option>
+                  <Select.Option key={item.productFeatureId}>{item.description}</Select.Option>
                 ))}
               </Select>
             );
@@ -280,15 +255,26 @@ class Iactn extends PureComponent {
       },
     ];
 
-    const { loading, list, data } = this.state;
+    const { list } = this.props;
+    const { loading, data } = this.state;
 
+    const dataSource = list.map(item => ({
+      ...item,
+      ...data[`${item.productFeatureId}-${item.productFeatureIdTo}`],
+    }))
+    Object.keys(data).forEach(key => {
+      if(key.split('-')[0] === 'new')
+        dataSource.push(data[key])
+    })
+    
     return (
       <Fragment>
         <Table
           loading={loading}
           columns={columns}
-          dataSource={[...list, ...data]}
+          dataSource={dataSource}
           pagination={false}
+          rowKey={record => `${record.productFeatureId}-${record.productFeatureIdTo}-${record.key}`}
         />
         <Button
           style={{ width: '100%', marginTop: 16, marginBottom: 8 }}
@@ -303,4 +289,4 @@ class Iactn extends PureComponent {
   }
 }
 
-export default Iactn;
+export default Iactn

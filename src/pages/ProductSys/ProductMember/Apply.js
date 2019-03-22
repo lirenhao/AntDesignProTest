@@ -26,24 +26,9 @@ import moment from 'moment'
 class Apply extends PureComponent {
   index = 0;
 
-  cacheOriginData = {};
-
-  constructor(props) {
-    super(props)
-    this.state = {
-      loading: false,
-      list: [],
-      data: [],
-    }
-  }
-
-  static getDerivedStateFromProps(nextProps, preState) {
-    if (isEqual(nextProps.list, preState.list)) {
-      return null;
-    }
-    return {
-      list: nextProps.list
-    };
+  state = {
+    loading: false,
+    data: {},
   }
 
   componentDidMount() {
@@ -70,16 +55,11 @@ class Apply extends PureComponent {
     });
   }
 
-  getRowByKey(key, newData) {
-    const { data } = this.state;
-    return (newData || data).filter(item => item.key === key)[0];
-  }
-
   newMember = () => {
     const { productId } = this.props;
     const { data } = this.state;
-    const newData = data.map(item => ({ ...item }));
-    newData.push({
+    const key = `new-${this.index}`;
+    const target = {
       key: `new-${this.index}`,
       productId,
       productFeatureId: '',
@@ -90,18 +70,17 @@ class Apply extends PureComponent {
       amount: '',
       editable: true,
       isNew: true,
-    });
+    };
     this.index += 1;
-    this.setState({ data: newData });
+    this.setState({ data: {...data, [key]: target} });
   }
 
   remove(key) {
     const { data } = this.state;
+    const newData = Object.keys(data).filter(k => k !== key).map(k => data[k]);
     if(key.split('-')[0] === 'new'){ 
-      const newData = data.filter(item => item.key !== key);
       this.setState({ data: newData });
     } else {
-      const newData = data.filter(item => item.key !== key);
       const { dispatch, productId } = this.props;
       dispatch({
         type: 'productFeatureApply/remove',
@@ -118,11 +97,11 @@ class Apply extends PureComponent {
 
   handleSelectFieldChange(value, fieldName, key) {
     const { data } = this.state;
-    const newData = data.map(item => ({ ...item }));
-    const target = this.getRowByKey(key, newData);
+    const target = data[key] || {};
     if (target) {
       target[fieldName] = value;
-      this.setState({ data: newData });
+      data[key] = target;
+      this.setState({ data: {...data} });
     }
   }
 
@@ -135,7 +114,8 @@ class Apply extends PureComponent {
       this.clickedCancel = false;
       return;
     }
-    const target = this.getRowByKey(key) || {};
+    const { data } = this.state
+    const target = data[key] ? {...data[key]} : {};
     if (!target.productFeatureId || !target.productId || !target.productFeatureApplTypeId || 
       !target.fromDate || !target.thruDate || !target.sequenceNum || !target.amount) {
       message.error('请填写完整特征适应性信息');
@@ -156,6 +136,7 @@ class Apply extends PureComponent {
       callback: () => {
         this.setState({
           loading: false,
+          data: Object.keys(data).filter(k => k !== key).map(k => data[k]),
         });
       }
     });
@@ -166,7 +147,7 @@ class Apply extends PureComponent {
     e.preventDefault();
     const { data } = this.state;
     const newData = data.map(item => ({ ...item }));
-    const target = this.getRowByKey(key, newData);
+    const target = data[key] ? {...data[key]} : {};
     if (this.cacheOriginData[key]) {
       Object.assign(target, this.cacheOriginData[key]);
       delete this.cacheOriginData[key];
@@ -194,7 +175,7 @@ class Apply extends PureComponent {
                 style={{ width: 120 }}
               >
                 {feature.map(item => (
-                  <Select.Option value={item.productFeatureId}>{item.description}</Select.Option>
+                  <Select.Option key={item.productFeatureId}>{item.description}</Select.Option>
                 ))}
               </Select>
             );
@@ -334,15 +315,26 @@ class Apply extends PureComponent {
       },
     ];
 
+    const { list } = this.props;
     const { loading, data } = this.state;
+
+    const dataSource = list.map(item => ({
+      ...item,
+      ...data[`${item.productFeatureId}-${item.productFeatureIdTo}`],
+    }))
+    Object.keys(data).forEach(key => {
+      if(key.split('-')[0] === 'new')
+        dataSource.push(data[key])
+    })
 
     return (
       <Fragment>
         <Table
           loading={loading}
           columns={columns}
-          dataSource={data}
+          dataSource={dataSource}
           pagination={false}
+          rowKey={record => `${record.productFeatureId}-${record.productId}-${record.key}`}
         />
         <Button
           style={{ width: '100%', marginTop: 16, marginBottom: 8 }}
