@@ -12,6 +12,7 @@ import {
   Popconfirm,
   Divider
 } from 'antd'
+import isEqual from 'lodash/isEqual'
 
 @connect(({ productFeatureIactn, productFeature, productType }) => ({
   list: productFeatureIactn.list,
@@ -28,8 +29,18 @@ class Iactn extends PureComponent {
     super(props)
     this.state = {
       loading: false,
-      data: props.list || [],
+      list: [],
+      data: [],
     }
+  }
+
+  static getDerivedStateFromProps(nextProps, preState) {
+    if (isEqual(nextProps.list, preState.list)) {
+      return null;
+    }
+    return {
+      list: nextProps.list
+    };
   }
 
   componentDidMount() {
@@ -137,6 +148,7 @@ class Iactn extends PureComponent {
       callback: () => {
         this.setState({
           loading: false,
+          data: [],
         });
       }
     });
@@ -268,14 +280,14 @@ class Iactn extends PureComponent {
       },
     ];
 
-    const { loading, data } = this.state;
+    const { loading, list, data } = this.state;
 
     return (
       <Fragment>
         <Table
           loading={loading}
           columns={columns}
-          dataSource={data}
+          dataSource={[...list, ...data]}
           pagination={false}
         />
         <Button

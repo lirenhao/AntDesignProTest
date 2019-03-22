@@ -216,6 +216,7 @@ class Assoc extends React.Component {
                 dataSource={memberList}
                 pagination={false}
                 columns={this.columns}
+                rowKey={record => record.productId}
               />
             </Card>
           </Layout.Content>

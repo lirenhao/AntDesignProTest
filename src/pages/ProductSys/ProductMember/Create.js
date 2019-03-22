@@ -82,7 +82,7 @@ class Create extends React.Component {
               })(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
                   {product.map(item => (
-                    <Select.Option value={item.productId}>{item.productName}</Select.Option>
+                    <Select.Option key={item.productId}>{item.productName}</Select.Option>
                   ))}
                 </Select>
               )}

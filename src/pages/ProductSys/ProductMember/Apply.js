@@ -14,6 +14,7 @@ import {
   Popconfirm,
   Divider,
 } from 'antd'
+import isEqual from 'lodash/isEqual'
 import moment from 'moment'
 
 @connect(({ productFeatureApply, productFeature, productType }) => ({
@@ -31,8 +32,18 @@ class Apply extends PureComponent {
     super(props)
     this.state = {
       loading: false,
-      data: props.list || [],
+      list: [],
+      data: [],
     }
+  }
+
+  static getDerivedStateFromProps(nextProps, preState) {
+    if (isEqual(nextProps.list, preState.list)) {
+      return null;
+    }
+    return {
+      list: nextProps.list
+    };
   }
 
   componentDidMount() {
@@ -131,6 +142,7 @@ class Apply extends PureComponent {
       e.target.focus();
       this.setState({
         loading: false,
+        data: [],
       });
       return;
     }
