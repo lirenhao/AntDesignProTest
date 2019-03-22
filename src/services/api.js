@@ -232,7 +232,31 @@ export async function addProductFeatureAppl(params) {
 }
 
 export async function deleteProductFeatureAppl(key) {
-  return request(`/api/product/featureAppl/${key}`, {
+  return request(`/api/product/priceComponent/${key}`, {
+    method: 'DELETE',
+  });
+}
+
+export async function getProductPriceComponent(productId) {
+  return request(`/api/product/priceComponent/${productId}`);
+}
+
+export async function addProductPriceComponent(params) {
+  return request(`/api/product/priceComponent`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function updateProductPriceComponent(key, params) {
+  return request(`/api/product/priceComponent/${key}`, {
+    method: 'PUT',
+    body: params,
+  });
+}
+
+export async function deleteProductPriceComponent(key) {
+  return request(`/api/product/priceComponent/${key}`, {
     method: 'DELETE',
   });
 }

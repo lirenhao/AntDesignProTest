@@ -7,7 +7,6 @@ import {
   Table,
   Button,
   Select,
-  TreeSelect,
   DatePicker,
   InputNumber,
   message,
@@ -16,11 +15,10 @@ import {
 } from 'antd'
 import moment from 'moment'
 
-@connect(({ productPriceComp, productFeature, productType }) => ({
+@connect(({ productPriceComp, productType }) => ({
   list: productPriceComp.list,
-  feature: productFeature.data.list,
-  applTypeTree: productType.tree.featureApplType,
-  featureApplType: productType.featureApplType,
+  priceType: productType.priceType,
+  pricePurpose: productType.pricePurpose,
 }))
 class Price extends PureComponent {
   index = 0;
@@ -31,23 +29,7 @@ class Price extends PureComponent {
   }
 
   componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'productFeature/findAll',
-      payload: {
-        type: 'feature',
-      },
-    });
-    dispatch({
-      type: 'productType/tree',
-      payload: {
-        type: 'featureApplType', 
-        id: 'productFeatureApplTypeId', 
-        pId: 'parentTypeId', 
-        title: 'description',
-      },
-    });
-    const { productId } = this.props;
+    const { dispatch, productId } = this.props;
     dispatch({
       type: 'productPriceComp/fetch',
       payload: productId,
@@ -59,14 +41,15 @@ class Price extends PureComponent {
     const { data } = this.state;
     const key = `new-${this.index}`;
     const target = {
-      key: `new-${this.index}`,
+      productPriceComponentId: key,
       productId,
-      productFeatureId: '',
-      productFeatureApplTypeId: '',
+      productPriceTypeId: '',
+      productPricePurposeId: '',
       fromDate: '',
       thruDate: '',
-      sequenceNum: '',
-      amount: '',
+      price: '',
+      percent: '',
+      descript: '',
       editable: true,
       isNew: true,
     };
@@ -78,7 +61,7 @@ class Price extends PureComponent {
     e.preventDefault();
     const { list } = this.props;
     const { data } = this.state;
-    const target = list.filter(item => `${item.productFeatureId}-${item.productId}`=== key)[0] || {};
+    const target = list.filter(item => item.productPriceComponentId === key)[0] || {};
     this.setState({ data: {...data, [key]: {...target, editable: true}}});
   }
 
@@ -124,9 +107,9 @@ class Price extends PureComponent {
     }
     const { data } = this.state
     const target = data[key] ? {...data[key]} : {};
-    if (!target.productFeatureId || !target.productId || !target.productFeatureApplTypeId || 
-      !target.fromDate || !target.thruDate || !target.sequenceNum || !target.amount) {
-      message.error('请填写完整特征适应性信息');
+    if (!target.productPriceTypeId || !target.productPricePurposeId || 
+      !target.fromDate || !target.thruDate || !target.price || !target.percent) {
+      message.error('请填写完整产品定价信息');
       e.target.focus();
       this.setState({
         loading: false,
@@ -137,10 +120,45 @@ class Price extends PureComponent {
     delete target.isNew
     delete target.editable
     const { dispatch } = this.props;
-    target.key = `${target.productFeatureId}-${target.productId}`;
     dispatch({
       type: 'productPriceComp/save',
       payload: target,
+      callback: () => {
+        this.setState({
+          loading: false,
+          data: Object.keys(data).filter(k => k !== key).map(k => data[k]),
+        });
+      }
+    });
+  }
+
+  updateRow(e, key) {
+    e.persist();
+    this.setState({
+      loading: true,
+    });
+    if (this.clickedCancel) {
+      this.clickedCancel = false;
+      return;
+    }
+    const { data } = this.state
+    const target = data[key] ? {...data[key]} : {};
+    if (!target.productPriceTypeId || !target.productPricePurposeId || 
+      !target.fromDate || !target.thruDate || !target.price || !target.percent) {
+      message.error('请填写完整产品定价信息');
+      e.target.focus();
+      this.setState({
+        loading: false,
+        data: [],
+      });
+      return;
+    }
+    delete target.isNew
+    delete target.editable
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'productPriceComp/update',
+      payload: { key, payload: target },
       callback: () => {
         this.setState({
           loading: false,
@@ -160,50 +178,53 @@ class Price extends PureComponent {
   render() {
     const columns = [
       {
-        title: '产品特征',
-        dataIndex: 'productFeatureId',
-        key: 'productFeatureId',
+        title: '产品价格类型',
+        dataIndex: 'productPriceTypeId',
+        key: 'productPriceTypeId',
         render: (text, record) => {
-          const { feature } = this.props
+          const { priceType } = this.props
           if (record.editable) {
             return (
               <Select 
                 value={text} 
-                onChange={value => this.handleSelectFieldChange(value, 'productFeatureId', record.key)}
-                placeholder="产品特征" 
+                onChange={value => this.handleSelectFieldChange(value, 'productPriceTypeId', record.productPriceComponentId)}
+                placeholder="产品价格类型" 
                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                 style={{ width: 120 }}
               >
-                {feature.map(item => (
-                  <Select.Option key={item.productFeatureId}>{item.description}</Select.Option>
+                {Object.keys(priceType).map(key => (
+                  <Select.Option key={priceType[key].productPriceTypeId}>{priceType[key].description}</Select.Option>
                 ))}
               </Select>
             );
           }
-          const item = feature.filter(v => v.productFeatureId === text)[0] || {}
-          return item.description;
+          return priceType[text].description;
         },
       },
       {
-        title: '特征适用性类型',
-        dataIndex: 'productFeatureApplTypeId',
-        key: 'productFeatureApplTypeId',
+        title: '产品价格用途',
+        dataIndex: 'productPricePurposeId',
+        key: 'productPricePurposeId',
         render: (text, record) => {
-          const { applTypeTree, featureApplType } = this.props
+          const { pricePurpose } = this.props
           if (record.editable) {
             return (
-              <TreeSelect
-                value={text}
-                onChange={e => this.handleSelectFieldChange(e, 'productFeatureApplTypeId', record.key)}
-                treeDefaultExpandAll
-                treeData={applTypeTree[0].children}
-                placeholder="适用性类型"
+              <Select 
+                value={text} 
+                onChange={value => this.handleSelectFieldChange(value, 'productPricePurposeId', record.productPriceComponentId)}
+                placeholder="产品价格类型" 
                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                style={{ width: '100%' }}
-              />
+                style={{ width: 120 }}
+              >
+                {Object.keys(pricePurpose).map(key => (
+                  <Select.Option key={pricePurpose[key].productPricePurposeId}>
+                    {pricePurpose[key].description}
+                  </Select.Option>
+                ))}
+              </Select>
             );
           }
-          return featureApplType[text] ? featureApplType[text].description : null;
+          return pricePurpose[text].description;
         },
       },
       {
@@ -215,7 +236,7 @@ class Price extends PureComponent {
             return (
               <DatePicker 
                 value={text? moment(text): null}
-                onChange={e => this.handleSelectFieldChange(e.format('YYYY-MM-DD'), 'fromDate', record.key)}
+                onChange={e => this.handleSelectFieldChange(e.format('YYYY-MM-DD'), 'fromDate', record.productPriceComponentId)}
                 placeholder='开始日期' 
               />
             );
@@ -232,7 +253,7 @@ class Price extends PureComponent {
             return (
               <DatePicker 
                 value={text? moment(text): null}
-                onChange={e => this.handleSelectFieldChange(e.format('YYYY-MM-DD'), 'thruDate', record.key)}
+                onChange={e => this.handleSelectFieldChange(e.format('YYYY-MM-DD'), 'thruDate', record.productPriceComponentId)}
                 placeholder='结束日期' 
               />
             );
@@ -241,39 +262,43 @@ class Price extends PureComponent {
         },
       },
       {
-        title: '序列号',
-        dataIndex: 'sequenceNum',
-        key: 'sequenceNum',
+        title: '价格',
+        dataIndex: 'price',
+        key: 'price',
         render: (text, record) => {
           if (record.editable) {
             return (
               <InputNumber
                 value={text}
-                onChange={e => this.handleSelectFieldChange(e, 'sequenceNum', record.key)}
-                placeholder='序列号' 
+                onChange={e => this.handleSelectFieldChange(e, 'price', record.productPriceComponentId)}
+                formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                placeholder='价格' 
               />
             );
           }
-          return text;
+          return `$ ${text}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         },
       },
       {
-        title: '金额',
-        dataIndex: 'amount',
-        key: 'amount',
+        title: '百分比',
+        dataIndex: 'percent',
+        key: 'percent',
         render: (text, record) => {
           if (record.editable) {
             return (
               <InputNumber
                 value={text}
-                onChange={e => this.handleSelectFieldChange(e, 'amount', record.key)}
-                formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                parser={value => value.replace(/\$\s?|(,*)/g, '')}
-                placeholder='金额' 
+                min={0}
+                max={100}
+                formatter={value => `${value}%`}
+                parser={value => value.replace('%', '')}
+                onChange={e => this.handleSelectFieldChange(e, 'percent', record.productPriceComponentId)}
+                placeholder='百分比' 
               />
             );
           }
-          return text;
+          return `${text}%`;
         },
       },
       {
@@ -288,9 +313,9 @@ class Price extends PureComponent {
             if (record.isNew) {
               return (
                 <span>
-                  <a onClick={e => this.saveRow(e, record.key)}>添加</a>
+                  <a onClick={e => this.saveRow(e, record.productPriceComponentId)}>添加</a>
                   <Divider type="vertical" />
-                  <Popconfirm title="是否要删除此行？" onConfirm={() => this.remove(record.key)}>
+                  <Popconfirm title="是否要删除此行？" onConfirm={() => this.remove(record.productPriceComponentId)}>
                     <a>删除</a>
                   </Popconfirm>
                 </span>
@@ -298,17 +323,17 @@ class Price extends PureComponent {
             }
             return (
               <span>
-                <a onClick={e => this.saveRow(e, record.key)}>保存</a>
+                <a onClick={e => this.updateRow(e, record.productPriceComponentId)}>保存</a>
                 <Divider type="vertical" />
-                <a onClick={e => this.cancel(e, record.key)}>取消</a>
+                <a onClick={e => this.cancel(e, record.productPriceComponentId)}>取消</a>
               </span>
             );
           }
           return (
             <span>
-              <a onClick={e => this.editRow(e, record.key)}>编辑</a>
+              <a onClick={e => this.editRow(e, record.productPriceComponentId)}>编辑</a>
               <Divider type="vertical" />
-              <Popconfirm title="是否要删除此行？" onConfirm={() => this.remove(record.key)}>
+              <Popconfirm title="是否要删除此行？" onConfirm={() => this.remove(record.productPriceComponentId)}>
                 <a>删除</a>
               </Popconfirm>
             </span>
@@ -322,7 +347,7 @@ class Price extends PureComponent {
 
     const dataSource = list.map(item => ({
       ...item,
-      ...data[`${item.productFeatureId}-${item.productId}`],
+      ...data[item.productPriceComponentId],
     }))
     Object.keys(data).forEach(key => {
       if(key.split('-')[0] === 'new')
@@ -336,7 +361,7 @@ class Price extends PureComponent {
           columns={columns}
           dataSource={dataSource}
           pagination={false}
-          rowKey={record => `${record.productFeatureId}-${record.productId}-${record.key}`}
+          rowKey={record => record.productPriceComponentId}
         />
         <Button
           style={{ width: '100%', marginTop: 16, marginBottom: 8 }}

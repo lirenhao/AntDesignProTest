@@ -344,7 +344,7 @@ class Apply extends PureComponent {
           onClick={this.newRow}
           icon="plus"
         >
-          添加特征互作用
+          添加特征适用性
         </Button>
       </Fragment>
     );

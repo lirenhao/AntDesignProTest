@@ -355,6 +355,50 @@ function removeFeatureAppl(req, res) {
   res.end()
 }
 
+function findPriceComponent(req, res) {
+  const { key: productId } = req.params
+  const data = dataSource.priceComponent
+  const result = Object.keys(data)
+    .filter(k => data[k].productId === productId)
+    .map(k => ({...data[k], key: `${data[k].productFeatureId}-${data[k].productId}`}))
+  res.json(result)
+}
+
+function savePriceComponent(req, res, u, b) {
+  const body = (b && b.body) || req.body
+  const key = index.toString()
+  index += 1
+  dataSource.priceComponent[key] = {
+    ...body,
+    productPriceComponentId: key,
+    lastUpdatedStamp: moment().format('YYYY-MM-DD HH:mm:ss'),
+    createdStamp: moment().format('YYYY-MM-DD HH:mm:ss'),
+    version: 'v1.0.0',
+  }
+  req.params.key = body.productId
+  return findPriceComponent(req, res, u)
+}
+
+function updatePriceComponent(req, res, u, b) {
+  const body = (b && b.body) || req.body
+  const { key } = req.params
+  const data = dataSource.priceComponent[key]
+  dataSource.priceComponent[key] = {
+    ...data,
+    ...body,
+    productPriceComponentId: key,
+    lastUpdatedStamp: moment().format('YYYY-MM-DD HH:mm:ss'),
+  }
+  req.params.key = data.productId
+  return findPriceComponent(req, res, u)
+}
+
+function removePriceComponent(req, res) {
+  const { key } = req.params
+  delete dataSource.priceComponent[key]
+  res.end()
+}
+
 export default {
   'GET /api/product/member/:key': findMember,
   'POST /api/product/member': saveMember,
@@ -366,6 +410,10 @@ export default {
   'GET /api/product/featureAppl/:key': findFeatureAppl,
   'POST /api/product/featureAppl': saveFeatureAppl,
   'DELETE /api/product/featureAppl/:key': removeFeatureAppl,
+  'GET /api/product/priceComponent/:key': findPriceComponent,
+  'POST /api/product/priceComponent': savePriceComponent,
+  'PUT /api/product/priceComponent/:key': updatePriceComponent,
+  'DELETE /api/product/priceComponent/:key': removePriceComponent,
   'GET /api/product/:type': findAll,
   'GET /api/product/:type/:key': findOne,
   'POST /api/product/:type': save,
