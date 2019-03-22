@@ -70,9 +70,9 @@ class Iactn extends PureComponent {
 
   remove(key) {
     const { data } = this.state;
-    const newData = Object.keys(data).filter(k => k !== key).map(k => data[k]);
     if(key.split('-')[0] === 'new'){
-      this.setState({ data: newData });
+      delete data[key];
+      this.setState({ data: {...data}, });
     } else {
       const { dispatch, productId } = this.props;
       dispatch({
@@ -82,7 +82,8 @@ class Iactn extends PureComponent {
           productId,
         },
         callback: () => {
-          this.setState({ data: newData });
+          delete data[key];
+          this.setState({ data: {...data}, });
         }
       });
     }
@@ -127,21 +128,6 @@ class Iactn extends PureComponent {
         });
       }
     });
-  }
-
-  cancel(e, key) {
-    this.clickedCancel = true;
-    e.preventDefault();
-    const { data } = this.state;
-    const newData = data.map(item => ({ ...item }));
-    const target = data[key];
-    if (this.cacheOriginData[key]) {
-      Object.assign(target, this.cacheOriginData[key]);
-      delete this.cacheOriginData[key];
-    }
-    target.editable = false;
-    this.setState({ data: newData });
-    this.clickedCancel = false;
   }
 
   render() {

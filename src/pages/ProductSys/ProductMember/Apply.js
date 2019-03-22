@@ -14,7 +14,6 @@ import {
   Popconfirm,
   Divider,
 } from 'antd'
-import isEqual from 'lodash/isEqual'
 import moment from 'moment'
 
 @connect(({ productFeatureApply, productFeature, productType }) => ({
@@ -85,9 +84,9 @@ class Apply extends PureComponent {
 
   remove(key) {
     const { data } = this.state;
-    const newData = Object.keys(data).filter(k => k !== key).map(k => data[k]);
-    if(key.split('-')[0] === 'new'){ 
-      this.setState({ data: newData });
+    if(key.split('-')[0] === 'new'){
+      delete data[key];
+      this.setState({ data: {...data}, });
     } else {
       const { dispatch, productId } = this.props;
       dispatch({
@@ -97,7 +96,8 @@ class Apply extends PureComponent {
           productId,
         },
         callback: () => {
-          this.setState({ loading: false, data: newData });
+          delete data[key];
+          this.setState({ loading: false, data: {...data}, });
         }
       });
     }
@@ -153,7 +153,8 @@ class Apply extends PureComponent {
   cancel(e, key) {
     e.preventDefault();
     const { data } = this.state;
-    this.setState({ data: Object.keys(data).filter(k => k !== key).map(k => data[k]), });
+    delete data[key];
+    this.setState({ data: {...data}, });
   }
 
   render() {
