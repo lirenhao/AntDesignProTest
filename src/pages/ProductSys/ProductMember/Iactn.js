@@ -181,7 +181,7 @@ class Iactn extends PureComponent {
         },
       },
       {
-        title: '特征类型',
+        title: '特征互作用类型',
         dataIndex: 'productFeatureIactnTypeId',
         key: 'productFeatureIactnTypeId',
         render: (text, record) => {
@@ -193,7 +193,7 @@ class Iactn extends PureComponent {
                 onChange={e => this.handleSelectFieldChange(e, 'productFeatureIactnTypeId', record.key)}
                 treeDefaultExpandAll
                 treeData={iactnTypeTree[0].children}
-                placeholder="请选择特征类型"
+                placeholder="请选择特征互作用类型"
                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                 style={{ width: '100%' }}
               />

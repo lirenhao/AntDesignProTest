@@ -262,7 +262,7 @@ export default {
         "productFeatureIactnTypeId": "1",
         "parentTypeId": "",
         "hasTable": "0",
-        "description": "特征互作用之不兼容性",
+        "description": "不兼容性",
         "lastUpdatedStamp": "2019-03-17 11:39:38", 
         "createdStamp": "2019-03-17 10:39:38", 
         "version": "v1.0.0"
@@ -271,11 +271,29 @@ export default {
         "productFeatureIactnTypeId": "2",
         "parentTypeId": "",
         "hasTable": "0",
-        "description": "特征互作用之依赖性",
+        "description": "兼容性",
         "lastUpdatedStamp": "2019-03-17 11:39:38", 
         "createdStamp": "2019-03-17 10:39:38", 
         "version": "v1.0.0"
-      }
+      },
+      "3": {
+        "productFeatureIactnTypeId": "3",
+        "parentTypeId": "2",
+        "hasTable": "0",
+        "description": "依赖性",
+        "lastUpdatedStamp": "2019-03-17 11:39:38", 
+        "createdStamp": "2019-03-17 10:39:38", 
+        "version": "v1.0.0"
+      },
+      "4": {
+        "productFeatureIactnTypeId": "4",
+        "parentTypeId": "2",
+        "hasTable": "0",
+        "description": "互补性",
+        "lastUpdatedStamp": "2019-03-17 11:39:38", 
+        "createdStamp": "2019-03-17 10:39:38", 
+        "version": "v1.0.0"
+      },
     },
     // 特征适用性类型
     featureApplType: {
