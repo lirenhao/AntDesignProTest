@@ -5,7 +5,7 @@ import {
 } from '@/services/api';
 
 export default {
-  namespace: 'productFeatureApply',
+  namespace: 'productPriceComp',
   state: {
     list: [],
   },

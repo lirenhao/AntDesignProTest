@@ -1,89 +1,115 @@
-import React, { PureComponent, Fragment } from 'react';
-import { Table, Button, Input, message, Popconfirm, Divider } from 'antd';
-import isEqual from 'lodash/isEqual';
+import React, {
+  PureComponent,
+  Fragment
+} from 'react'
+import { connect } from 'dva'
+import {
+  Table,
+  Button,
+  Select,
+  TreeSelect,
+  DatePicker,
+  InputNumber,
+  message,
+  Popconfirm,
+  Divider,
+} from 'antd'
+import moment from 'moment'
 
-class FeatureForm extends PureComponent {
+@connect(({ productPriceComp, productFeature, productType }) => ({
+  list: productPriceComp.list,
+  feature: productFeature.data.list,
+  applTypeTree: productType.tree.featureApplType,
+  featureApplType: productType.featureApplType,
+}))
+class Price extends PureComponent {
   index = 0;
 
-  cacheOriginData = {};
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      data: props.value,
-      loading: false,
-      /* eslint-disable-next-line react/no-unused-state */
-      value: props.value,
-    };
+  state = {
+    loading: false,
+    data: {},
   }
 
-  static getDerivedStateFromProps(nextProps, preState) {
-    if (isEqual(nextProps.value, preState.value)) {
-      return null;
-    }
-    return {
-      data: nextProps.value,
-      value: nextProps.value,
-    };
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'productFeature/findAll',
+      payload: {
+        type: 'feature',
+      },
+    });
+    dispatch({
+      type: 'productType/tree',
+      payload: {
+        type: 'featureApplType', 
+        id: 'productFeatureApplTypeId', 
+        pId: 'parentTypeId', 
+        title: 'description',
+      },
+    });
+    const { productId } = this.props;
+    dispatch({
+      type: 'productPriceComp/fetch',
+      payload: productId,
+    });
   }
 
-  getRowByKey(key, newData) {
+  newRow = () => {
+    const { productId } = this.props;
     const { data } = this.state;
-    return (newData || data).filter(item => item.key === key)[0];
-  }
-
-  toggleEditable = (e, key) => {
-    e.preventDefault();
-    const { data } = this.state;
-    const newData = data.map(item => ({ ...item }));
-    const target = this.getRowByKey(key, newData);
-    if (target) {
-      // 进入编辑状态时保存原始数据
-      if (!target.editable) {
-        this.cacheOriginData[key] = { ...target };
-      }
-      target.editable = !target.editable;
-      this.setState({ data: newData });
-    }
-  };
-
-  newMember = () => {
-    const { data } = this.state;
-    const newData = data.map(item => ({ ...item }));
-    newData.push({
-      key: `NEW_TEMP_ID_${this.index}`,
-      workId: '',
-      name: '',
-      department: '',
+    const key = `new-${this.index}`;
+    const target = {
+      key: `new-${this.index}`,
+      productId,
+      productFeatureId: '',
+      productFeatureApplTypeId: '',
+      fromDate: '',
+      thruDate: '',
+      sequenceNum: '',
+      amount: '',
       editable: true,
       isNew: true,
-    });
+    };
     this.index += 1;
-    this.setState({ data: newData });
-  };
+    this.setState({ data: {...data, [key]: target} });
+  }
+
+  editRow = (e, key) => {
+    e.preventDefault();
+    const { list } = this.props;
+    const { data } = this.state;
+    const target = list.filter(item => `${item.productFeatureId}-${item.productId}`=== key)[0] || {};
+    this.setState({ data: {...data, [key]: {...target, editable: true}}});
+  }
 
   remove(key) {
     const { data } = this.state;
-    const { onChange } = this.props;
-    const newData = data.filter(item => item.key !== key);
-    this.setState({ data: newData });
-    onChange(newData);
-  }
-
-  handleKeyPress(e, key) {
-    if (e.key === 'Enter') {
-      this.saveRow(e, key);
+    if(key.split('-')[0] === 'new'){
+      delete data[key];
+      this.setState({ data: {...data}, });
+    } else {
+      const { dispatch, productId } = this.props;
+      dispatch({
+        type: 'productPriceComp/remove',
+        payload: {
+          key,
+          productId,
+        },
+        callback: () => {
+          delete data[key];
+          this.setState({ loading: false, data: {...data}, });
+        }
+      });
     }
   }
 
-  handleFieldChange(e, fieldName, key) {
+  handleSelectFieldChange(value, fieldName, key) {
     const { data } = this.state;
-    const newData = data.map(item => ({ ...item }));
-    const target = this.getRowByKey(key, newData);
+    const target = data[key] || {};
     if (target) {
-      target[fieldName] = e.target.value;
-      this.setState({ data: newData });
+      target[fieldName] = value;
+      data[key] = target;
+      this.setState({ data: {...data} });
     }
   }
 
@@ -92,44 +118,43 @@ class FeatureForm extends PureComponent {
     this.setState({
       loading: true,
     });
-    setTimeout(() => {
-      if (this.clickedCancel) {
-        this.clickedCancel = false;
-        return;
-      }
-      const target = this.getRowByKey(key) || {};
-      if (!target.productFeatureId || !target.fromDate || !target.thruDate) {
-        message.error('请填写完整定价信息');
-        e.target.focus();
-        this.setState({
-          loading: false,
-        });
-        return;
-      }
-      delete target.isNew;
-      this.toggleEditable(e, key);
-      const { data } = this.state;
-      const { onChange } = this.props;
-      onChange(data);
+    if (this.clickedCancel) {
+      this.clickedCancel = false;
+      return;
+    }
+    const { data } = this.state
+    const target = data[key] ? {...data[key]} : {};
+    if (!target.productFeatureId || !target.productId || !target.productFeatureApplTypeId || 
+      !target.fromDate || !target.thruDate || !target.sequenceNum || !target.amount) {
+      message.error('请填写完整特征适应性信息');
+      e.target.focus();
       this.setState({
         loading: false,
+        data: [],
       });
-    }, 500);
+      return;
+    }
+    delete target.isNew
+    delete target.editable
+    const { dispatch } = this.props;
+    target.key = `${target.productFeatureId}-${target.productId}`;
+    dispatch({
+      type: 'productPriceComp/save',
+      payload: target,
+      callback: () => {
+        this.setState({
+          loading: false,
+          data: Object.keys(data).filter(k => k !== key).map(k => data[k]),
+        });
+      }
+    });
   }
 
   cancel(e, key) {
-    this.clickedCancel = true;
     e.preventDefault();
     const { data } = this.state;
-    const newData = data.map(item => ({ ...item }));
-    const target = this.getRowByKey(key, newData);
-    if (this.cacheOriginData[key]) {
-      Object.assign(target, this.cacheOriginData[key]);
-      delete this.cacheOriginData[key];
-    }
-    target.editable = false;
-    this.setState({ data: newData });
-    this.clickedCancel = false;
+    delete data[key];
+    this.setState({ data: {...data}, });
   }
 
   render() {
@@ -139,36 +164,46 @@ class FeatureForm extends PureComponent {
         dataIndex: 'productFeatureId',
         key: 'productFeatureId',
         render: (text, record) => {
+          const { feature } = this.props
           if (record.editable) {
             return (
-              <Input
-                value={text}
-                autoFocus
-                onChange={e => this.handleFieldChange(e, 'productFeatureId', record.key)}
-                onKeyPress={e => this.handleKeyPress(e, record.key)}
-                placeholder="产品特征"
-              />
+              <Select 
+                value={text} 
+                onChange={value => this.handleSelectFieldChange(value, 'productFeatureId', record.key)}
+                placeholder="产品特征" 
+                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                style={{ width: 120 }}
+              >
+                {feature.map(item => (
+                  <Select.Option key={item.productFeatureId}>{item.description}</Select.Option>
+                ))}
+              </Select>
             );
           }
-          return text;
+          const item = feature.filter(v => v.productFeatureId === text)[0] || {}
+          return item.description;
         },
       },
       {
-        title: '特征适用性',
+        title: '特征适用性类型',
         dataIndex: 'productFeatureApplTypeId',
         key: 'productFeatureApplTypeId',
         render: (text, record) => {
+          const { applTypeTree, featureApplType } = this.props
           if (record.editable) {
             return (
-              <Input
+              <TreeSelect
                 value={text}
-                onChange={e => this.handleFieldChange(e, 'productFeatureApplTypeId', record.key)}
-                onKeyPress={e => this.handleKeyPress(e, record.key)}
-                placeholder="特征适用性"
+                onChange={e => this.handleSelectFieldChange(e, 'productFeatureApplTypeId', record.key)}
+                treeDefaultExpandAll
+                treeData={applTypeTree[0].children}
+                placeholder="适用性类型"
+                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                style={{ width: '100%' }}
               />
             );
           }
-          return text;
+          return featureApplType[text] ? featureApplType[text].description : null;
         },
       },
       {
@@ -178,11 +213,10 @@ class FeatureForm extends PureComponent {
         render: (text, record) => {
           if (record.editable) {
             return (
-              <Input
-                value={text}
-                onChange={e => this.handleFieldChange(e, 'fromDate', record.key)}
-                onKeyPress={e => this.handleKeyPress(e, record.key)}
-                placeholder="开始日期"
+              <DatePicker 
+                value={text? moment(text): null}
+                onChange={e => this.handleSelectFieldChange(e.format('YYYY-MM-DD'), 'fromDate', record.key)}
+                placeholder='开始日期' 
               />
             );
           }
@@ -196,11 +230,10 @@ class FeatureForm extends PureComponent {
         render: (text, record) => {
           if (record.editable) {
             return (
-              <Input
-                value={text}
-                onChange={e => this.handleFieldChange(e, 'thruDate', record.key)}
-                onKeyPress={e => this.handleKeyPress(e, record.key)}
-                placeholder="结束日期"
+              <DatePicker 
+                value={text? moment(text): null}
+                onChange={e => this.handleSelectFieldChange(e.format('YYYY-MM-DD'), 'thruDate', record.key)}
+                placeholder='结束日期' 
               />
             );
           }
@@ -214,11 +247,10 @@ class FeatureForm extends PureComponent {
         render: (text, record) => {
           if (record.editable) {
             return (
-              <Input
+              <InputNumber
                 value={text}
-                onChange={e => this.handleFieldChange(e, 'sequenceNum', record.key)}
-                onKeyPress={e => this.handleKeyPress(e, record.key)}
-                placeholder="序列号"
+                onChange={e => this.handleSelectFieldChange(e, 'sequenceNum', record.key)}
+                placeholder='序列号' 
               />
             );
           }
@@ -232,11 +264,12 @@ class FeatureForm extends PureComponent {
         render: (text, record) => {
           if (record.editable) {
             return (
-              <Input
+              <InputNumber
                 value={text}
-                onChange={e => this.handleFieldChange(e, 'amount', record.key)}
-                onKeyPress={e => this.handleKeyPress(e, record.key)}
-                placeholder="金额"
+                onChange={e => this.handleSelectFieldChange(e, 'amount', record.key)}
+                formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                placeholder='金额' 
               />
             );
           }
@@ -273,7 +306,7 @@ class FeatureForm extends PureComponent {
           }
           return (
             <span>
-              <a onClick={e => this.toggleEditable(e, record.key)}>编辑</a>
+              <a onClick={e => this.editRow(e, record.key)}>编辑</a>
               <Divider type="vertical" />
               <Popconfirm title="是否要删除此行？" onConfirm={() => this.remove(record.key)}>
                 <a>删除</a>
@@ -284,27 +317,38 @@ class FeatureForm extends PureComponent {
       },
     ];
 
+    const { list } = this.props;
     const { loading, data } = this.state;
+
+    const dataSource = list.map(item => ({
+      ...item,
+      ...data[`${item.productFeatureId}-${item.productId}`],
+    }))
+    Object.keys(data).forEach(key => {
+      if(key.split('-')[0] === 'new')
+        dataSource.push(data[key])
+    })
 
     return (
       <Fragment>
         <Table
           loading={loading}
           columns={columns}
-          dataSource={data}
+          dataSource={dataSource}
           pagination={false}
+          rowKey={record => `${record.productFeatureId}-${record.productId}-${record.key}`}
         />
         <Button
           style={{ width: '100%', marginTop: 16, marginBottom: 8 }}
           type="dashed"
-          onClick={this.newMember}
+          onClick={this.newRow}
           icon="plus"
         >
-          添加定价
+          添加产品定价
         </Button>
       </Fragment>
     );
   }
 }
 
-export default FeatureForm;
+export default Price
