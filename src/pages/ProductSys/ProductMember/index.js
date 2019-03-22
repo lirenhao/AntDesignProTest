@@ -30,6 +30,7 @@ class Assoc extends React.Component {
     isManagerShow: false,
     currentId: '',
     info: {},
+    productId: '',
   }
 
   columns = [
@@ -149,7 +150,7 @@ class Assoc extends React.Component {
   }
 
   handleManager = (record) => {
-    console.log(record)
+    this.setState({productId: record.productId})
     this.handleManagerModal(true)
   }
 
@@ -183,6 +184,7 @@ class Assoc extends React.Component {
       isManagerShow,
       currentId,
       info,
+      productId,
     } = this.state
 
     const loop = data => data.map((item) => {
@@ -232,6 +234,7 @@ class Assoc extends React.Component {
           <Manager 
             visible={isManagerShow} 
             hideModal={() => this.handleManagerModal(false)} 
+            productId={productId}
           />
         </Layout>
       </PageHeaderWrapper>

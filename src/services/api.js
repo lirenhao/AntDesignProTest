@@ -202,3 +202,20 @@ export async function deleteProductCategoryMember(key) {
     method: 'DELETE',
   });
 }
+
+export async function getProductFeatureIactn(productId) {
+  return request(`/api/product/featureIactn/${productId}`);
+}
+
+export async function addProductFeatureIactn(params) {
+  return request(`/api/product/featureIactn`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function deleteProductFeatureIactn(key) {
+  return request(`/api/product/featureIactn/${key}`, {
+    method: 'DELETE',
+  });
+}
