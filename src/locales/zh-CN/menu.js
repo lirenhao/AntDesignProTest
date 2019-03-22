@@ -63,5 +63,6 @@ export default {
   'menu.productSys.productPrice': '产品价格',
   'menu.partySys': '当事人系统',
   'menu.partySys.partyType': '当事人类型',
+  'menu.partySys.partyCategoryType': '当事人类别类型',
   'menu.partySys.roleType': '角色类型',
 };

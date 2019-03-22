@@ -139,6 +139,11 @@ export default [
             component: './PartySys/PartyType',
           },
           {
+            name: 'partyCategoryType',
+            path: '/partySys/partyCategoryType',
+            component: './PartySys/PartyCategoryType',
+          },
+          {
             name: 'roleType',
             path: '/partySys/roleType',
             component: './PartySys/RoleType',

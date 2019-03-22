@@ -1,11 +1,11 @@
-import moment from 'moment'
+import moment from "moment"
 
 let index = 100
 
 const objToTree = (root, data, id, pId, title) => {
-  const keys =  Object.keys(data)
+  const keys = Object.keys(data)
     .filter(key => data[key][pId] === root[id])
-  if(keys.length > 0) {
+  if (keys.length > 0) {
     // eslint-disable-next-line no-param-reassign
     root.children = []
     keys.forEach(key => root.children.push(objToTree(data[key], data, id, pId, title)))
@@ -19,7 +19,7 @@ const objToTree = (root, data, id, pId, title) => {
 
 export default {
 
-  namespace: 'partyType',
+  namespace: "partyType",
 
   state: {
     tree: {},
@@ -103,6 +103,113 @@ export default {
         parentTypeId: "4",
         hasTable: "0",
         description: "其他非正式组织",
+        lastUpdatedStamp: "2019-03-17 11:39:38",
+        createdStamp: "2019-03-17 10:39:38",
+        version: "v1.0.0",
+      },
+    },
+    categoryType: {
+      "1": {
+        partyCategoryTypeId: "1",
+        parentTypeId: "",
+        description: "年收入",
+        lastUpdatedStamp: "2019-03-17 11:39:38",
+        createdStamp: "2019-03-17 10:39:38",
+        version: "v1.0.0",
+      },
+      "2": {
+        partyCategoryTypeId: "2",
+        parentTypeId: "",
+        description: "平等机会",
+        lastUpdatedStamp: "2019-03-17 11:39:38",
+        createdStamp: "2019-03-17 10:39:38",
+        version: "v1.0.0",
+      },
+      "3": {
+        partyCategoryTypeId: "3",
+        parentTypeId: "",
+        description: "收入",
+        lastUpdatedStamp: "2019-03-17 11:39:38",
+        createdStamp: "2019-03-17 10:39:38",
+        version: "v1.0.0",
+      },
+      "4": {
+        partyCategoryTypeId: "4",
+        parentTypeId: "",
+        description: "行业",
+        lastUpdatedStamp: "2019-03-17 11:39:38",
+        createdStamp: "2019-03-17 10:39:38",
+        version: "v1.0.0",
+      },
+      "5": {
+        partyCategoryTypeId: "5",
+        parentTypeId: "",
+        description: "少数民族",
+        lastUpdatedStamp: "2019-03-17 11:39:38",
+        createdStamp: "2019-03-17 10:39:38",
+        version: "v1.0.0",
+      },
+      "6": {
+        partyCategoryTypeId: "6",
+        parentTypeId: "",
+        description: "在职员工人数",
+        lastUpdatedStamp: "2019-03-17 11:39:38",
+        createdStamp: "2019-03-17 10:39:38",
+        version: "v1.0.0",
+      },
+      "7": {
+        partyCategoryTypeId: "7",
+        parentTypeId: "",
+        description: "组织",
+        lastUpdatedStamp: "2019-03-17 11:39:38",
+        createdStamp: "2019-03-17 10:39:38",
+        version: "v1.0.0",
+      },
+      "8": {
+        partyCategoryTypeId: "8",
+        parentTypeId: "",
+        description: "所有权",
+        lastUpdatedStamp: "2019-03-17 11:39:38",
+        createdStamp: "2019-03-17 10:39:38",
+        version: "v1.0.0",
+      },
+      "9": {
+        partyCategoryTypeId: "9",
+        parentTypeId: "",
+        description: "SIC代码",
+        lastUpdatedStamp: "2019-03-17 11:39:38",
+        createdStamp: "2019-03-17 10:39:38",
+        version: "v1.0.0",
+      },
+
+      "10": {
+        partyCategoryTypeId: "10",
+        parentTypeId: "",
+        description: "贸易",
+        lastUpdatedStamp: "2019-03-17 11:39:38",
+        createdStamp: "2019-03-17 10:39:38",
+        version: "v1.0.0",
+      },
+      "11": {
+        partyCategoryTypeId: "11",
+        parentTypeId: "10",
+        description: "零售",
+        lastUpdatedStamp: "2019-03-17 11:39:38",
+        createdStamp: "2019-03-17 10:39:38",
+        version: "v1.0.0",
+      },
+      "12": {
+        partyCategoryTypeId: "12",
+        parentTypeId: "10",
+        description: "批发",
+        lastUpdatedStamp: "2019-03-17 11:39:38",
+        createdStamp: "2019-03-17 10:39:38",
+        version: "v1.0.0",
+      },
+      "13": {
+        partyCategoryTypeId: "13",
+        parentTypeId: "",
+        description: "价值评级",
         lastUpdatedStamp: "2019-03-17 11:39:38",
         createdStamp: "2019-03-17 10:39:38",
         version: "v1.0.0",
@@ -321,9 +428,9 @@ export default {
         parentTypeId: "6",
         hasTable: "0",
         description: "部门",
-      lastUpdatedStamp: "2019-03-17 11:39:38",
-      createdStamp: "2019-03-17 10:39:38",
-      version: "v1.0.0",
+        lastUpdatedStamp: "2019-03-17 11:39:38",
+        createdStamp: "2019-03-17 10:39:38",
+        version: "v1.0.0",
       },
       "63": {
         roleTypeId: "63",
@@ -365,31 +472,76 @@ export default {
   },
 
   effects: {
-    *add({ payload, callback }, { put }) {
-      yield put({type: 'save', payload});
+    * add({
+      payload,
+      callback
+    }, {
+      put
+    }) {
+      yield put({
+        type: "save",
+        payload
+      });
       if (payload.isTree) {
-        yield put({type: 'tree', payload});
+        yield put({
+          type: "tree",
+          payload
+        });
       } else {
-        yield put({type: 'find', payload});
+        yield put({
+          type: "find",
+          payload
+        });
       }
       if (callback) callback();
     },
-    *edit({ payload, callback }, { put }) {
-      yield put({type: 'update', payload});
+    * edit({
+      payload,
+      callback
+    }, {
+      put
+    }) {
+      yield put({
+        type: "update",
+        payload
+      });
       if (payload.isTree) {
-        yield put({type: 'tree', payload});
+        yield put({
+          type: "tree",
+          payload
+        });
       } else {
-        yield put({type: 'find', payload});
+        yield put({
+          type: "find",
+          payload
+        });
       }
-      yield put({type: 'findOne', payload});
+      yield put({
+        type: "findOne",
+        payload
+      });
       if (callback) callback();
     },
-    *remove({ payload, callback }, { put }) {
-      yield put({type: 'delete', payload});
+    * remove({
+      payload,
+      callback
+    }, {
+      put
+    }) {
+      yield put({
+        type: "delete",
+        payload
+      });
       if (payload.isTree) {
-        yield put({type: 'tree', payload});
+        yield put({
+          type: "tree",
+          payload
+        });
       } else {
-        yield put({type: 'find', payload});
+        yield put({
+          type: "find",
+          payload
+        });
       }
       if (callback) callback();
     }
@@ -397,25 +549,44 @@ export default {
 
   reducers: {
     tree(state, action) {
-      const { type, id, pId, title } = action.payload
+      const {
+        type,
+        id,
+        pId,
+        title
+      } = action.payload
       const data = state[type] || {}
       const tree = {
         ...state.tree,
-        [type]: [objToTree({[id]: "", [title]: "父级节点"}, data, id, pId, title)],
+        [type]: [objToTree({
+          [id]: "",
+          [title]: "父级节点"
+        }, data, id, pId, title)],
       }
-      return {...state, tree};
+      return {
+        ...state,
+        tree
+      };
     },
     find(state, action) {
-      const { type } = action.payload
+      const {
+        type
+      } = action.payload
       const data = state[type] || {}
       const list = {
         ...state.list,
         [type]: Object.keys(data).map(key => data[key]),
       }
-      return { ...state, list, };
+      return {
+        ...state,
+        list,
+      };
     },
     findOne(state, action) {
-      const { type, key } = action.payload
+      const {
+        type,
+        key
+      } = action.payload
       const data = state[type] || {}
       return {
         ...state,
@@ -423,15 +594,19 @@ export default {
       };
     },
     save(state, action) {
-      const { type, id, payload } = action.payload
+      const {
+        type,
+        id,
+        payload
+      } = action.payload
       const data = state[type] || {}
       const key = index.toString()
       index += 1
-      data[key] = { 
+      data[key] = {
         ...payload,
         [id]: key,
-        lastUpdatedStamp: moment().format('YYYY-MM-DD HH:mm:ss'),
-        createdStamp: moment().format('YYYY-MM-DD HH:mm:ss'),
+        lastUpdatedStamp: moment().format("YYYY-MM-DD HH:mm:ss"),
+        createdStamp: moment().format("YYYY-MM-DD HH:mm:ss"),
         version: "v1.0.0",
       }
       return {
@@ -440,12 +615,16 @@ export default {
       };
     },
     update(state, action) {
-      const { type, key, payload } = action.payload
+      const {
+        type,
+        key,
+        payload
+      } = action.payload
       const data = state[type] || {}
-      data[key] = { 
+      data[key] = {
         ...data[key],
         ...payload,
-        lastUpdatedStamp: moment().format('YYYY-MM-DD HH:mm:ss'),
+        lastUpdatedStamp: moment().format("YYYY-MM-DD HH:mm:ss"),
       }
       return {
         ...state,
@@ -453,7 +632,10 @@ export default {
       };
     },
     delete(state, action) {
-      const { type, key } = action.payload
+      const {
+        type,
+        key
+      } = action.payload
       const data = state[type] || {}
       delete data[key]
       return {
