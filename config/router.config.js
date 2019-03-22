@@ -92,24 +92,14 @@ export default [
             component: './ProductSys/ProductPricePurpose',
           },
           {
-            name: 'product',
-            path: '/productSys/product',
-            hideChildrenInMenu: true,
-            routes: [
-              {
-                path: '/productSys/product',
-                component: './ProductSys/Product',
-              },
-              {
-                path: '/productSys/product/create',
-                component: './ProductSys/Product/Create',
-              }
-            ]
-          },
-          {
             name: 'productCategory',
             path: '/productSys/productCategory',
             component: './ProductSys/ProductCategory',
+          },
+          {
+            name: 'product',
+            path: '/productSys/product',
+            component: './ProductSys/Product',
           },
           {
             name: 'productFeature',

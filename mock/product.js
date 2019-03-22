@@ -302,13 +302,13 @@ function findFeatureIactn(req, res) {
   const data = dataSource.featureIactn
   const result = Object.keys(data)
     .filter(k => data[k].productId === productId)
-    .map(k => ({...data[k], key: `${data[k].productFeatureId}-${data[k].productFeatureIdTo}`}))
+    .map(k => ({...data[k], key: `${data[k].productFeatureId}-${data[k].productFeatureIdTo}-${data[k].productId}`}))
   res.json(result)
 }
 
 function saveFeatureIactn(req, res, u, b) {
   const body = (b && b.body) || req.body
-  const key = `${body.productFeatureId}-${body.productFeatureIdTo}`
+  const key = `${body.productFeatureId}-${body.productFeatureIdTo}-${body.productId}`
   dataSource.featureIactn[key] = {
     ...body,
     key,

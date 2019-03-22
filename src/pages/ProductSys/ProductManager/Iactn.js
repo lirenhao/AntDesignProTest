@@ -117,7 +117,7 @@ class Iactn extends PureComponent {
     delete target.isNew
     delete target.editable
     const { dispatch } = this.props;
-    target.key = `${target.productFeatureId}-${target.productFeatureIdTo}`;
+    target.key = `${target.productFeatureId}-${target.productFeatureIdTo}-${target.productId}`;
     dispatch({
       type: 'productFeatureIactn/save',
       payload: target,
