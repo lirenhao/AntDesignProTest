@@ -65,4 +65,7 @@ export default {
   'menu.partySys.partyType': '当事人类型',
   'menu.partySys.partyCategoryType': '当事人类别类型',
   'menu.partySys.roleType': '角色类型',
+  'menu.partySys.partyRelationshipType': '当事人关系类型',
+  'menu.partySys.contactMechType': '联系机制类型',
+  'menu.partySys.contactMechPurposeType': '联系机制用途类型',
 };

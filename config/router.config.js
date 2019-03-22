@@ -128,6 +128,7 @@ export default [
           },
         ],
       },
+      // partySys
       {
         name: 'partySys',
         icon: 'contacts',
@@ -147,6 +148,21 @@ export default [
             name: 'roleType',
             path: '/partySys/roleType',
             component: './PartySys/RoleType',
+          },
+          {
+            name: 'partyRelationshipType',
+            path: '/partySys/partyRelationshipType',
+            component: './PartySys/PartyRelationshipType',
+          },
+          {
+            name: 'contactMechType',
+            path: '/partySys/contactMechType',
+            component: './PartySys/ContactMechType',
+          },
+          {
+            name: 'contactMechPurposeType',
+            path: '/partySys/contactMechPurposeType',
+            component: './PartySys/ContactMechPurposeType',
           },
         ],
       },
