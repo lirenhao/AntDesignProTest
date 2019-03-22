@@ -5,6 +5,7 @@ import {
   Card,
 } from 'antd'
 import Iactn from './Iactn'
+import Apply from './Apply'
 import Feature from './Feature'
 
 class Manager extends React.Component {
@@ -41,7 +42,7 @@ class Manager extends React.Component {
           </Tabs.TabPane>
           <Tabs.TabPane tab="产品特征适用性" key="2">
             <Card title="产品特征适用性" bordered={false}>
-              <Feature productId={productId} />
+              <Apply productId={productId} />
             </Card>
           </Tabs.TabPane>
           <Tabs.TabPane tab="产品价格" key="3">

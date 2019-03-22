@@ -219,3 +219,20 @@ export async function deleteProductFeatureIactn(key) {
     method: 'DELETE',
   });
 }
+
+export async function getProductFeatureAppl(productId) {
+  return request(`/api/product/featureAppl/${productId}`);
+}
+
+export async function addProductFeatureAppl(params) {
+  return request(`/api/product/featureAppl`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function deleteProductFeatureAppl(key) {
+  return request(`/api/product/featureAppl/${key}`, {
+    method: 'DELETE',
+  });
+}

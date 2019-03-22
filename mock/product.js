@@ -326,6 +326,35 @@ function removeFeatureIactn(req, res) {
   res.end()
 }
 
+function findFeatureAppl(req, res) {
+  const { key: productId } = req.params
+  const data = dataSource.featureAppl
+  const result = Object.keys(data)
+    .filter(k => data[k].productId === productId)
+    .map(k => ({...data[k], key: `${data[k].productFeatureId}-${data[k].productId}`}))
+  res.json(result)
+}
+
+function saveFeatureAppl(req, res, u, b) {
+  const body = (b && b.body) || req.body
+  const key = `${body.productFeatureId}-${body.productId}`
+  dataSource.featureAppl[key] = {
+    ...body,
+    key,
+    lastUpdatedStamp: moment().format('YYYY-MM-DD HH:mm:ss'),
+    createdStamp: moment().format('YYYY-MM-DD HH:mm:ss'),
+    version: 'v1.0.0',
+  }
+  req.params.key = body.productId
+  return findFeatureAppl(req, res, u)
+}
+
+function removeFeatureAppl(req, res) {
+  const { key } = req.params
+  delete dataSource.featureAppl[key]
+  res.end()
+}
+
 export default {
   'GET /api/product/member/:key': findMember,
   'POST /api/product/member': saveMember,
@@ -334,6 +363,9 @@ export default {
   'GET /api/product/featureIactn/:key': findFeatureIactn,
   'POST /api/product/featureIactn': saveFeatureIactn,
   'DELETE /api/product/featureIactn/:key': removeFeatureIactn,
+  'GET /api/product/featureAppl/:key': findFeatureAppl,
+  'POST /api/product/featureAppl': saveFeatureAppl,
+  'DELETE /api/product/featureAppl/:key': removeFeatureAppl,
   'GET /api/product/:type': findAll,
   'GET /api/product/:type/:key': findOne,
   'POST /api/product/:type': save,
