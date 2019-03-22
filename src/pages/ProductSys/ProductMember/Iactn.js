@@ -51,7 +51,7 @@ class Iactn extends PureComponent {
     });
   }
 
-  newMember = () => {
+  newRow = () => {
     const { productId } = this.props;
     const { data } = this.state;
     const key = `new-${this.index}`;
@@ -279,7 +279,7 @@ class Iactn extends PureComponent {
         <Button
           style={{ width: '100%', marginTop: 16, marginBottom: 8 }}
           type="dashed"
-          onClick={this.newMember}
+          onClick={this.newRow}
           icon="plus"
         >
           添加特征互作用

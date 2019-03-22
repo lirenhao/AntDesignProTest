@@ -55,7 +55,7 @@ class Apply extends PureComponent {
     });
   }
 
-  newMember = () => {
+  newRow = () => {
     const { productId } = this.props;
     const { data } = this.state;
     const key = `new-${this.index}`;
@@ -73,6 +73,14 @@ class Apply extends PureComponent {
     };
     this.index += 1;
     this.setState({ data: {...data, [key]: target} });
+  }
+
+  editRow = (e, key) => {
+    e.preventDefault();
+    const { list } = this.props;
+    const { data } = this.state;
+    const target = list.filter(item => `${item.productFeatureId}-${item.productId}`=== key)[0] || {};
+    this.setState({ data: {...data, [key]: {...target, editable: true}}});
   }
 
   remove(key) {
@@ -143,18 +151,9 @@ class Apply extends PureComponent {
   }
 
   cancel(e, key) {
-    this.clickedCancel = true;
     e.preventDefault();
     const { data } = this.state;
-    const newData = data.map(item => ({ ...item }));
-    const target = data[key] ? {...data[key]} : {};
-    if (this.cacheOriginData[key]) {
-      Object.assign(target, this.cacheOriginData[key]);
-      delete this.cacheOriginData[key];
-    }
-    target.editable = false;
-    this.setState({ data: newData });
-    this.clickedCancel = false;
+    this.setState({ data: Object.keys(data).filter(k => k !== key).map(k => data[k]), });
   }
 
   render() {
@@ -306,6 +305,8 @@ class Apply extends PureComponent {
           }
           return (
             <span>
+              <a onClick={e => this.editRow(e, record.key)}>编辑</a>
+              <Divider type="vertical" />
               <Popconfirm title="是否要删除此行？" onConfirm={() => this.remove(record.key)}>
                 <a>删除</a>
               </Popconfirm>
@@ -320,7 +321,7 @@ class Apply extends PureComponent {
 
     const dataSource = list.map(item => ({
       ...item,
-      ...data[`${item.productFeatureId}-${item.productFeatureIdTo}`],
+      ...data[`${item.productFeatureId}-${item.productId}`],
     }))
     Object.keys(data).forEach(key => {
       if(key.split('-')[0] === 'new')
@@ -339,7 +340,7 @@ class Apply extends PureComponent {
         <Button
           style={{ width: '100%', marginTop: 16, marginBottom: 8 }}
           type="dashed"
-          onClick={this.newMember}
+          onClick={this.newRow}
           icon="plus"
         >
           添加特征互作用
