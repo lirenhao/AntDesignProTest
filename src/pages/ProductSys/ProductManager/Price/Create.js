@@ -185,6 +185,72 @@ class Create extends React.Component {
                 />
               )}
           </Form.Item>
+          <Form.Item {...formItemLayout} label='合同标识定价'>
+            {getFieldDecorator('agreementId', {
+              initialValue: info.agreementId,
+              rules: [
+                {
+                  required: true,
+                  message: '请输入合同标识定价',
+                },
+              ],
+              })(<Input placeholder='请输入' />)}
+          </Form.Item>
+          <Form.Item {...formItemLayout} label='协议标识定价'>
+            {getFieldDecorator('agreementItemSeqId', {
+              initialValue: info.agreementItemSeqId,
+              rules: [
+                {
+                  required: true,
+                  message: '请输入协议标识定价',
+                },
+              ],
+              })(<Input placeholder='请输入' />)}
+          </Form.Item>
+          <Form.Item {...formItemLayout} label='货币标识'>
+            {getFieldDecorator('uomId', {
+              initialValue: info.uomId,
+              rules: [
+                {
+                  required: true,
+                  message: '请输入货币标识',
+                },
+              ],
+              })(<Input placeholder='请输入' />)}
+          </Form.Item>
+          <Form.Item {...formItemLayout} label='销售类型标识'>
+            {getFieldDecorator('saleTypeId', {
+              initialValue: info.saleTypeId,
+              rules: [
+                {
+                  required: true,
+                  message: '请输入销售类型标识',
+                },
+              ],
+              })(<Input placeholder='请输入' />)}
+          </Form.Item>
+          <Form.Item {...formItemLayout} label='订购价值标识'>
+            {getFieldDecorator('orderValueId', {
+              initialValue: info.orderValueId,
+              rules: [
+                {
+                  required: true,
+                  message: '请输入订购价值标识',
+                },
+              ],
+              })(<Input placeholder='请输入' />)}
+          </Form.Item>
+          <Form.Item {...formItemLayout} label='数量超出标识'>
+            {getFieldDecorator('quantityBreakId', {
+              initialValue: info.quantityBreakId,
+              rules: [
+                {
+                  required: true,
+                  message: '请输入数量超出标识',
+                },
+              ],
+              })(<Input placeholder='请输入' />)}
+          </Form.Item>
           <Form.Item {...formItemLayout} label='区域标识定价'>
             {getFieldDecorator('geoId', {
               initialValue: info.geoId,
