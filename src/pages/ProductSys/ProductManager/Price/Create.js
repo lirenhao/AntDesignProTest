@@ -4,6 +4,7 @@ import {
   Drawer,
   Form,
   Select,
+  TreeSelect,
   Cascader,
   DatePicker,
   InputNumber,
@@ -37,10 +38,11 @@ const geo = [{
   }],
 }];
 
-@connect(({ productType, productFeature, loading }) => ({
+@connect(({ productType, productFeature, productCategory, loading }) => ({
   priceType: productType.priceType,
   pricePurpose: productType.pricePurpose,
   productFeature: productFeature.data.list,
+  productCategoryTree: productCategory.tree,
   loading: loading.models.productPriceComp,
 }))
 @Form.create()
@@ -52,6 +54,15 @@ class Create extends React.Component {
       type: 'productFeature/findAll',
       payload: {
         type: 'feature',
+      }
+    });
+    dispatch({
+      type: 'productCategory/tree',
+      payload: {
+        type: 'category', 
+        id: 'productCategoryId', 
+        pId: 'primaryParentCategoryId',  
+        title: 'categoryName', 
       }
     });
   }
@@ -77,6 +88,7 @@ class Create extends React.Component {
       priceType,
       pricePurpose,
       productFeature,
+      productCategoryTree,
       loading,
     } = this.props;
 
@@ -155,6 +167,24 @@ class Create extends React.Component {
                 </Select>
               )}
           </Form.Item>
+          <Form.Item {...formItemLayout} label='类别标识定价'>
+            {getFieldDecorator('productCategoryId', {
+              initialValue: info.productCategoryId,
+              rules: [
+                {
+                  required: true,
+                  message: '请选择类别标识定价',
+                },
+              ],
+              })(
+                <TreeSelect
+                  dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                  placeholder="类别标识定价"
+                  treeDefaultExpandAll
+                  treeData={productCategoryTree[0].children}
+                />
+              )}
+          </Form.Item>
           <Form.Item {...formItemLayout} label='区域标识定价'>
             {getFieldDecorator('geoId', {
               initialValue: info.geoId,
@@ -223,6 +253,8 @@ class Create extends React.Component {
               initialValue: info.descript,
               })(<Input.TextArea placeholder='请输入' rows={3} />)}
           </Form.Item>
+          <br />
+          <br />
         </Form>
         <FooterToolbar style={{width}}>
           <Button 
