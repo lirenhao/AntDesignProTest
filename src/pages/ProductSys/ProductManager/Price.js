@@ -14,6 +14,7 @@ import {
   Divider,
 } from 'antd'
 import moment from 'moment'
+import Create from './Price/Create'
 
 @connect(({ productPriceComp, productType }) => ({
   list: productPriceComp.list,
@@ -26,6 +27,7 @@ class Price extends PureComponent {
   state = {
     loading: false,
     data: {},
+    isCreateShow: false,
   }
 
   componentDidMount() {
@@ -63,6 +65,22 @@ class Price extends PureComponent {
     const { data } = this.state;
     const target = list.filter(item => item.productPriceComponentId === key)[0] || {};
     this.setState({ data: {...data, [key]: {...target, editable: true}}});
+  }
+
+  handleCreateForm = (record) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'productPriceComp/save',
+      payload: {
+        ...record,
+        fromDate: record.fromDate.format('YYYY-MM-DD'),
+        thruDate: record.thruDate.format('YYYY-MM-DD'),
+      },
+      callback: () => {
+        this.setState({isCreateShow: false})
+        message.success('新增成功')
+      },
+    });
   }
 
   remove(key) {
@@ -342,8 +360,15 @@ class Price extends PureComponent {
       },
     ];
 
-    const { list } = this.props;
-    const { loading, data } = this.state;
+    const {
+      list,
+      productId,
+    } = this.props;
+    const {
+      loading,
+      data,
+      isCreateShow,
+    } = this.state;
 
     const dataSource = list.map(item => ({
       ...item,
@@ -356,6 +381,14 @@ class Price extends PureComponent {
 
     return (
       <Fragment>
+        <Button
+          style={{ width: '100%', marginTop: 16, marginBottom: 8 }}
+          type="dashed"
+          onClick={() => this.setState({ isCreateShow: true })}
+          icon="plus"
+        >
+          添加产品定价
+        </Button>
         <Table
           loading={loading}
           columns={columns}
@@ -371,6 +404,13 @@ class Price extends PureComponent {
         >
           添加产品定价
         </Button>
+        <Create 
+          visible={isCreateShow} 
+          hideModal={() => this.setState({ isCreateShow: false })} 
+          handleFormSubmit={this.handleCreateForm}
+          title="新建定价"
+          info={{productId}}
+        />
       </Fragment>
     );
   }
