@@ -152,7 +152,7 @@ class Create extends React.Component {
           </Form.Item>
           <Form.Item {...formItemLayout} label='特征标识定价'>
             {getFieldDecorator('productFeatureId', {
-              initialValue: info.productFeatureId,
+              initialValue: info.productFeatureId || [],
               rules: [
                 {
                   required: true,
@@ -160,7 +160,7 @@ class Create extends React.Component {
                 },
               ],
               })(
-                <Select placeholder="特征标识定价">
+                <Select mode="multiple" placeholder="特征标识定价">
                   {productFeature.map(item => (
                     <Select.Option key={item.productFeatureId}>{item.description}</Select.Option>
                   ))}

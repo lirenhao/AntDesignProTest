@@ -260,3 +260,27 @@ export async function deleteProductPriceComponent(key) {
     method: 'DELETE',
   });
 }
+
+export async function getProductAssoc(assocTypeId) {
+  return request(`/api/product/assoc/${assocTypeId}`);
+}
+
+export async function addProductAssoc(params) {
+  return request(`/api/product/assoc`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function updateProductAssoc(key, params) {
+  return request(`/api/product/assoc/${key}`, {
+    method: 'PUT',
+    body: params,
+  });
+}
+
+export async function deleteProductAssoc(key) {
+  return request(`/api/product/assoc/${key}`, {
+    method: 'DELETE',
+  });
+}

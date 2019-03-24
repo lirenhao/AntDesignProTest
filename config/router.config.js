@@ -102,6 +102,11 @@ export default [
             component: './ProductSys/Product',
           },
           {
+            name: 'productAssoc',
+            path: '/productSys/productAssoc',
+            component: './ProductSys/ProductAssoc',
+          },
+          {
             name: 'productFeature',
             path: '/productSys/productFeature',
             component: './ProductSys/ProductFeature',

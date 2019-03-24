@@ -87,6 +87,9 @@ const dataSource = {
       version: 'v1.0.0',
     },
   },
+  assoc: {
+
+  },
   // 产品类别
   category: {
     "1": {
@@ -399,7 +402,53 @@ function removePriceComponent(req, res) {
   res.end()
 }
 
+function findAssoc(req, res) {
+  const { key: productAssocTypeId } = req.params
+  const data = dataSource.assoc
+  const result = Object.keys(data)
+    .filter(k => data[k].productAssocTypeId === productAssocTypeId)
+    .map(k => ({...data[k], key: `${data[k].productId}-${data[k].productIdTo}-${data[k].productAssocTypeId}`}))
+  res.json(result)
+}
+
+function saveAssoc(req, res, u, b) {
+  const body = (b && b.body) || req.body
+  const key = `${body.productId}-${body.productIdTo}-${body.productAssocTypeId}`
+  dataSource.assoc[key] = {
+    ...body,
+    key,
+    lastUpdatedStamp: moment().format('YYYY-MM-DD HH:mm:ss'),
+    createdStamp: moment().format('YYYY-MM-DD HH:mm:ss'),
+    version: 'v1.0.0',
+  }
+  req.params.key = body.productId
+  return findAssoc(req, res, u)
+}
+
+function updateAssoc(req, res, u, b) {
+  const body = (b && b.body) || req.body
+  const { key } = req.params
+  const data = dataSource.assoc[key]
+  dataSource.priceComponent[key] = {
+    ...data,
+    ...body,
+    lastUpdatedStamp: moment().format('YYYY-MM-DD HH:mm:ss'),
+  }
+  req.params.key = data.productAssocTypeId
+  return findAssoc(req, res, u)
+}
+
+function removeAssoc(req, res) {
+  const { key } = req.params
+  delete dataSource.assoc[key]
+  res.end()
+}
+
 export default {
+  'GET /api/product/assoc/:key': findAssoc,
+  'POST /api/product/assoc': saveAssoc,
+  'PUT /api/product/assoc/:key': updateAssoc,
+  'DELETE /api/product/assoc/:key': removeAssoc,
   'GET /api/product/member/:key': findMember,
   'POST /api/product/member': saveMember,
   'PUT /api/product/member/:key': updateMember,

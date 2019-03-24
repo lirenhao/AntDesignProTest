@@ -118,29 +118,11 @@ export default {
         "productAssocTypeId": "1",
         "parentTypeId": "",
         "hasTable": "0",
-        "description": "自由套餐",
+        "description": "产品组合包",
         "lastUpdatedStamp": "2019-03-17 11:39:38",
         "createdStamp": "2019-03-17 10:39:38",
         "version": "v1.0.0"
       },
-      "2": {
-        "productAssocTypeId": "2",
-        "parentTypeId": "",
-        "hasTable": "0",
-        "description": " 套餐A",
-        "lastUpdatedStamp": "2019-03-17 11:39:38",
-        "createdStamp": "2019-03-17 10:39:38",
-        "version": "v1.0.0"
-      },
-      "3": {
-        "productAssocTypeId": "3",
-        "parentTypeId": "",
-        "hasTable": "0",
-        "description": " 套餐B",
-        "lastUpdatedStamp": "2019-03-17 11:39:38",
-        "createdStamp": "2019-03-17 10:39:38",
-        "version": "v1.0.0"
-      }
     },
     // 类别类型
     categoryType: {
