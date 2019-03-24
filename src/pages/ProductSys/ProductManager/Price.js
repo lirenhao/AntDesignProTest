@@ -12,10 +12,11 @@ import {
 } from 'antd'
 import Create from './Price/Create'
 
-@connect(({ productPriceComp, productType, loading }) => ({
+@connect(({ productPriceComp, productType, productFeature, loading }) => ({
   list: productPriceComp.list,
   priceType: productType.priceType,
   pricePurpose: productType.pricePurpose,
+  feature: productFeature.data.list,
   loading: loading.models.productPriceComp,
 }))
 class Price extends PureComponent {
@@ -28,6 +29,12 @@ class Price extends PureComponent {
 
   componentDidMount() {
     const { dispatch, productId } = this.props;
+    dispatch({
+      type: 'productFeature/findAll',
+      payload: {
+        type: 'feature',
+      }
+    });
     dispatch({
       type: 'productPriceComp/fetch',
       payload: productId,
@@ -118,6 +125,12 @@ class Price extends PureComponent {
         title: '特征标识定价',
         dataIndex: 'productFeatureId',
         key: 'productFeatureId',
+        render: text => {
+          const { feature } = this.props
+          return text.map(key => feature.filter(i => i.productFeatureId === key)[0] || {})
+            .map(i => i.description)
+            .reduce((a, b) => a === '' ? b :`${a}/${b}`, '')
+        }
       },
       {
         title: '类别标识定价',
@@ -158,6 +171,7 @@ class Price extends PureComponent {
         title: '区域标识定价',
         dataIndex: 'geoId',
         key: 'geoId',
+        render: text => text.reduce((a, b) => a === '' ? b :`${a}/${b}`, '')
       },
       {
         title: '开始日期',
