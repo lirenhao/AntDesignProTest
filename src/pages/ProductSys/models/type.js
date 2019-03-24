@@ -2,19 +2,15 @@ import moment from 'moment'
 
 let index = 100
 
-const objToTree = (root, data, id, pId, title) => {
+const objToTree = (r, data, id, pId, title) => {
+  const root = {value: r[id], title: r[title]}
   const keys =  Object.keys(data)
-    .filter(key => data[key][pId] === root[id])
+    .filter(key => data[key][pId] === root.value)
   if(keys.length > 0) {
-    // eslint-disable-next-line no-param-reassign
     root.children = []
     keys.forEach(key => root.children.push(objToTree(data[key], data, id, pId, title)))
   }
-  return {
-    value: root[id],
-    title: root[title],
-    children: root.children
-  }
+  return root
 }
 
 export default {
