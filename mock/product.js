@@ -421,7 +421,7 @@ function saveAssoc(req, res, u, b) {
     createdStamp: moment().format('YYYY-MM-DD HH:mm:ss'),
     version: 'v1.0.0',
   }
-  req.params.key = body.productId
+  req.params.key = body.productAssocTypeId
   return findAssoc(req, res, u)
 }
 
