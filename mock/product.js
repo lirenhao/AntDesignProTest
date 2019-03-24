@@ -119,7 +119,7 @@ const dataSource = {
     "1": {
       productFeatureId: '1',
       productFeatureTypeId: '1',
-      description: '特征一',
+      description: '质量特征',
       uomId: 'uomId',
       numberSpecified: '',
       defaultAmount: '',
@@ -133,7 +133,7 @@ const dataSource = {
     "2": {
       productFeatureId: '2',
       productFeatureTypeId: '2',
-      description: '特征二',
+      description: '颜色特征',
       uomId: 'uomId',
       numberSpecified: '',
       defaultAmount: '',
