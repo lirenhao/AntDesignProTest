@@ -57,6 +57,26 @@ export default [
             component: './InfraSys/StatusItem'
           },
           {
+            name: 'dataSource',
+            path: '/infraSys/dataSource',
+            component: './InfraSys/DataSource'
+          },
+          {
+            name: 'deliverable',
+            path: '/infraSys/deliverable',
+            component: './InfraSys/Deliverable'
+          },
+          {
+            name: 'quantityBreak',
+            path: '/infraSys/quantityBreak',
+            component: './InfraSys/QuantityBreak'
+          },
+          {
+            name: 'uom',
+            path: '/infraSys/uom',
+            component: './InfraSys/Uom'
+          },
+          {
             name: 'statusType',
             path: '/infraSys/statusType',
             component: './InfraSys/StatusType'

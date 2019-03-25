@@ -72,4 +72,8 @@ export default {
   'menu.infraSys.': '',
   'menu.infraSys.statusItem': '状态项',
   'menu.infraSys.statusValidChange': '状态有效改变',
+  'menu.infraSys.dataSource': '数据来源',
+  'menu.infraSys.deliverable': '可交付成果',
+  'menu.infraSys.quantityBreak': '数量超出',
+  'menu.infraSys.uom': '度量单位',
 };

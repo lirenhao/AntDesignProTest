@@ -147,7 +147,10 @@ const dataSource = {
       createdStamp: '2019-03-17 10:39:38',
       version: 'v1.0.0'
     }
-  }
+  },
+  quantityBreak: {
+
+  },
 }
 
 

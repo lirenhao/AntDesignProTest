@@ -1396,7 +1396,15 @@ const dataSource = {
   },
   // 可交付成果类型
   deliverableType: {
-
+    '1': {
+      deliverableTypeId: '1',
+      parentTypeId: '',
+      deliverableTypeName: '实物成果',
+      description: '可交付成果类型',
+      lastUpdatedStamp: '2019-03-17 11:39:38',
+      createdStamp: '2019-03-17 10:39:38',
+      version: 'v1.0.0'
+    },
   },
   // 多媒体类型
   mimeType: {
@@ -1436,7 +1444,16 @@ const dataSource = {
   },
   // 度量单位类型
   uomType: {
-
+    '1': {
+      uomTypeId: '1',
+      uomTypeName: '长度',
+      parentTypeId: '',
+      hasTable: '0',
+      description: '度量单位类型长度',
+      lastUpdatedStamp: '2019-03-17 11:39:38',
+      createdStamp: '2019-03-17 10:39:38',
+      version: 'v1.0.0'
+    },
   },
   // 职位类型
   emplPositionType: {
