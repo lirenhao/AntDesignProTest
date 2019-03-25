@@ -18,7 +18,7 @@ import Create from './Create'
 import styles from '../table.less'
 
 @connect(({ infra, type: sysType, loading }) => ({
-  list: infra.list,
+  list: infra.list.emplPosition,
   type: sysType.emplPositionType,
   typeTree: sysType.tree.emplPositionType || [{}],
   loading: loading.models.emplPosition,

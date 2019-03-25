@@ -11,7 +11,7 @@ export default {
   namespace: 'infra',
 
   state: {
-    list: [],
+    list: {},
   },
 
   effects: {
@@ -20,7 +20,10 @@ export default {
       const response = yield call(getList, type, params);
       yield put({
         type: 'refresh',
-        payload: response,
+        payload: {
+          type,
+          list: response,
+        },
       });
     },
     *findByUnionId({ payload }, { call, put }) {
@@ -28,7 +31,10 @@ export default {
       const response = yield call(getByUnionId, type, unionId);
       yield put({
         type: 'refresh',
-        payload: response,
+        payload: {
+          type,
+          list: response,
+        },
       });
     },
     *save({ payload, callback }, { call, put }) {
@@ -36,7 +42,10 @@ export default {
       const response = yield call(save, type, params);
       yield put({
         type: 'refresh',
-        payload: response,
+        payload: {
+          type,
+          list: response,
+        },
       });
       if (callback) callback();
     },
@@ -45,7 +54,10 @@ export default {
       const response = yield call(saveUnion, type, params);
       yield put({
         type: 'refresh',
-        payload: response,
+        payload: {
+          type,
+          list: response,
+        },
       });
       if (callback) callback();
     },
@@ -54,7 +66,10 @@ export default {
       const response = yield call(update, type, key, params);
       yield put({
         type: 'refresh',
-        payload: response,
+        payload: {
+          type,
+          list: response,
+        },
       });
       if (callback) callback();
     },
@@ -72,9 +87,13 @@ export default {
 
   reducers: {
     refresh(state, action) {
+      const { type, list } = action.payload
       return {
         ...state,
-        list: action.payload,
+        list: {
+          ...state.list,
+          [type]: list
+        },
       };
     },
   },

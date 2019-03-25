@@ -16,7 +16,7 @@ import {
 import moment from 'moment'
 
 @connect(({ infra, type: sysType, }) => ({
-  list: infra.list,
+  list: infra.list.validResponsibility || [],
   responsibilityType: sysType.responsibilityType,
   responsibilityTypeTree: sysType.tree.responsibilityType || [{children: []}],
 }))

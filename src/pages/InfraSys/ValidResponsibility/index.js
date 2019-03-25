@@ -74,7 +74,7 @@ class Category extends React.Component {
     })
     
     return (
-      <PageHeaderWrapper title="职位的责任">
+      <PageHeaderWrapper title="有效的职责">
         <Layout>
           <Layout.Sider theme="light" width="200">
             <Card bordered={false}>
@@ -91,7 +91,7 @@ class Category extends React.Component {
             </Card>
           </Layout.Sider>
           <Layout.Content>
-            <Card title="职位的责任列表">
+            <Card title="有效的职责列表">
               {emplPositionTypeId === "" ? (<Empty description="点击节点" />) : (<Form emplPositionTypeId={emplPositionTypeId} />)}
             </Card>
           </Layout.Content>
