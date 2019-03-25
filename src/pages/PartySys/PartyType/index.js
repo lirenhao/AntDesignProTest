@@ -19,9 +19,9 @@ const pId = 'parentTypeId'
 const title = 'description'
 const header = '当事人类型'
 
-@connect(({ partyType, loading }) => ({
-  partyType,
-  tree: partyType.tree[type] || [],
+@connect(({ type: sysType, loading }) => ({
+  sysType,
+  tree: sysType.tree[type] || [],
   loading: loading.models[type],
 }))
 class Type extends React.Component {
@@ -37,7 +37,7 @@ class Type extends React.Component {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'partyType/tree',
+      type: 'type/tree',
       payload: {
         type,
         id,
@@ -54,14 +54,17 @@ class Type extends React.Component {
   handleCreateForm = (values) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'partyType/add',
+      type: 'type/add',
       payload: {
         type,
         id,
         pId,
         title,
         isTree: true,
-        payload: values,
+        payload: {
+          ...values,
+          id,
+        },
       },
       callback: () =>  {
         this.handleCreateModal(false)
@@ -70,9 +73,9 @@ class Type extends React.Component {
   }
 
   handleTreeSelect = (selectedKeys, e) => {
-    const { partyType } = this.props
+    const { sysType } = this.props
     const key = e.node.props.eventKey
-    this.setState({selectedKeys, info: { ...partyType[type][key], key }})
+    this.setState({selectedKeys, info: { ...sysType[type][key], key }})
   }
 
   handleTreeExpand = (expandedKeys) => {
@@ -82,7 +85,7 @@ class Type extends React.Component {
   handleUpdateForm = (record) => {
     const { dispatch } = this.props
     dispatch({
-      type: 'partyType/edit',
+      type: 'type/edit',
       payload: {
         isTree: true,
         type,
@@ -102,7 +105,7 @@ class Type extends React.Component {
   handleRemove = (key) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'partyType/remove',
+      type: 'type/remove',
       payload: {
         type,
         id,

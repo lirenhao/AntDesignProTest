@@ -4,6 +4,7 @@ import {
   Layout,
   Card,
   Tree,
+  Empty,
   Input,
   message,
 } from 'antd'
@@ -86,7 +87,7 @@ class Category extends React.Component {
           </Layout.Sider>
           <Layout.Content>
             <Card title="产品关联列表">
-              {assocTypeId === "" ? null : (<Form assocTypeId={assocTypeId} />)}
+              {assocTypeId === "" ? (<Empty description="点击节点" />) : (<Form assocTypeId={assocTypeId} />)}
             </Card>
           </Layout.Content>
         </Layout>

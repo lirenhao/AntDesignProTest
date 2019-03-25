@@ -13,15 +13,15 @@ import PageHeaderWrapper from '@/components/PageHeaderWrapper'
 import Form from './Form'
 import Create from './Create'
 
-const type = 'roleType'
-const id = 'roleTypeId'
+const type = 'statusType'
+const id = 'productAssocTypeId'
 const pId = 'parentTypeId'
 const title = 'description'
-const header = '角色类型'
+const header = '产品关联类型'
 
-@connect(({ type: sysType, loading }) => ({
-  sysType,
-  tree: sysType.tree[type] || [],
+@connect(({ productType, loading }) => ({
+  productType,
+  tree: productType.tree[type] || [],
   loading: loading.models[type],
 }))
 class Type extends React.Component {
@@ -37,7 +37,7 @@ class Type extends React.Component {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'type/tree',
+      type: 'productType/tree',
       payload: {
         type,
         id,
@@ -54,17 +54,14 @@ class Type extends React.Component {
   handleCreateForm = (values) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'type/add',
+      type: 'productType/add',
       payload: {
         type,
         id,
         pId,
         title,
         isTree: true,
-        payload: {
-          ...values,
-          id,
-        },
+        payload: values,
       },
       callback: () =>  {
         this.handleCreateModal(false)
@@ -73,9 +70,9 @@ class Type extends React.Component {
   }
 
   handleTreeSelect = (selectedKeys, e) => {
-    const { sysType  } = this.props
+    const { productType } = this.props
     const key = e.node.props.eventKey
-    this.setState({selectedKeys, info: { ...sysType[type][key], key }})
+    this.setState({selectedKeys, info: { ...productType[type][key], key }})
   }
 
   handleTreeExpand = (expandedKeys) => {
@@ -85,7 +82,7 @@ class Type extends React.Component {
   handleUpdateForm = (record) => {
     const { dispatch } = this.props
     dispatch({
-      type: 'type/edit',
+      type: 'productType/edit',
       payload: {
         isTree: true,
         type,
@@ -105,7 +102,7 @@ class Type extends React.Component {
   handleRemove = (key) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'type/remove',
+      type: 'productType/remove',
       payload: {
         type,
         id,

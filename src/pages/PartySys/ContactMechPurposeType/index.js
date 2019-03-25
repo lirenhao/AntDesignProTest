@@ -17,8 +17,8 @@ const type = 'contactMechPurposeType'
 const id = 'contactMethPurposeTypeId'
 const header = '联系机制用途类型'
 
-@connect(({ partyType, loading }) => ({
-  list: partyType.list[type],
+@connect(({ type: sysType, loading }) => ({
+  list: sysType.list[type],
   loading: loading.models[`product${type}`],
 }))
 @Form.create()
@@ -64,7 +64,7 @@ class Type extends React.Component {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'partyType/find',
+      type: 'type/find',
       payload: {
         type,
       }
@@ -78,11 +78,14 @@ class Type extends React.Component {
   handleCreateForm = (values) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'partyType/add',
+      type: 'type/add',
       payload: {
         type,
         id,
-        payload: values,
+        payload: {
+          ...values,
+          id,
+        },
       },
       callback: () => this.handleCreateModal(false),
     });
@@ -91,7 +94,7 @@ class Type extends React.Component {
   handleRemove = (record) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'partyType/remove',
+      type: 'type/remove',
       payload: {
         type,
         key: record[id]
@@ -110,7 +113,7 @@ class Type extends React.Component {
   handleUpdateForm = (record) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'partyType/edit',
+      type: 'type/edit',
       payload: {
         type,
         key: record[id],
@@ -145,6 +148,7 @@ class Type extends React.Component {
               dataSource={list}
               pagination={false}
               columns={this.columns}
+              rowKey={record => record[id]}
             />
           </div>
         </Card>

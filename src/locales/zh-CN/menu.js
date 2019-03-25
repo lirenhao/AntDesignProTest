@@ -68,4 +68,13 @@ export default {
   'menu.partySys.partyRelationshipType': '当事人关系类型',
   'menu.partySys.contactMechType': '联系机制类型',
   'menu.partySys.contactMechPurposeType': '联系机制用途类型',
+  'menu.infraSys': '基础设施系统',
+  'menu.infraSys.': '',
+  'menu.infraSys.statusType': '状态类型',
+  'menu.infraSys.statusItem': '状态项',
+  'menu.infraSys.statusValidChange': '状态有效改变',
+  'menu.infraSys.contentPurposeType': '内容用途类型',
+  'menu.infraSys.dataResourceType': '数据资源类型',
+  'menu.infraSys.dataSourceType': '数据来源类型',
+  'menu.infraSys.dataSource': '数据来源',
 };
