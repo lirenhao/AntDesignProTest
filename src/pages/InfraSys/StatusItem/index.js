@@ -14,6 +14,7 @@ import {
 } from 'antd'
 import PageHeaderWrapper from '@/components/PageHeaderWrapper'
 import Create from './Create'
+import Apply from './Apply'
 
 import styles from '../table.less'
 
@@ -29,7 +30,9 @@ class Product extends React.Component {
   state = {
     isCreateShow: false,
     isUpdateShow: false,
+    isDrawerShow: false,
     info: {},
+    statusId: '',
   }
 
   columns = [
@@ -72,6 +75,8 @@ class Product extends React.Component {
           <a onClick={() => this.handleRemove(record)}>删除</a>
           <Divider type="vertical" />
           <a onClick={() => this.handleUpdate(record)}>修改</a>
+          <Divider type="vertical" />
+          <a onClick={() => this.handleDrawer(record)}>状态</a>
         </React.Fragment>
       ),
     },
@@ -146,6 +151,15 @@ class Product extends React.Component {
     });
   }
 
+  handleDrawerModal = (visible) => {
+    this.setState({isDrawerShow: visible})
+  }
+
+  handleDrawer = (record) => {
+    this.setState({statusId: record.statusId})
+    this.handleDrawerModal(true);
+  }
+
   render() {
     const {
       loading,
@@ -158,7 +172,9 @@ class Product extends React.Component {
     const { 
       isCreateShow, 
       isUpdateShow,
+      isDrawerShow,
       info,
+      statusId,
     } = this.state
     
     return (
@@ -222,6 +238,11 @@ class Product extends React.Component {
           hideModal={() => this.handleUpdateModal(false)} 
           handleFormSubmit={this.handleUpdateForm}
           info={info}
+        />
+        <Apply 
+          visible={isDrawerShow} 
+          hideModal={() => this.handleDrawerModal(false)} 
+          statusId={statusId}
         />
       </PageHeaderWrapper>
     )

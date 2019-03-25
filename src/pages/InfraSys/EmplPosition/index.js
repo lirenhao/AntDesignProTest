@@ -14,6 +14,7 @@ import {
 } from 'antd'
 import PageHeaderWrapper from '@/components/PageHeaderWrapper'
 import Create from './Create'
+import Apply from './Apply'
 
 import styles from '../table.less'
 
@@ -29,7 +30,9 @@ class Product extends React.Component {
   state = {
     isCreateShow: false,
     isUpdateShow: false,
+    isDrawerShow: false,
     info: {},
+    emplPositionId: '',
   }
 
   columns = [
@@ -104,12 +107,14 @@ class Product extends React.Component {
     {
       title: '操作',
       fixed: 'right',
-        width: 120,
+        width: 150,
       render: (text, record) => (
         <React.Fragment>
           <a onClick={() => this.handleRemove(record)}>删除</a>
           <Divider type="vertical" />
           <a onClick={() => this.handleUpdate(record)}>修改</a>
+          <Divider type="vertical" />
+          <a onClick={() => this.handleDrawer(record)}>职责</a>
         </React.Fragment>
       ),
     },
@@ -197,6 +202,15 @@ class Product extends React.Component {
     });
   }
 
+  handleDrawerModal = (visible) => {
+    this.setState({isDrawerShow: visible})
+  }
+
+  handleDrawer = (record) => {
+    this.setState({emplPositionId: record.emplPositionId})
+    this.handleDrawerModal(true);
+  }
+
   render() {
     const {
       loading,
@@ -209,7 +223,9 @@ class Product extends React.Component {
     const { 
       isCreateShow, 
       isUpdateShow,
+      isDrawerShow,
       info,
+      emplPositionId,
     } = this.state
     
     return (
@@ -259,7 +275,7 @@ class Product extends React.Component {
               dataSource={list}
               columns={this.columns}
               rowKey={record => record.emplPositionId}
-              scroll={{ x: 1800 }}
+              scroll={{ x: 2000 }}
             />
           </div>
         </Card>
@@ -274,6 +290,11 @@ class Product extends React.Component {
           hideModal={() => this.handleUpdateModal(false)} 
           handleFormSubmit={this.handleUpdateForm}
           info={info}
+        />
+        <Apply 
+          visible={isDrawerShow} 
+          hideModal={() => this.handleDrawerModal(false)} 
+          emplPositionId={emplPositionId}
         />
       </PageHeaderWrapper>
     )
