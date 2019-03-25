@@ -52,6 +52,11 @@ export default [
         path: '/infraSys',
         routes: [
           {
+            name: 'statusItem',
+            path: '/infraSys/statusItem',
+            component: './InfraSys/StatusItem'
+          },
+          {
             name: 'statusType',
             path: '/infraSys/statusType',
             component: './InfraSys/StatusType'
