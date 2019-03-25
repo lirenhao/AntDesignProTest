@@ -253,6 +253,16 @@ export default [
             component: './PartySys/PartyType',
           },
           {
+            name: 'partyIdentificationType',
+            path: '/partySys/partyIdentificationType',
+            component: './PartySys/PartyIdentificationType',
+          },
+          {
+            name: 'businessLicenceApprovalType',
+            path: '/partySys/businessLicenceApprovalType',
+            component: './PartySys/BusinessLicenceApprovalType',
+          },
+          {
             name: 'partyCategoryType',
             path: '/partySys/partyCategoryType',
             component: './PartySys/PartyCategoryType',
@@ -276,6 +286,16 @@ export default [
             name: 'contactMechPurposeType',
             path: '/partySys/contactMechPurposeType',
             component: './PartySys/ContactMechPurposeType',
+          },
+          {
+            name: 'communicationEventType',
+            path: '/partySys/communicationEventType',
+            component: './PartySys/CommunicationEventType',
+          },
+          {
+            name: 'communicationEventPrpType',
+            path: '/partySys/communicationEventPrpType',
+            component: './PartySys/CommunicationEventPrpType',
           },
         ],
       },

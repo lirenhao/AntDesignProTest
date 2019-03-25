@@ -13,67 +13,69 @@ import PageHeaderWrapper from '@/components/PageHeaderWrapper'
 import Form from './Form'
 import Create from './Create'
 
-const type = 'category'
-const id = 'productCategoryId'
-const pId = 'primaryParentCategoryId'
-const title = 'categoryName'
-const header = '产品类别'
+const type = 'partyIdentificationType'
+const id = 'partyIdentificationTypeId'
+const pId = 'parentTypeId'
+const title = 'partyIdentificationTypeName'
+const header = '当事人身份标识类型'
 
-@connect(({ productCategory, loading }) => ({
-  tree: productCategory.tree,
-  info: productCategory.info || {},
-  loading: loading.models.productCategory,
+@connect(({ type: sysType, loading }) => ({
+  sysType,
+  tree: sysType.tree[type] || [],
+  loading: loading.models[type],
 }))
-class Category extends React.Component {
+class Type extends React.Component {
 
   state = {
     expandedKeys: ["0-0"],
     selectedKeys: [],
     isCreateShow: false,
-    parentId: "",
+    parentTypeId: "",
+    info: {},
   }
 
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'productCategory/tree',
-      payload: {
-        type, 
-        id, 
-        pId, 
-        title
-      },
-    });
-  }
-
-  handleCreateModal = (visible, parentId = "") => {
-    this.setState({isCreateShow: visible, parentId})
-  }
-
-  handleCreateForm = (record) => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'productCategory/save',
+      type: 'type/tree',
       payload: {
         type,
         id,
         pId,
         title,
-        payload: {id, ...record},
+      }
+    });
+  }
+
+  handleCreateModal = (visible, parentTypeId = "") => {
+    this.setState({isCreateShow: visible, parentTypeId})
+  }
+
+  handleCreateForm = (values) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'type/add',
+      payload: {
+        type,
+        id,
+        pId,
+        title,
+        isTree: true,
+        payload: {
+          ...values,
+          id,
+        },
       },
-      callback: () =>  this.handleCreateModal(false),
+      callback: () =>  {
+        this.handleCreateModal(false)
+      },
     });
   }
 
   handleTreeSelect = (selectedKeys, e) => {
-    const { dispatch } = this.props;
+    const { sysType } = this.props
     const key = e.node.props.eventKey
-    this.setState({selectedKeys})
-    dispatch({
-      type: 'productCategory/findOne',
-      payload: {type, key},
-      callback: () => message.success('添加成功'),
-    });
+    this.setState({selectedKeys, info: { ...sysType[type][key], key }})
   }
 
   handleTreeExpand = (expandedKeys) => {
@@ -83,29 +85,34 @@ class Category extends React.Component {
   handleUpdateForm = (record) => {
     const { dispatch } = this.props
     dispatch({
-      type: 'productCategory/update',
+      type: 'type/edit',
       payload: {
+        isTree: true,
         type,
         id,
         pId,
         title,
-        key: record[id],
+        key: record.key,
         payload: record,
       },
-      callback: () => message.success('编辑成功'),
+      callback: () => {
+        this.setState({ info: record})
+        message.success('提交成功')
+      },
     });
   }
 
   handleRemove = (key) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'productCategory/remove',
+      type: 'type/remove',
       payload: {
         type,
         id,
         pId,
         title,
         key,
+        isTree: true,
       },
       callback: () => {
         message.success('删除成功')
@@ -140,13 +147,13 @@ class Category extends React.Component {
   render() {
     const {
       tree,
-      info,
     } = this.props
     const { 
       expandedKeys,
       selectedKeys,
       isCreateShow,
-      parentId,
+      parentTypeId,
+      info,
     } = this.state
 
     const loop = data => data.map((item) => {
@@ -189,7 +196,7 @@ class Category extends React.Component {
               visible={isCreateShow} 
               hideModal={() => this.handleCreateModal(false)} 
               handleFormSubmit={this.handleCreateForm}
-              info={{[pId]: parentId}}
+              info={{parentTypeId}}
               tree={tree}
             />
           </Layout.Content>
@@ -199,4 +206,4 @@ class Category extends React.Component {
   }
 }
 
-export default Category
+export default Type
