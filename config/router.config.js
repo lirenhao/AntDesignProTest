@@ -77,6 +77,16 @@ export default [
             component: './InfraSys/Uom'
           },
           {
+            name: 'emplPosition',
+            path: '/infraSys/emplPosition',
+            component: './InfraSys/EmplPosition'
+          },
+          {
+            name: 'validResponsibility',
+            path: '/infraSys/validResponsibility',
+            component: './InfraSys/ValidResponsibility'
+          },
+          {
             name: 'statusType',
             path: '/infraSys/statusType',
             component: './InfraSys/StatusType'

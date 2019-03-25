@@ -148,9 +148,6 @@ const dataSource = {
       version: 'v1.0.0'
     }
   },
-  quantityBreak: {
-
-  },
 }
 
 
@@ -201,7 +198,30 @@ function remove(req, res) {
   res.end()
 }
 
+function findByUnionId(req, res) {
+  const { type, key: unionId } = req.params
+  const data = dataSource[type] || {}
+  return res.json(Object.keys(data).filter(key => key.split('-')[0] === unionId).map(key => data[key]))
+}
+
+function saveUnion(req, res, u, b) {
+  const body = (b && b.body) || req.body
+  const { type } = req.params
+  const data = dataSource[type] || {}
+  data[body.key] = {
+    ...body,
+    lastUpdatedStamp: moment().format('YYYY-MM-DD HH:mm:ss'),
+    createdStamp: moment().format('YYYY-MM-DD HH:mm:ss'),
+    version: 'v1.0.0',
+  }
+  dataSource[type] = data
+  req.params.key = body.key.split('-')[0] || ''
+  findByUnionId(req, res)
+}
+
 export default {
+  'GET /api/infra/union/:type/:key': findByUnionId,
+  'POST /api/infra/union/:type': saveUnion,
   'GET /api/infra/:type': findAll,
   'GET /api/infra/:type/:key': findOne,
   'POST /api/infra/:type': save,

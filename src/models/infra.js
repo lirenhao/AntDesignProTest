@@ -1,5 +1,7 @@
 import {
   getList,
+  getByUnionId,
+  saveUnion,
   save,
   update,
   remove
@@ -21,9 +23,26 @@ export default {
         payload: response,
       });
     },
+    *findByUnionId({ payload }, { call, put }) {
+      const { type, unionId } = payload
+      const response = yield call(getByUnionId, type, unionId);
+      yield put({
+        type: 'refresh',
+        payload: response,
+      });
+    },
     *save({ payload, callback }, { call, put }) {
       const { type, payload: params } = payload
       const response = yield call(save, type, params);
+      yield put({
+        type: 'refresh',
+        payload: response,
+      });
+      if (callback) callback();
+    },
+    *saveUnion({ payload, callback }, { call, put }) {
+      const { type, payload: params } = payload
+      const response = yield call(saveUnion, type, params);
       yield put({
         type: 'refresh',
         payload: response,
@@ -40,13 +59,13 @@ export default {
       if (callback) callback();
     },
     *remove({ payload, callback }, { call, put }) {
-      const { type, key, payload: params } = payload
-      yield call(remove, type, key, params);
-      const response = yield call(getList, type, params);
-      yield put({
-        type: 'refresh',
-        payload: response,
-      });
+      const { type, key, isUnion } = payload
+      yield call(remove, type, key);
+      if(isUnion) {
+        yield put({type: 'findByUnionId', payload})
+      } else {
+        yield put({type: 'findAll', payload})
+      }
       if (callback) callback();
     },
   },

@@ -79,6 +79,8 @@ export default {
   'menu.infraSys.deliverable': '可交付成果',
   'menu.infraSys.quantityBreak': '数量超出',
   'menu.infraSys.uom': '度量单位',
+  'menu.infraSys.emplPosition': '职位',
+  'menu.infraSys.validResponsibility': '职位的职责',
   'menu.infraSys.statusType': 'statusType',
   'menu.infraSys.contentPurposeType': 'contentPurposeType',
   'menu.infraSys.dataResourceType': 'dataResourceType',

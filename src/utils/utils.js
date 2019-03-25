@@ -194,11 +194,10 @@ export const importCDN = (url, name) =>
   });
 
 export const objToTree = (node, data, id, pId, title) => {
-  const root = {value: node[id], title: node[title]}
+  const root = {value: node[id], title: node[title], children: []}
   const keys =  Object.keys(data)
     .filter(key => data[key][pId] === root.value)
   if(keys.length > 0) {
-    root.children = []
     keys.forEach(key => root.children.push(objToTree(data[key], data, id, pId, title)))
   }
   return root
