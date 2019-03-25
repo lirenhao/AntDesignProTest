@@ -1,17 +1,7 @@
 import moment from 'moment'
+import { objToTree } from '@/utils/utils'
 
 let index = 100
-
-const objToTree = (r, data, id, pId, title) => {
-  const root = {value: r[id], title: r[title]}
-  const keys =  Object.keys(data)
-    .filter(key => data[key][pId] === root.value)
-  if(keys.length > 0) {
-    root.children = []
-    keys.forEach(key => root.children.push(objToTree(data[key], data, id, pId, title)))
-  }
-  return root
-}
 
 export default {
 

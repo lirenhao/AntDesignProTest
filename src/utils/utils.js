@@ -192,3 +192,14 @@ export const importCDN = (url, name) =>
     };
     document.head.appendChild(dom);
   });
+
+export const objToTree = (node, data, id, pId, title) => {
+  const root = {value: node[id], title: node[title]}
+  const keys =  Object.keys(data)
+    .filter(key => data[key][pId] === root.value)
+  if(keys.length > 0) {
+    root.children = []
+    keys.forEach(key => root.children.push(objToTree(data[key], data, id, pId, title)))
+  }
+  return root
+}
