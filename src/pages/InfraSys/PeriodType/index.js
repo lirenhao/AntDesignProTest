@@ -13,11 +13,11 @@ import PageHeaderWrapper from '@/components/PageHeaderWrapper'
 import Form from './Form'
 import Create from './Create'
 
-const type = 'statusType'
-const id = 'statusTypeId'
+const type = 'periodType'
+const id = `${type}Id`
 const pId = 'parentTypeId'
-const title = 'description'
-const header = '状态类型'
+const title = `${type}Name`
+const header = '周期类型'
 
 @connect(({ type: sysType, loading }) => ({
   sysType,
@@ -190,6 +190,7 @@ class Type extends React.Component {
                 info={info}
                 tree={tree}
                 handleFormSubmit={this.handleUpdateForm}
+                type={type}
               />
             </Card>
             <Create 
@@ -198,6 +199,7 @@ class Type extends React.Component {
               handleFormSubmit={this.handleCreateForm}
               info={{parentTypeId}}
               tree={tree}
+              type={type}
             />
           </Layout.Content>
         </Layout>

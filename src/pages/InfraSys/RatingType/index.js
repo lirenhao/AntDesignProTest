@@ -13,11 +13,11 @@ import PageHeaderWrapper from '@/components/PageHeaderWrapper'
 import Form from './Form'
 import Create from './Create'
 
-const type = 'statusType'
-const id = 'statusTypeId'
+const type = 'ratingType'
+const id = 'ratingTypeId'
 const pId = 'parentTypeId'
-const title = 'description'
-const header = '状态类型'
+const title = 'ratingTypeName'
+const header = '评级/评估类型'
 
 @connect(({ type: sysType, loading }) => ({
   sysType,

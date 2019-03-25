@@ -13,11 +13,11 @@ import PageHeaderWrapper from '@/components/PageHeaderWrapper'
 import Form from './Form'
 import Create from './Create'
 
-const type = 'statusType'
-const id = 'statusTypeId'
+const type = 'deliverableType'
+const id = 'deliverableTypeId'
 const pId = 'parentTypeId'
-const title = 'description'
-const header = '状态类型'
+const title = 'deliverableTypeName'
+const header = '可交付成果类型'
 
 @connect(({ type: sysType, loading }) => ({
   sysType,

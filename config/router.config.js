@@ -45,6 +45,99 @@ export default [
       //     },
       //   ],
       // },
+      // infraSys
+      {
+        name: 'infraSys',
+        icon: 'contacts',
+        path: '/infraSys',
+        routes: [
+          {
+            name: 'statusType',
+            path: '/infraSys/statusType',
+            component: './InfraSys/StatusType'
+          },
+          {
+            name: 'contentPurposeType',
+            path: '/infraSys/contentPurposeType',
+            component: './InfraSys/ContentPurposeType'
+          },
+          {
+            name: 'dataResourceType',
+            path: '/infraSys/dataResourceType',
+            component: './InfraSys/DataResourceType'
+          },
+          {
+            name: 'dataSourceType',
+            path: '/infraSys/dataSourceType',
+            component: './InfraSys/DataSourceType'
+          },
+          {
+            name: 'deliverableType',
+            path: '/infraSys/deliverableType',
+            component: './InfraSys/DeliverableType'
+          },
+          {
+            name: 'mimeType',
+            path: '/infraSys/mimeType',
+            component: './InfraSys/MimeType'
+          },
+          {
+            name: 'periodType',
+            path: '/infraSys/periodType',
+            component: './InfraSys/PeriodType'
+          },
+          {
+            name: 'priorityType',
+            path: '/infraSys/priorityType',
+            component: './InfraSys/PriorityType'
+          },
+          {
+            name: 'quantityBreakType',
+            path: '/infraSys/quantityBreakType',
+            component: './InfraSys/QuantityBreakType'
+          },
+          {
+            name: 'rateType',
+            path: '/infraSys/rateType',
+            component: './InfraSys/RateType'
+          },
+          {
+            name: 'ratingType',
+            path: '/infraSys/ratingType',
+            component: './InfraSys/RatingType'
+          },
+          {
+            name: 'requirementType',
+            path: '/infraSys/requirementType',
+            component: './InfraSys/RequirementType'
+          },
+          {
+            name: 'saleType',
+            path: '/infraSys/saleType',
+            component: './InfraSys/SaleType'
+          },
+          {
+            name: 'skillType',
+            path: '/infraSys/skillType',
+            component: './InfraSys/SkillType'
+          },
+          {
+            name: 'uomType',
+            path: '/infraSys/uomType',
+            component: './InfraSys/UomType'
+          },
+          {
+            name: 'emplPositionType',
+            path: '/infraSys/emplPositionType',
+            component: './InfraSys/EmplPositionType'
+          },
+          {
+            name: 'responsibilityType',
+            path: '/infraSys/responsibilityType',
+            component: './InfraSys/ResponsibilityType'
+          },
+        ],
+      },
       // productSys
       {
         name: 'productSys',

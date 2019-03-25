@@ -13,11 +13,11 @@ import PageHeaderWrapper from '@/components/PageHeaderWrapper'
 import Form from './Form'
 import Create from './Create'
 
-const type = 'statusType'
-const id = 'statusTypeId'
+const type = 'skillType'
+const id = 'skillTypeId'
 const pId = 'parentTypeId'
-const title = 'description'
-const header = '状态类型'
+const title = 'skillTypeName'
+const header = '技能类型'
 
 @connect(({ type: sysType, loading }) => ({
   sysType,
