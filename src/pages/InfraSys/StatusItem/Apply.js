@@ -208,9 +208,11 @@ class Apply extends PureComponent {
           if (record.editable) {
             return (
               <Select 
+                value={text}
                 placeholder="有效改变状态"
                 onChange={value => this.handleSelectFieldChange(value, 'statusIdTo', record.key)}
-                style={{ width: 120 }}
+                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                dropdownMatchSelectWidth={false}
               >
                 {statusList.map(item => (
                   <Select.Option key={item.statusId}>{item.statusCode}</Select.Option>
