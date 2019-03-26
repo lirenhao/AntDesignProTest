@@ -141,7 +141,7 @@ class Iactn extends PureComponent {
           if (record.editable) {
             return (
               <Select 
-                value={text} 
+                value={text === '' ? undefined : text} 
                 onChange={value => this.handleSelectFieldChange(value, 'productFeatureId', record.key)}
                 placeholder="请选择产品特征" 
                 style={{ width: '100%' }}
@@ -165,7 +165,7 @@ class Iactn extends PureComponent {
           if (record.editable) {
             return (
               <Select 
-                value={text} 
+                value={text === '' ? undefined : text} 
                 onChange={value => this.handleSelectFieldChange(value, 'productFeatureIdTo', record.key)}
                 placeholder="请选择产品特征" 
                 style={{ width: '100%' }}

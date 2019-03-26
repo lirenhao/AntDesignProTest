@@ -169,7 +169,7 @@ class Apply extends PureComponent {
           if (record.editable) {
             return (
               <Select 
-                value={text} 
+                value={text === '' ? undefined : text} 
                 onChange={value => this.handleSelectFieldChange(value, 'productId', record.key)}
                 placeholder="源产品" 
                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
@@ -194,7 +194,7 @@ class Apply extends PureComponent {
           if (record.editable) {
             return (
               <Select 
-                value={text} 
+                value={text === '' ? undefined : text} 
                 onChange={value => this.handleSelectFieldChange(value, 'productIdTo', record.key)}
                 placeholder="目标产品" 
                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
