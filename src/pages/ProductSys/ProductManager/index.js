@@ -4,6 +4,7 @@ import {
   Layout,
   Card,
   Tree,
+  Empty,
   Menu,
   Dropdown,
   Table,
@@ -88,7 +89,7 @@ class Assoc extends React.Component {
   handleTreeSelect = (selectedKeys, e) => {
     const { dispatch } = this.props;
     const { value, title} = e.node.props.info
-    this.setState({ selectedKeys, title })
+    this.setState({ selectedKeys, title, currentId: value })
     dispatch({
       type: 'productMember/fetch',
       payload: value,
@@ -211,13 +212,15 @@ class Assoc extends React.Component {
           </Layout.Sider>
           <Layout.Content>
             <Card title={title ? `【${title}】类别成员` : "产品类别成员"}>
-              <Table
-                loading={loading}
-                dataSource={memberList}
-                pagination={false}
-                columns={this.columns}
-                rowKey={record => record.productId}
-              />
+              {currentId === "" ? (<Empty description="点击节点" />) : (
+                <Table
+                  loading={loading}
+                  dataSource={memberList}
+                  pagination={false}
+                  columns={this.columns}
+                  rowKey={record => record.productId}
+                />
+              )}
             </Card>
           </Layout.Content>
           <Create 
@@ -235,6 +238,7 @@ class Assoc extends React.Component {
           <Manager 
             visible={isManagerShow} 
             hideModal={() => this.handleManagerModal(false)} 
+            productCategoryId={currentId}
             productId={productId}
           />
         </Layout>

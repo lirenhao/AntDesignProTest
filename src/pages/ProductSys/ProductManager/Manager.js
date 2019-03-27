@@ -9,7 +9,7 @@ import Apply from './Apply'
 import Price from './Price'
 
 function Manager(props) {
-  const { visible, hideModal, productId } = props
+  const { visible, hideModal, productCategoryId, productId } = props
   return (
     <Drawer
       width="70%"
@@ -26,17 +26,17 @@ function Manager(props) {
       <Tabs>
         <Tabs.TabPane tab="产品特征互作用" key="1">
           <Card title="产品特征互作用" bordered={false}>
-            <Iactn productId={productId} />
+            <Iactn productCategoryId={productCategoryId} productId={productId} />
           </Card>
         </Tabs.TabPane>
         <Tabs.TabPane tab="产品特征适用性" key="2">
           <Card title="产品特征适用性" bordered={false}>
-            <Apply productId={productId} />
+            <Apply productCategoryId={productCategoryId} productId={productId} />
           </Card>
         </Tabs.TabPane>
         <Tabs.TabPane tab="产品定价" key="3">
           <Card title="产品定价" bordered={false}>
-            <Price productId={productId} />
+            <Price productCategoryId={productCategoryId} productId={productId} />
           </Card>
         </Tabs.TabPane>
       </Tabs>

@@ -30,9 +30,18 @@ export default {
       pagination: {},
     },
     tree: [],
+    info: {},
   },
 
   effects: {
+    *findAll({ payload }, { call, put }) {
+      const { type, payload: params } = payload
+      const response = yield call(getProductList, type, params);
+      yield put({
+        type: 'createData',
+        payload: response,
+      });
+    },
     *findOne({ payload }, { call, put }) {
       const { type, key } = payload
       const info = yield call(getProductInfo, type, key);
@@ -81,6 +90,12 @@ export default {
   },
 
   reducers: {
+    createData(state, action) {
+      return {
+        ...state,
+        data: action.payload,
+      };
+    },
     createInfo(state, action) {
       return {
         ...state,

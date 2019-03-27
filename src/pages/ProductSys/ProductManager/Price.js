@@ -12,11 +12,12 @@ import {
 } from 'antd'
 import Create from './Price/Create'
 
-@connect(({ productPriceComp, type: sysType, productFeature, loading }) => ({
+@connect(({ productPriceComp, type: sysType, productFeature, productCategory, loading }) => ({
   list: productPriceComp.list,
   priceType: sysType.productPriceType,
   pricePurpose: sysType.productPricePurpose,
   feature: productFeature.data.list,
+  category: productCategory.data.list,
   loading: loading.models.productPriceComp,
 }))
 class Price extends PureComponent {
@@ -33,6 +34,12 @@ class Price extends PureComponent {
       type: 'productFeature/findAll',
       payload: {
         type: 'feature',
+      }
+    });
+    dispatch({
+      type: 'productCategory/findAll',
+      payload: {
+        type: 'category',
       }
     });
     dispatch({
@@ -136,6 +143,11 @@ class Price extends PureComponent {
         title: '类别标识定价',
         dataIndex: 'productCategoryId',
         key: 'productCategoryId',
+        render: text => {
+          const { category } = this.props
+          const data = category.filter(i => i.productCategoryId === text)[0] || {}
+          return data.categoryName
+        }
       },
       {
         title: '合同标识定价',
@@ -217,6 +229,7 @@ class Price extends PureComponent {
     const {
       list,
       productId,
+      productCategoryId,
     } = this.props;
     const {
       loading,
@@ -248,7 +261,7 @@ class Price extends PureComponent {
           hideModal={() => this.setState({ isCreateShow: false })} 
           handleFormSubmit={this.handleCreateForm}
           title="新建定价"
-          info={{productId}}
+          info={{productId, productCategoryId}}
         />
         <Create 
           visible={isUpdateShow} 

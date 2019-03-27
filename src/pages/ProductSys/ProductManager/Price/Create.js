@@ -91,7 +91,7 @@ class Create extends React.Component {
       productCategoryTree,
       loading,
     } = this.props;
-
+    
     const width = "40%"
 
     const formItemLayout = {
@@ -178,6 +178,7 @@ class Create extends React.Component {
               ],
               })(
                 <TreeSelect
+                  disabled
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                   placeholder="类别标识定价"
                   treeDefaultExpandAll
