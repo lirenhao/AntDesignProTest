@@ -8,9 +8,11 @@ import {
 } from 'antd'
 import Create from './Create'
 
-@connect(({ infra, type: sysType, loading }) => ({
-  emplPositionList: infra.list.emplPosition,
-  emplPositionType: sysType.emplPositionType,
+@connect(({ party, type: sysType, infra, loading }) => ({
+  list: party.list.partyRelationship,
+  groupList: party.list.partyGroup || [],
+  personList: party.list.partyPerson || [],
+  roleType: sysType.roleType,
   statusItemList: infra.list.statusItem || [],
   loading: loading.models.groupManagerPosition,
 }))
@@ -24,16 +26,46 @@ class Position extends Component {
 
   columns = [
     {
-      title: '职位名称',
-      dataIndex: 'emplPositionName',
+      title: '源当事人',
+      dataIndex: 'partyIdFrom',
+      render: (id) => {
+        const { groupList } = this.props
+        const data = groupList.filter(item => item.partyId === id)[0] || {}
+        return data.groupName
+      }
     },
     {
-      title: '职位类型',
-      dataIndex: 'emplPositionTypeId',
+      title: '源角色',
+      dataIndex: 'roleTypeIdFrom',
       render: (id) => {
-        const { emplPositionType } = this.props
-        return emplPositionType[id] ? emplPositionType[id].emplPositionTypeName : null
+        const { roleType } = this.props
+        return roleType[id] ? roleType[id].description : null
       },
+    },
+    {
+      title: '目标当事人',
+      dataIndex: 'partyIdTo',
+      render: (id) => {
+        const { personList } = this.props
+        const data = personList.filter(item => item.partyId === id)[0] || {}
+        return data.nickName
+      }
+    },
+    {
+      title: '目标角色',
+      dataIndex: 'roleTypeIdTo',
+      render: (id) => {
+        const { roleType } = this.props
+        return roleType[id] ? roleType[id].description : null
+      },
+    },
+    {
+      title: '开始日期',
+      dataIndex: 'fromDate',
+    },
+    {
+      title: '结束日期',
+      dataIndex: 'thruDate',
     },
     {
       title: '状态项',
@@ -45,70 +77,18 @@ class Position extends Component {
       },
     },
     {
-      title: 'partyId',
-      dataIndex: 'partyId',
-    },
-    {
-      title: 'budgetId',
-      dataIndex: 'budgetId',
-    },
-    {
-      title: 'budgetItemSeqId',
-      dataIndex: 'budgetItemSeqId',
-    },
-    {
-      title: 'FromDate',
-      dataIndex: 'estimatedFromDate',
-    },
-    {
-      title: 'ThruDate',
-      dataIndex: 'estimatedThruDate',
-    },
-    {
-      title: 'SalaryFlag',
-      dataIndex: 'isSalaryFlag',
-      render: text => text === '1' ? '是' : '否',
-    },
-    {
-      title: 'FulltimeFlag',
-      dataIndex: 'isFulltimeFlag',
-      render: text => text === '1' ? '是' : '否',
-    },
-    {
-      title: '实际开始时间',
-      dataIndex: 'actualFromDate',
-    },
-    {
-      title: '实际终止时间',
-      dataIndex: 'actualThruDate',
-    },
-    {
-      title: '描述',
-      dataIndex: 'description',
-    },
-    {
-      title: '最后修改时间',
-      dataIndex: 'lastUpdatedStamp',
-    },
-    {
-      title: '创建时间',
-      dataIndex: 'createdStamp',
-    },
-    {
-      title: '版本',
-      dataIndex: 'version',
+      title: '关系名称',
+      dataIndex: 'relationshipName',
     },
     {
       title: '操作',
       fixed: 'right',
-        width: 150,
+        width: 120,
       render: (text, record) => (
         <React.Fragment>
           <a onClick={() => this.handleRemove(record)}>删除</a>
           <Divider type="vertical" />
           <a onClick={() => this.handleUpdate(record)}>修改</a>
-          <Divider type="vertical" />
-          <a onClick={() => this.handleManager(record)}>管理</a>
         </React.Fragment>
       ),
     },
@@ -121,16 +101,14 @@ class Position extends Component {
   handleCreateForm = (record) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'infra/save',
+      type: 'party/saveUnion',
       payload: {
-        type: 'emplPosition',
+        type: 'partyRelationship',
         payload: {
           ...record,
-          id: 'emplPositionId',
-          estimatedFromDate: record.estimatedFromDate.format('YYYY-MM-DD'),
-          estimatedThruDate: record.estimatedThruDate.format('YYYY-MM-DD'),
-          actualFromDate: record.actualFromDate.format('YYYY-MM-DD'),
-          actualThruDate: record.actualThruDate.format('YYYY-MM-DD'),
+          key: `${record.partyIdFrom}-${record.partyIdTo}`,
+          fromDate: record.fromDate.format('YYYY-MM-DD'),
+          thruDate: record.thruDate.format('YYYY-MM-DD'),
         },
       },
       callback: () => this.handleCreateModal(false)
@@ -149,16 +127,14 @@ class Position extends Component {
   handleUpdateForm = (record) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'infra/update',
+      type: 'party/update',
       payload: {
-        type: 'emplPosition',
-        key: record.emplPositionId,
+        type: 'partyRelationship',
+        key: `${record.partyIdFrom}-${record.partyIdTo}`,
         payload: {
           ...record,
-          estimatedFromDate: record.estimatedFromDate.format('YYYY-MM-DD'),
-          estimatedThruDate: record.estimatedThruDate.format('YYYY-MM-DD'),
-          actualFromDate: record.actualFromDate.format('YYYY-MM-DD'),
-          actualThruDate: record.actualThruDate.format('YYYY-MM-DD'),
+          fromDate: record.fromDate.format('YYYY-MM-DD'),
+          thruDate: record.thruDate.format('YYYY-MM-DD'),
         },
       },
       callback: () => {
@@ -171,10 +147,11 @@ class Position extends Component {
   handleRemove = (record) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'infra/remove',
+      type: 'party/remove',
       payload: {
-        type: 'emplPosition',
-        key: record.emplPositionId,
+        type: 'partyRelationship',
+        key: `${record.partyIdFrom}-${record.partyIdTo}`,
+        isUnion: true,
       },
       callback: () => message.success('删除成功'),
     });
@@ -182,7 +159,7 @@ class Position extends Component {
 
   render() {
     const {
-      emplPositionList,
+      list,
       loading,
       partyId,
     } = this.props
@@ -204,16 +181,16 @@ class Position extends Component {
         </Button>
         <Table
           loading={loading}
-          dataSource={emplPositionList}
+          dataSource={list}
           columns={this.columns}
-          rowKey={record => record.emplPositionId}
-          scroll={{ x: 2000 }}
+          rowKey={record => `${record.partyIdFrom}-${record.partyIdTo}`}
+          scroll={{ x: 1000 }}
         />
         <Create 
           visible={isCreateShow} 
           hideModal={() => this.handleCreateModal(false)} 
           handleFormSubmit={this.handleCreateForm}
-          info={{partyId}}
+          info={{partyIdFrom: partyId}}
         />
         <Create 
           visible={isUpdateShow} 

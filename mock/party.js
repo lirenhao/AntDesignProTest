@@ -77,10 +77,7 @@ const dataSource = {
       version: 'v1.0.0',
     },
   },
-  partyCategory: {
-    "1": {
-
-    },
+  partyRelationship: {
   }
 }
 

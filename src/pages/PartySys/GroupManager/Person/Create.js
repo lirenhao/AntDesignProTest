@@ -7,12 +7,13 @@ import {
   TreeSelect,
   Select,
   DatePicker,
-  Radio,
 } from 'antd'
 import moment from 'moment'
 
-@connect(({ type: sysType, infra }) => ({
-  typeTree: sysType.tree.emplPositionType || [{}],
+@connect(({ party, type: sysType, infra }) => ({
+  groupList: party.list.partyGroup || [],
+  personList: party.list.partyPerson || [],
+  roleTypeTree: sysType.tree.roleType || [{}],
   statusItemList: infra.list.statusItem || [],
 }))
 @Form.create()
@@ -21,12 +22,18 @@ class Create extends React.Component {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
+      type: 'party/findAll',
+      payload: {
+        type: 'partyPerson',
+      }
+    });
+    dispatch({
       type: 'type/tree',
       payload: {
-        type: 'emplPositionType',
-        id: 'emplPositionTypeId',
+        type: 'roleType',
+        id: 'roleTypeId',
         pId: 'parentTypeId',
-        title: 'emplPositionTypeName',
+        title: 'description',
       }
     });
     dispatch({
@@ -54,7 +61,9 @@ class Create extends React.Component {
       info,
       visible,
       hideModal,
-      typeTree,
+      groupList,
+      personList,
+      roleTypeTree,
       statusItemList,
     } = this.props;
 
@@ -70,6 +79,8 @@ class Create extends React.Component {
       },
     }
 
+    const group = groupList.filter(item => item.partyId === info.partyIdFrom)[0] || {}
+
     return (
       <Modal 
         width="60%"
@@ -82,29 +93,82 @@ class Create extends React.Component {
         onCancel={hideModal}
       >
         <Form>
-          <Form.Item {...formItemLayout} label='职位名称'>
-            {getFieldDecorator('emplPositionName', {
-              initialValue: info.emplPositionName,
+          <Form.Item {...formItemLayout} label="源当事人">
+            {group.groupName}
+          </Form.Item>
+          <Form.Item {...formItemLayout} label='源当事人角色'>
+            {getFieldDecorator('roleTypeIdFrom', {
+              initialValue: info.roleTypeIdFrom,
               rules: [
                 {
                   required: true,
-                  message: '请输入职位名称',
+                  message: '请选择',
                 },
               ],
-              })(<Input placeholder='请输入' />)}
+              })(
+                <TreeSelect
+                  dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                  placeholder="请选择"
+                  treeDefaultExpandAll
+                  treeData={roleTypeTree[0].children}
+                />
+              )}
           </Form.Item>
-          <Form.Item {...formItemLayout} label="职位类型">
-            {getFieldDecorator('emplPositionTypeId', {
-              initialValue: info.emplPositionTypeId,
-              rules: [{ required: true, message: '请选择职位类型' }],
+          <Form.Item {...formItemLayout} label="目标当事人">
+            {getFieldDecorator('partyIdTo', {
+              initialValue: info.partyIdTo,
+              rules: [{ required: true, message: '请选择目标当事人' }],
             })(
-              <TreeSelect
-                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+              <Select 
                 placeholder="请选择"
-                treeDefaultExpandAll
-                treeData={typeTree[0].children}
-              />
+                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                dropdownMatchSelectWidth={false}
+              >
+                {personList.map(item => (
+                  <Select.Option key={item.partyId}>{item.nickName}</Select.Option>
+                ))}
+              </Select>
             )}
+          </Form.Item>
+          <Form.Item {...formItemLayout} label='目标当事人角色'>
+            {getFieldDecorator('roleTypeIdTo', {
+              initialValue: info.roleTypeIdTo,
+              rules: [
+                {
+                  required: true,
+                  message: '请选择',
+                },
+              ],
+              })(
+                <TreeSelect
+                  dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                  placeholder="请选择"
+                  treeDefaultExpandAll
+                  treeData={roleTypeTree[0].children}
+                />
+              )}
+          </Form.Item>
+          <Form.Item {...formItemLayout} label='fromDate'>
+            {getFieldDecorator('fromDate', {
+              initialValue: moment(info.fromDate),
+              rules: [
+                {
+                  required: true,
+                  message: '请选择开始日期',
+                },
+              ],
+              })(<DatePicker placeholder='请选择' />)}
+          </Form.Item>
+          <Form.Item {...formItemLayout} label='thruDate'>
+            {getFieldDecorator('thruDate', {
+              initialValue: moment(info.thruDate),
+              rules: [
+                {
+                  required: true,
+                  message: '请选择结束日期',
+                },
+              ],
+              })(<DatePicker placeholder='请选择' />)}
           </Form.Item>
           <Form.Item {...formItemLayout} label="状态项">
             {getFieldDecorator('statusId', {
@@ -122,102 +186,46 @@ class Create extends React.Component {
               </Select>
             )}
           </Form.Item>
-          <Form.Item {...formItemLayout} label='partyId'>
-            {getFieldDecorator('partyId', {
-              initialValue: info.partyId,
+          <Form.Item {...formItemLayout} label='关系名称'>
+            {getFieldDecorator('relationshipName', {
+              initialValue: info.relationshipName,
               rules: [
                 {
                   required: true,
-                  message: '请输入partyId',
+                  message: '请输入关系名称',
                 },
               ],
               })(<Input placeholder='请输入' />)}
           </Form.Item>
-          <Form.Item {...formItemLayout} label='budgetId'>
-            {getFieldDecorator('budgetId', {
-              initialValue: info.budgetId,
+          <Form.Item {...formItemLayout} label='securityGroupId'>
+            {getFieldDecorator('securityGroupId', {
+              initialValue: info.securityGroupId,
               })(<Input placeholder='请输入' />)}
           </Form.Item>
-          <Form.Item {...formItemLayout} label='budgetItemSeqId'>
-            {getFieldDecorator('budgetItemSeqId', {
-              initialValue: info.budgetItemSeqId,
+          <Form.Item {...formItemLayout} label='priorityTypeId'>
+            {getFieldDecorator('priorityTypeId', {
+              initialValue: info.priorityTypeId,
               })(<Input placeholder='请输入' />)}
           </Form.Item>
-          <Form.Item {...formItemLayout} label='estimatedFromDate'>
-            {getFieldDecorator('estimatedFromDate', {
-              initialValue: moment(info.estimatedFromDate),
-              rules: [
-                {
-                  required: true,
-                  message: 'estimatedFromDate',
-                },
-              ],
-              })(<DatePicker placeholder='estimatedFromDate' />)}
+          <Form.Item {...formItemLayout} label='partyRelationshipTypeId'>
+            {getFieldDecorator('partyRelationshipTypeId', {
+              initialValue: info.partyRelationshipTypeId,
+              })(<Input placeholder='请输入' />)}
           </Form.Item>
-          <Form.Item {...formItemLayout} label='estimatedThruDate'>
-            {getFieldDecorator('estimatedThruDate', {
-              initialValue: moment(info.estimatedThruDate),
-              rules: [
-                {
-                  required: true,
-                  message: 'estimatedThruDate',
-                },
-              ],
-              })(<DatePicker placeholder='estimatedThruDate' />)}
+          <Form.Item {...formItemLayout} label='permissionsEnumId'>
+            {getFieldDecorator('permissionsEnumId', {
+              initialValue: info.permissionsEnumId,
+              })(<Input placeholder='请输入' />)}
           </Form.Item>
-          <Form.Item {...formItemLayout} label='是否给薪水'>
-            {getFieldDecorator('isSalaryFlag', {
-              initialValue: info.isSalaryFlag,
-              rules: [
-                {
-                  required: true,
-                  message: '请选择',
-                },
-              ],
-              })(
-                <Radio.Group>
-                  <Radio value="0">否</Radio>
-                  <Radio value="1">是</Radio>
-                </Radio.Group>
-              )}
+          <Form.Item {...formItemLayout} label='positionTitle'>
+            {getFieldDecorator('positionTitle', {
+              initialValue: info.positionTitle,
+              })(<Input placeholder='请输入' />)}
           </Form.Item>
-          <Form.Item {...formItemLayout} label='是否全职'>
-            {getFieldDecorator('isFulltimeFlag', {
-              initialValue: info.isFulltimeFlag,
-              rules: [
-                {
-                  required: true,
-                  message: '请选择',
-                },
-              ],
-              })(
-                <Radio.Group>
-                  <Radio value="0">否</Radio>
-                  <Radio value="1">是</Radio>
-                </Radio.Group>
-              )}
-          </Form.Item>
-          <Form.Item {...formItemLayout} label='实际开始时间'>
-            {getFieldDecorator('actualFromDate', {
-              initialValue: moment(info.actualFromDate),
-              rules: [
-                {
-                  required: true,
-                  message: 'actualFromDate',
-                },
-              ],
-              })(<DatePicker placeholder='请选择实际开始时间' />)}
-          </Form.Item>
-          <Form.Item {...formItemLayout} label='实际终止时间'>
-            {getFieldDecorator('actualThruDate', {
-              initialValue: moment(info.actualThruDate),
-              rules: [
-                {
-                  required: true,
-                  message: 'actualThruDate',
-                },
-              ],
-              })(<DatePicker placeholder='请选择实际终止时间' />)}
+          <Form.Item {...formItemLayout} label='评论'>
+            {getFieldDecorator('comments', {
+              initialValue: info.comments,
+              })(<Input placeholder='请输入' />)}
           </Form.Item>
           <Form.Item {...formItemLayout} label='描述'>
             {getFieldDecorator('description', {

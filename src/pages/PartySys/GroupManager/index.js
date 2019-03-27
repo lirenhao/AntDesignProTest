@@ -44,6 +44,13 @@ class Party extends React.Component {
     const { value } = e.node.props.info
     this.setState({ selectedKeys, partyId: value })
     dispatch({
+      type: 'party/findByUnionId',
+      payload: {
+        type: 'partyRelationship',
+        unionId: value,
+      }
+    });
+    dispatch({
       type: 'infra/findByField',
       payload: {
         type: 'emplPosition',
