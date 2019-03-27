@@ -9,8 +9,8 @@ import {
 } from 'antd'
 import moment from 'moment'
 
-@connect(({ productType }) => ({
-  typeTree: productType.tree.type || [{}],
+@connect(({ type: sysType }) => ({
+  typeTree: sysType.tree.productType || [{}],
 }))
 @Form.create()
 class Create extends React.Component {
@@ -18,9 +18,9 @@ class Create extends React.Component {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'productType/tree',
+      type: 'type/tree',
       payload: {
-        type: 'type',
+        type: 'productType',
         id: 'productTypeId',
         pId: 'parentTypeId',
         title: 'productTypeName',
@@ -33,7 +33,14 @@ class Create extends React.Component {
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        handleFormSubmit({ ...info,  ...values});
+        handleFormSubmit({ 
+          ...info,
+          ...values,
+          introductionDate: values.introductionDate.format('YYYY-MM-DD'),
+          relaseDate: values.relaseDate.format('YYYY-MM-DD'),
+          supportDiscontinuationDate: values.supportDiscontinuationDate.format('YYYY-MM-DD'),
+          salesDiscontinuationDate: values.salesDiscontinuationDate.format('YYYY-MM-DD'),
+        });
         form.resetFields();
       }
     });

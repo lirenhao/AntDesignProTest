@@ -12,10 +12,10 @@ import {
 } from 'antd'
 import Create from './Price/Create'
 
-@connect(({ productPriceComp, productType, productFeature, loading }) => ({
+@connect(({ productPriceComp, type: sysType, productFeature, loading }) => ({
   list: productPriceComp.list,
-  priceType: productType.priceType,
-  pricePurpose: productType.pricePurpose,
+  priceType: sysType.productPriceType,
+  pricePurpose: sysType.productPricePurpose,
   feature: productFeature.data.list,
   loading: loading.models.productPriceComp,
 }))

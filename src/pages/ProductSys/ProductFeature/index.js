@@ -17,10 +17,10 @@ import Create from './Create'
 
 import styles from '../table.less'
 
-@connect(({ productFeature, productType, loading }) => ({
+@connect(({ productFeature, type: sysType, loading }) => ({
   data: productFeature.data,
-  featureType: productType.featureType,
-  featureTypeTree: productType.tree.featureType || [{}],
+  featureType: sysType.productFeatureType,
+  featureTypeTree: sysType.tree.productFeatureType || [{}],
   loading: loading.models.productFeature,
 }))
 @Form.create()
@@ -82,9 +82,9 @@ class Product extends React.Component {
       }
     });
     dispatch({
-      type: 'productType/tree',
+      type: 'type/tree',
       payload: {
-        type: 'featureType',
+        type: 'productFeatureType',
         id: 'productFeatureTypeId',
         pId: 'parentTypeId',
         title: 'description',
@@ -207,6 +207,7 @@ class Product extends React.Component {
               dataSource={list}
               pagination={pagination}
               columns={this.columns}
+              rowKey={record => record.productFeatureId}
             />
           </div>
         </Card>

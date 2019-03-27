@@ -19,7 +19,7 @@ const header = '联系机制用途类型'
 
 @connect(({ type: sysType, loading }) => ({
   list: sysType.list[type],
-  loading: loading.models[`product${type}`],
+  loading: loading.models[type],
 }))
 @Form.create()
 class Type extends React.Component {

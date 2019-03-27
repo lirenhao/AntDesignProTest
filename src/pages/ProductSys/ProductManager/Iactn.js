@@ -13,11 +13,11 @@ import {
   Divider
 } from 'antd'
 
-@connect(({ productFeatureIactn, productFeature, productType }) => ({
+@connect(({ productFeatureIactn, productFeature, type: sysType }) => ({
   list: productFeatureIactn.list,
   feature: productFeature.data.list,
-  iactnTypeTree: productType.tree.featureIactnType,
-  featureIactnType: productType.featureIactnType,
+  iactnTypeTree: sysType.tree.productFeatureIactnType,
+  featureIactnType: sysType.productFeatureIactnType,
 }))
 class Iactn extends PureComponent {
   index = 0;
@@ -36,7 +36,7 @@ class Iactn extends PureComponent {
       },
     });
     dispatch({
-      type: 'productType/tree',
+      type: 'type/tree',
       payload: {
         type: 'featureIactnType', 
         id: 'productFeatureIactnTypeId', 

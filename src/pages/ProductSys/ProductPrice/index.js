@@ -16,10 +16,10 @@ import Create from './Create'
 
 import styles from '../table.less'
 
-@connect(({ productPrice, productType, loading }) => ({
+@connect(({ productPrice, type: sysType, loading }) => ({
   data: productPrice.data,
-  priceType: productType.priceType,
-  pricePurpose: productType.pricePurpose,
+  priceType: sysType.productPriceType,
+  pricePurpose: sysType.productPricePurpose,
   loading: loading.models.productPrice,
 }))
 @Form.create()
@@ -167,7 +167,7 @@ class Product extends React.Component {
                       {getFieldDecorator('productPriceTypeId')(
                         <Select placeholder="请选择" style={{ width: '100%' }}>
                           {Object.keys(priceType).map(key => (
-                            <Select.Option value={key}>{priceType[key].description}</Select.Option>
+                            <Select.Option key={key}>{priceType[key].description}</Select.Option>
                           ))}
                         </Select>
                       )}
@@ -178,7 +178,7 @@ class Product extends React.Component {
                       {getFieldDecorator('productPricePurposeId')(
                         <Select placeholder="请选择" style={{ width: '100%' }}>
                           {Object.keys(pricePurpose).map(key => (
-                            <Select.Option value={key}>{pricePurpose[key].description}</Select.Option>
+                            <Select.Option key={key}>{pricePurpose[key].description}</Select.Option>
                           ))}
                         </Select>
                       )}
@@ -207,6 +207,7 @@ class Product extends React.Component {
               dataSource={list}
               pagination={pagination}
               columns={this.columns}
+              rowKey={record => record.productPriceId}
             />
           </div>
         </Card>

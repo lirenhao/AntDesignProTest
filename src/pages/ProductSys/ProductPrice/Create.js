@@ -7,9 +7,9 @@ import {
   Select,
 } from 'antd'
 
-@connect(({ productType }) => ({
-  priceType: productType.priceType,
-  pricePurpose: productType.pricePurpose,
+@connect(({ type: sysType }) => ({
+  priceType: sysType.productPriceType,
+  pricePurpose: sysType.productPricePurpose,
 }))
 @Form.create()
 class Create extends React.Component {
@@ -66,7 +66,7 @@ class Create extends React.Component {
             })(
               <Select placeholder="请选择">
                 {Object.keys(priceType).map(key => (
-                  <Select.Option value={key}>{priceType[key].description}</Select.Option>
+                  <Select.Option key={key}>{priceType[key].description}</Select.Option>
                 ))}
               </Select>
             )}
@@ -78,7 +78,7 @@ class Create extends React.Component {
             })(
               <Select placeholder="请选择">
                 {Object.keys(pricePurpose).map(key => (
-                  <Select.Option value={key}>{pricePurpose[key].description}</Select.Option>
+                  <Select.Option key={key}>{pricePurpose[key].description}</Select.Option>
                 ))}
               </Select>
             )}

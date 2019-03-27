@@ -19,9 +19,9 @@ const pId = 'parentTypeId'
 const title = 'description'
 const header = '产品特征适用性类型'
 
-@connect(({ productType, loading }) => ({
-  productType,
-  tree: productType.tree[type] || [],
+@connect(({ type: sysType, loading }) => ({
+  sysType,
+  tree: sysType.tree[type] || [],
   loading: loading.models[type],
 }))
 class Type extends React.Component {
@@ -37,7 +37,7 @@ class Type extends React.Component {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'productType/tree',
+      type: 'type/tree',
       payload: {
         type,
         id,
@@ -54,14 +54,17 @@ class Type extends React.Component {
   handleCreateForm = (values) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'productType/add',
+      type: 'type/add',
       payload: {
         type,
         id,
         pId,
         title,
         isTree: true,
-        payload: values,
+        payload: {
+          ...values,
+          id,
+        },
       },
       callback: () =>  {
         this.handleCreateModal(false)
@@ -70,9 +73,10 @@ class Type extends React.Component {
   }
 
   handleTreeSelect = (selectedKeys, e) => {
-    const { productType } = this.props
+    const { sysType } = this.props
     const key = e.node.props.eventKey
-    this.setState({selectedKeys, info: { ...productType[type][key], key }})
+    const data = sysType[type] || {}
+    this.setState({selectedKeys, info: { ...data[key], key }})
   }
 
   handleTreeExpand = (expandedKeys) => {
@@ -82,7 +86,7 @@ class Type extends React.Component {
   handleUpdateForm = (record) => {
     const { dispatch } = this.props
     dispatch({
-      type: 'productType/edit',
+      type: 'type/edit',
       payload: {
         isTree: true,
         type,
@@ -102,7 +106,7 @@ class Type extends React.Component {
   handleRemove = (key) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'productType/remove',
+      type: 'type/remove',
       payload: {
         type,
         id,

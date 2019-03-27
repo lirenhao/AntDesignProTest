@@ -11,8 +11,8 @@ import {
 import PageHeaderWrapper from '@/components/PageHeaderWrapper'
 import Form from './Form'
 
-@connect(({ productType, loading }) => ({
-  assocTypeTree: productType.tree.assocType || [{children: []}],
+@connect(({ type: sysType, loading }) => ({
+  assocTypeTree: sysType.tree.productAssocType || [{children: []}],
   loading: loading.models.productAssoc,
 }))
 class Category extends React.Component {
@@ -26,9 +26,9 @@ class Category extends React.Component {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'productType/tree',
+      type: 'type/tree',
       payload: {
-        type: 'assocType', 
+        type: 'productAssocType', 
         id: 'productAssocTypeId', 
         pId: 'parentTypeId',  
         title: 'description', 

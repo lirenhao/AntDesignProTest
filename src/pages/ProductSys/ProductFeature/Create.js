@@ -7,8 +7,8 @@ import {
   TreeSelect,
 } from 'antd'
 
-@connect(({ productType }) => ({
-  featureTypeTree: productType.tree.featureType || [{}],
+@connect(({ type: sysType }) => ({
+  featureTypeTree: sysType.tree.productFeatureType || [{}],
 }))
 @Form.create()
 class Create extends React.Component {
@@ -16,9 +16,9 @@ class Create extends React.Component {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'productType/tree',
+      type: 'type/tree',
       payload: {
-        type: 'featureType',
+        type: 'productFeatureType',
         id: 'productFeatureTypeId',
         pId: 'parentTypeId',
         title: 'description',

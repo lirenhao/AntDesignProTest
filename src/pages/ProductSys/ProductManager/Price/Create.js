@@ -38,9 +38,9 @@ const geo = [{
   }],
 }];
 
-@connect(({ productType, productFeature, productCategory, loading }) => ({
-  priceType: productType.priceType,
-  pricePurpose: productType.pricePurpose,
+@connect(({ type: sysType, productFeature, productCategory, loading }) => ({
+  priceType: sysType.productPriceType,
+  pricePurpose: sysType.productPricePurpose,
   productFeature: productFeature.data.list,
   productCategoryTree: productCategory.tree,
   loading: loading.models.productPriceComp,

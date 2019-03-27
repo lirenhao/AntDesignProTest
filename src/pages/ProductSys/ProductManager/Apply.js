@@ -16,11 +16,11 @@ import {
 } from 'antd'
 import moment from 'moment'
 
-@connect(({ productFeatureApply, productFeature, productType }) => ({
+@connect(({ productFeatureApply, productFeature, type: sysType }) => ({
   list: productFeatureApply.list,
   feature: productFeature.data.list,
-  applTypeTree: productType.tree.featureApplType,
-  featureApplType: productType.featureApplType,
+  applTypeTree: sysType.tree.productFeatureApplType,
+  featureApplType: sysType.productFeatureApplType || {},
 }))
 class Apply extends PureComponent {
   index = 0;
@@ -39,7 +39,7 @@ class Apply extends PureComponent {
       },
     });
     dispatch({
-      type: 'productType/tree',
+      type: 'type/tree',
       payload: {
         type: 'featureApplType', 
         id: 'productFeatureApplTypeId', 

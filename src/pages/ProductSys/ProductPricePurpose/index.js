@@ -13,13 +13,13 @@ import Create from './Create'
 
 import styles from '../table.less'
 
-const type = 'pricePurpose'
+const type = 'productPricePurpose'
 const id = 'productPricePurposeId'
 const header = '产品价格用途'
 
-@connect(({ productType, loading }) => ({
-  list: productType.list[type],
-  loading: loading.models[`product${type}`],
+@connect(({ type: sysType, loading }) => ({
+  list: sysType.list[type],
+  loading: loading.models[type],
 }))
 @Form.create()
 class Type extends React.Component {
@@ -64,7 +64,7 @@ class Type extends React.Component {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'productType/find',
+      type: 'type/find',
       payload: {
         type,
       }
@@ -78,11 +78,14 @@ class Type extends React.Component {
   handleCreateForm = (values) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'productType/add',
+      type: 'type/add',
       payload: {
         type,
         id,
-        payload: values,
+        payload: {
+          ...values,
+          id,
+        },
       },
       callback: () => this.handleCreateModal(false),
     });
@@ -91,7 +94,7 @@ class Type extends React.Component {
   handleRemove = (record) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'productType/remove',
+      type: 'type/remove',
       payload: {
         type,
         key: record[id]
@@ -110,7 +113,7 @@ class Type extends React.Component {
   handleUpdateForm = (record) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'productType/edit',
+      type: 'type/edit',
       payload: {
         type,
         key: record[id],
@@ -145,6 +148,7 @@ class Type extends React.Component {
               dataSource={list}
               pagination={false}
               columns={this.columns}
+              rowKey={record => record[id]}
             />
           </div>
         </Card>
