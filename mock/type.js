@@ -1457,7 +1457,16 @@ const dataSource = {
   },
   // 职位类型
   emplPositionType: {
-
+    "1": {
+      emplPositionTypeId: '1',
+      parentTypeId: '',
+      positionTypeName: 'CEO类型',
+      hasTable: '0',
+      description: 'CEO类型',
+      lastUpdatedStamp: '2019-03-17 11:39:38',
+      createdStamp: '2019-03-17 10:39:38',
+      version: 'v1.0.0'
+    },
   },
   // 职责类型
   responsibilityType: {

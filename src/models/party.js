@@ -1,21 +1,36 @@
 import {
   getList,
   getByUnionId,
-  getByField,
   saveUnion,
   save,
   update,
   remove
-} from '@/services/infra';
+} from '@/services/party'
+import { objToTree } from '@/utils/utils'
 
 export default {
-  namespace: 'infra',
+  namespace: 'party',
 
   state: {
     list: {},
+    tree: {},
   },
 
   effects: {
+    *tree({ payload }, { call, put }) {
+      const { type, id, pId, title, payload: params } = payload
+      const response = yield call(getList, type, params);
+      yield put({
+        type: 'refreshTree',
+        payload: {
+          type,
+          id, 
+          pId, 
+          title,
+          list: response,
+        },
+      });
+    },
     *findAll({ payload }, { call, put }) {
       const { type, payload: params } = payload
       const response = yield call(getList, type, params);
@@ -30,17 +45,6 @@ export default {
     *findByUnionId({ payload }, { call, put }) {
       const { type, unionId } = payload
       const response = yield call(getByUnionId, type, unionId);
-      yield put({
-        type: 'refresh',
-        payload: {
-          type,
-          list: response,
-        },
-      });
-    },
-    *findByField({ payload }, { call, put }) {
-      const { type, params } = payload
-      const response = yield call(getByField, type, params);
       yield put({
         type: 'refresh',
         payload: {
@@ -105,6 +109,20 @@ export default {
         list: {
           ...state.list,
           [type]: list
+        },
+      };
+    },
+    refreshTree(state, action) {
+      const { type, id, pId, title, list } = action.payload
+      return {
+        ...state,
+        list: {
+          ...state.list,
+          [type]: list
+        },
+        tree: {
+          ...state.tree,
+          [type]: [objToTree({ [id]: "", [title]: "父级节点" }, list, id, pId, title)],
         },
       };
     },
