@@ -181,7 +181,7 @@ class Reporting extends PureComponent {
               <Select 
                 value={text}
                 onChange={value => this.handleSelectFieldChange(value, 'emplPositionIdReportingTo', record.key)}
-                placeholder="当事人"
+                placeholder="上级职位"
                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                 dropdownMatchSelectWidth={false}
                 style={{ width: 120 }}
