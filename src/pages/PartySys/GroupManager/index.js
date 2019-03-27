@@ -8,19 +8,15 @@ import {
   Menu,
   Dropdown,
   Input,
-  Divider,
-  Table,
   message,
 } from 'antd'
 import PageHeaderWrapper from '@/components/PageHeaderWrapper'
 import Create from './Create'
 import Manager from './Manager'
+import { objToTree } from '@/utils/utils'
 
-@connect(({ party, infra, type: sysType, loading }) => ({
-  partyGroupList: party.list.partyGroup || [],
-  partyGroupTree: party.tree.partyGroup || [],
-  emplPositionList: infra.list.emplPosition,
-  emplPositionType: sysType.emplPositionType,
+@connect(({ party, loading }) => ({
+  list: party.list.partyGroup || [],
   loading: loading.models.groupManager,
 }))
 class Party extends React.Component {
@@ -29,108 +25,16 @@ class Party extends React.Component {
     selectedKeys: [],
     isCreateShow: false,
     isUpdateShow: false,
-    isManagerShow: false,
     partyId: '',
     info: {},
-    emplPositionId: '',
   }
-
-  columns = [
-    {
-      title: '职位名称',
-      dataIndex: 'emplPositionName',
-    },
-    {
-      title: '职位类型',
-      dataIndex: 'emplPositionTypeId',
-      render: (id) => {
-        const { emplPositionType } = this.props
-        return emplPositionType[id] ? emplPositionType[id].emplPositionTypeName : null
-      },
-    },
-    {
-      title: '状态项',
-      dataIndex: 'statusId',
-    },
-    {
-      title: 'partyId',
-      dataIndex: 'partyId',
-    },
-    {
-      title: 'budgetId',
-      dataIndex: 'budgetId',
-    },
-    {
-      title: 'budgetItemSeqId',
-      dataIndex: 'budgetItemSeqId',
-    },
-    {
-      title: 'FromDate',
-      dataIndex: 'estimatedFromDate',
-    },
-    {
-      title: 'ThruDate',
-      dataIndex: 'estimatedThruDate',
-    },
-    {
-      title: 'SalaryFlag',
-      dataIndex: 'isSalaryFlag',
-      render: text => text === '1' ? '是' : '否',
-    },
-    {
-      title: 'FulltimeFlag',
-      dataIndex: 'isFulltimeFlag',
-      render: text => text === '1' ? '是' : '否',
-    },
-    {
-      title: '实际开始时间',
-      dataIndex: 'actualFromDate',
-    },
-    {
-      title: '实际终止时间',
-      dataIndex: 'actualThruDate',
-    },
-    {
-      title: '描述',
-      dataIndex: 'description',
-    },
-    {
-      title: '最后修改时间',
-      dataIndex: 'lastUpdatedStamp',
-    },
-    {
-      title: '创建时间',
-      dataIndex: 'createdStamp',
-    },
-    {
-      title: '版本',
-      dataIndex: 'version',
-    },
-    {
-      title: '操作',
-      fixed: 'right',
-        width: 150,
-      render: (text, record) => (
-        <React.Fragment>
-          <a onClick={() => this.handleRemove(record)}>删除</a>
-          <Divider type="vertical" />
-          <a onClick={() => this.handleUpdate(record)}>修改</a>
-          <Divider type="vertical" />
-          <a onClick={() => this.handleManager(record)}>管理</a>
-        </React.Fragment>
-      ),
-    },
-  ]
 
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'party/tree',
+      type: 'party/findAll',
       payload: {
-        type: 'partyGroup', 
-        id: 'partyId', 
-        pId: 'parentId', 
-        title: 'groupName',
+        type: 'partyGroup',
       },
     });
   }
@@ -150,86 +54,73 @@ class Party extends React.Component {
     });
   }
 
-  handleCreateModal = (visible, partyId = '') => {
-    this.setState({isCreateShow: visible, partyId})
+  handleCreate = (key, visible) => {
+    this.setState({partyId: key, isCreateShow: visible})
   }
 
   handleCreateForm = (record) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'infra/save',
+      type: 'party/save',
       payload: {
-        type: 'emplPosition',
+        type: 'partyGroup',
         payload: {
           ...record,
-          id: 'emplPositionId',
-          estimatedFromDate: record.estimatedFromDate.format('YYYY-MM-DD'),
-          estimatedThruDate: record.estimatedThruDate.format('YYYY-MM-DD'),
-          actualFromDate: record.actualFromDate.format('YYYY-MM-DD'),
-          actualThruDate: record.actualThruDate.format('YYYY-MM-DD'),
+          id: 'partyId',
         },
       },
-      callback: () => this.handleCreateModal(false)
+      callback: () => this.setState({ isCreateShow: false })
     });
   }
 
-  handleUpdateModal = (visible) => {
-    this.setState({isUpdateShow: visible})
-  }
-
-  handleUpdate = (record) => {
-    this.setState({info: record})
-    this.handleUpdateModal(true);
+  handleUpdate = (key) => {
+    const { list } = this.props
+    const info = list.filter(item => item.partyId === key)[0] || {}
+    this.setState({ info, isUpdateShow: true })
   }
 
   handleUpdateForm = (record) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'infra/update',
+      type: 'party/update',
       payload: {
-        type: 'emplPosition',
-        key: record.emplPositionId,
-        payload: {
-          ...record,
-          estimatedFromDate: record.estimatedFromDate.format('YYYY-MM-DD'),
-          estimatedThruDate: record.estimatedThruDate.format('YYYY-MM-DD'),
-          actualFromDate: record.actualFromDate.format('YYYY-MM-DD'),
-          actualThruDate: record.actualThruDate.format('YYYY-MM-DD'),
-        },
+        type: 'partyGroup',
+        key: record.partyId,
+        payload: record,
       },
       callback: () => {
-        this.handleUpdateModal(false)
+        this.setState({ isUpdateShow: false })
         message.success('编辑成功')
       },
     });
   }
 
-  handleRemove = (record) => {
+  handleRemove = (key) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'infra/remove',
+      type: 'party/remove',
       payload: {
-        type: 'emplPosition',
-        key: record.emplPositionId,
+        type: 'partyGroup',
+        key,
       },
       callback: () => message.success('删除成功'),
     });
   }
 
-  handleManagerModal = (visible) => {
-    this.setState({isManagerShow: visible})
-  }
-
-  handleManager = (record) => {
-    this.setState({emplPositionId: record.emplPositionId})
-    this.handleManagerModal(true)
-  }
-
   renderRightMenu(record) {
+    if(record.children && record.children.length){
+      return (
+        <Menu>
+          <Menu.Item onClick={() => this.handleCreate(record.value, true)}>添加组织</Menu.Item>
+          <Menu.Item onClick={() => this.handleUpdate(record.value)}>编辑组织</Menu.Item>
+        </Menu>
+      )
+    }
     return (
       <Menu>
-        <Menu.Item onClick={() => this.handleCreateModal(true, record.value)}>添加组织</Menu.Item>
-        <Menu.Item onClick={() => this.handleCreateModal(true, record.value)}>添加职位</Menu.Item>
+        <Menu.Item onClick={() => this.handleCreate(record.value, true)}>添加组织</Menu.Item>
+        <Menu.Item onClick={() => this.handleUpdate(record.value)}>编辑组织</Menu.Item>
+        <Menu.Item onClick={() => this.handleRemove(record.value)}>删除组织</Menu.Item>
       </Menu>
     )
   }
@@ -244,18 +135,14 @@ class Party extends React.Component {
 
   render() {
     const {
-      partyGroupTree,
-      emplPositionList,
-      loading,
+      list,
     } = this.props
     const { 
       selectedKeys,
-      partyId,
       isCreateShow,
       isUpdateShow,
-      isManagerShow,
       info,
-      emplPositionId,
+      partyId,
     } = this.state
 
     const loop = data => data.map((item) => {
@@ -265,6 +152,8 @@ class Party extends React.Component {
       return <Tree.TreeNode key={item.value} title={this.renderTreeTitle(item)} info={item} />
     })
     
+    const tree = [objToTree({ partyId: "", groupName: "父级节点" }, list, 'partyId', 'parentId', 'groupName')] || []
+
     return (
       <PageHeaderWrapper>
         <Layout>
@@ -276,40 +165,30 @@ class Party extends React.Component {
                 selectedKeys={selectedKeys}
                 onSelect={this.handleTreeSelect}
               >
-                {loop(partyGroupTree)}
+                {loop(tree)}
               </Tree>
             </Card>
           </Layout.Sider>
           <Layout.Content>
-            <Card title="组织职位列表">
+            <Card>
               {partyId === "" ? (<Empty description="选择组织" />) : (
-                <Table
-                  loading={loading}
-                  dataSource={emplPositionList}
-                  columns={this.columns}
-                  rowKey={record => record.emplPositionId}
-                  scroll={{ x: 2000 }}
-                />
+                <Manager partyId={partyId} />
               )}
             </Card>
           </Layout.Content>
           <Create 
             visible={isCreateShow} 
-            hideModal={() => this.handleCreateModal(false)} 
+            hideModal={() => this.setState({isCreateShow: false})} 
             handleFormSubmit={this.handleCreateForm}
-            info={{partyId}}
+            info={{parentId: partyId}}
+            tree={tree}
           />
           <Create 
             visible={isUpdateShow} 
-            hideModal={() => this.handleUpdateModal(false)} 
+            hideModal={() => this.setState({isUpdateShow: false})} 
             handleFormSubmit={this.handleUpdateForm}
             info={info}
-          />
-          <Manager 
-            visible={isManagerShow} 
-            hideModal={() => this.handleManagerModal(false)} 
-            partyId={partyId}
-            emplPositionId={emplPositionId}
+            tree={tree}
           />
         </Layout>
       </PageHeaderWrapper>

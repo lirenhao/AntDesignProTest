@@ -1,33 +1,13 @@
 import React from 'react'
-import { connect } from 'dva'
 import {
   Modal,
   Form,
-  Input,
   TreeSelect,
-  DatePicker,
-  Radio,
+  Input,
 } from 'antd'
-import moment from 'moment'
 
-@connect(({ type: sysType }) => ({
-  typeTree: sysType.tree.emplPositionType || [{}],
-}))
 @Form.create()
 class Create extends React.Component {
-
-  componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'type/tree',
-      payload: {
-        type: 'emplPositionType',
-        id: 'emplPositionTypeId',
-        pId: 'parentTypeId',
-        title: 'emplPositionTypeName',
-      }
-    });
-  }
 
   handleSubmit = e => {
     const { handleFormSubmit, form, info } = this.props;
@@ -43,10 +23,10 @@ class Create extends React.Component {
   render() {
     const {
       form: { getFieldDecorator },
-      info,
       visible,
       hideModal,
-      typeTree,
+      info,
+      tree,
     } = this.props;
 
     const formItemLayout = {
@@ -66,6 +46,7 @@ class Create extends React.Component {
         width="60%"
         bodyStyle={{ padding: '32px 40px 48px' }}
         title='新建'
+        destroyOnClose
         maskClosable={false}
         visible={visible}
         okText="提交"
@@ -73,130 +54,32 @@ class Create extends React.Component {
         onCancel={hideModal}
       >
         <Form>
-          <Form.Item {...formItemLayout} label='职位名称'>
-            {getFieldDecorator('emplPositionName', {
-              initialValue: info.emplPositionName,
-              rules: [
-                {
-                  required: true,
-                  message: '请输入职位名称',
-                },
-              ],
-              })(<Input placeholder='请输入' />)}
-          </Form.Item>
-          <Form.Item {...formItemLayout} label="职位类型">
-            {getFieldDecorator('emplPositionTypeId', {
-              initialValue: info.emplPositionTypeId,
-              rules: [{ required: true, message: '请选择职位类型' }],
-            })(
-              <TreeSelect
-                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                placeholder="请选择"
-                treeDefaultExpandAll
-                treeData={typeTree[0].children}
-              />
-            )}
-          </Form.Item>
-          <Form.Item {...formItemLayout} label='partyId'>
-            {getFieldDecorator('partyId', {
-              initialValue: info.partyId,
-              rules: [
-                {
-                  required: true,
-                  message: '请输入partyId',
-                },
-              ],
-              })(<Input placeholder='请输入' />)}
-          </Form.Item>
-          <Form.Item {...formItemLayout} label='budgetId'>
-            {getFieldDecorator('budgetId', {
-              initialValue: info.budgetId,
-              })(<Input placeholder='请输入' />)}
-          </Form.Item>
-          <Form.Item {...formItemLayout} label='budgetItemSeqId'>
-            {getFieldDecorator('budgetItemSeqId', {
-              initialValue: info.budgetItemSeqId,
-              })(<Input placeholder='请输入' />)}
-          </Form.Item>
-          <Form.Item {...formItemLayout} label='estimatedFromDate'>
-            {getFieldDecorator('estimatedFromDate', {
-              initialValue: moment(info.estimatedFromDate),
-              rules: [
-                {
-                  required: true,
-                  message: 'estimatedFromDate',
-                },
-              ],
-              })(<DatePicker placeholder='estimatedFromDate' />)}
-          </Form.Item>
-          <Form.Item {...formItemLayout} label='estimatedThruDate'>
-            {getFieldDecorator('estimatedThruDate', {
-              initialValue: moment(info.estimatedThruDate),
-              rules: [
-                {
-                  required: true,
-                  message: 'estimatedThruDate',
-                },
-              ],
-              })(<DatePicker placeholder='estimatedThruDate' />)}
-          </Form.Item>
-          <Form.Item {...formItemLayout} label='是否给薪水'>
-            {getFieldDecorator('isSalaryFlag', {
-              initialValue: info.isSalaryFlag,
-              rules: [
-                {
-                  required: true,
-                  message: '请选择',
-                },
-              ],
+          <Form.Item {...formItemLayout} label='所属父级'>
+            {getFieldDecorator('parentId', {
+              initialValue: info.parentId,
               })(
-                <Radio.Group>
-                  <Radio value="0">否</Radio>
-                  <Radio value="1">是</Radio>
-                </Radio.Group>
+                <TreeSelect
+                  dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                  placeholder="请选择"
+                  treeDefaultExpandAll
+                  treeData={tree}
+                />
               )}
           </Form.Item>
-          <Form.Item {...formItemLayout} label='是否全职'>
-            {getFieldDecorator('isFulltimeFlag', {
-              initialValue: info.isFulltimeFlag,
+          <Form.Item {...formItemLayout} label='组织名称'>
+            {getFieldDecorator('groupName', {
+              initialValue: info.groupName,
               rules: [
                 {
                   required: true,
-                  message: '请选择',
+                  message: '请输入组织名称',
                 },
               ],
-              })(
-                <Radio.Group>
-                  <Radio value="0">否</Radio>
-                  <Radio value="1">是</Radio>
-                </Radio.Group>
-              )}
+              })(<Input placeholder='请输入' />)}
           </Form.Item>
-          <Form.Item {...formItemLayout} label='实际开始时间'>
-            {getFieldDecorator('actualFromDate', {
-              initialValue: moment(info.actualFromDate),
-              rules: [
-                {
-                  required: true,
-                  message: 'actualFromDate',
-                },
-              ],
-              })(<DatePicker placeholder='请选择实际开始时间' />)}
-          </Form.Item>
-          <Form.Item {...formItemLayout} label='实际终止时间'>
-            {getFieldDecorator('actualThruDate', {
-              initialValue: moment(info.actualThruDate),
-              rules: [
-                {
-                  required: true,
-                  message: 'actualThruDate',
-                },
-              ],
-              })(<DatePicker placeholder='请选择实际终止时间' />)}
-          </Form.Item>
-          <Form.Item {...formItemLayout} label='描述'>
-            {getFieldDecorator('description', {
-              initialValue: info.description,
+          <Form.Item {...formItemLayout} label='评论'>
+            {getFieldDecorator('comments', {
+              initialValue: info.comments,
             })(
               <Input.TextArea
                 style={{ minHeight: 32 }}
@@ -211,4 +94,4 @@ class Create extends React.Component {
   }
 }
 
-export default Create;
+export default Create
