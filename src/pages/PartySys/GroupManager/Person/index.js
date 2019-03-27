@@ -26,7 +26,7 @@ class Position extends Component {
 
   columns = [
     {
-      title: '源当事人',
+      title: '组织',
       dataIndex: 'partyIdFrom',
       render: (id) => {
         const { groupList } = this.props
@@ -35,7 +35,7 @@ class Position extends Component {
       }
     },
     {
-      title: '源角色',
+      title: '组织角色',
       dataIndex: 'roleTypeIdFrom',
       render: (id) => {
         const { roleType } = this.props
@@ -43,7 +43,7 @@ class Position extends Component {
       },
     },
     {
-      title: '目标当事人',
+      title: '当事人',
       dataIndex: 'partyIdTo',
       render: (id) => {
         const { personList } = this.props
@@ -52,7 +52,7 @@ class Position extends Component {
       }
     },
     {
-      title: '目标角色',
+      title: '当事人角色',
       dataIndex: 'roleTypeIdTo',
       render: (id) => {
         const { roleType } = this.props

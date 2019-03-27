@@ -11,7 +11,8 @@ import {
 } from 'antd'
 import moment from 'moment'
 
-@connect(({ type: sysType, infra }) => ({
+@connect(({ party, type: sysType, infra }) => ({
+  groupList: party.list.partyGroup || [],
   typeTree: sysType.tree.emplPositionType || [{}],
   statusItemList: infra.list.statusItem || [],
 }))
@@ -54,6 +55,7 @@ class Create extends React.Component {
       info,
       visible,
       hideModal,
+      groupList,
       typeTree,
       statusItemList,
     } = this.props;
@@ -70,6 +72,8 @@ class Create extends React.Component {
       },
     }
 
+    const group = groupList.filter(item => item.partyId === info.partyId)[0] || {}
+
     return (
       <Modal 
         width="60%"
@@ -82,6 +86,9 @@ class Create extends React.Component {
         onCancel={hideModal}
       >
         <Form>
+          <Form.Item {...formItemLayout} label='组织'>
+            {group.groupName}
+          </Form.Item>
           <Form.Item {...formItemLayout} label='职位名称'>
             {getFieldDecorator('emplPositionName', {
               initialValue: info.emplPositionName,
@@ -122,17 +129,6 @@ class Create extends React.Component {
               </Select>
             )}
           </Form.Item>
-          <Form.Item {...formItemLayout} label='partyId'>
-            {getFieldDecorator('partyId', {
-              initialValue: info.partyId,
-              rules: [
-                {
-                  required: true,
-                  message: '请输入partyId',
-                },
-              ],
-              })(<Input placeholder='请输入' />)}
-          </Form.Item>
           <Form.Item {...formItemLayout} label='budgetId'>
             {getFieldDecorator('budgetId', {
               initialValue: info.budgetId,
@@ -143,24 +139,24 @@ class Create extends React.Component {
               initialValue: info.budgetItemSeqId,
               })(<Input placeholder='请输入' />)}
           </Form.Item>
-          <Form.Item {...formItemLayout} label='estimatedFromDate'>
+          <Form.Item {...formItemLayout} label='预计开始日期'>
             {getFieldDecorator('estimatedFromDate', {
               initialValue: moment(info.estimatedFromDate),
               rules: [
                 {
                   required: true,
-                  message: 'estimatedFromDate',
+                  message: '请选择预计开始日期',
                 },
               ],
               })(<DatePicker placeholder='estimatedFromDate' />)}
           </Form.Item>
-          <Form.Item {...formItemLayout} label='estimatedThruDate'>
+          <Form.Item {...formItemLayout} label='预计结束日期'>
             {getFieldDecorator('estimatedThruDate', {
               initialValue: moment(info.estimatedThruDate),
               rules: [
                 {
                   required: true,
-                  message: 'estimatedThruDate',
+                  message: '请选择预计结束日期',
                 },
               ],
               })(<DatePicker placeholder='estimatedThruDate' />)}

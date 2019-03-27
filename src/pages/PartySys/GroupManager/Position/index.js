@@ -9,9 +9,10 @@ import {
 import Create from './Create'
 import Manager from './Manager'
 
-@connect(({ infra, type: sysType, loading }) => ({
+@connect(({ infra, party, type: sysType, loading }) => ({
   emplPositionList: infra.list.emplPosition,
   emplPositionType: sysType.emplPositionType,
+  groupList: party.list.partyGroup || [],
   statusItemList: infra.list.statusItem || [],
   loading: loading.models.groupManagerPosition,
 }))
@@ -26,6 +27,15 @@ class Position extends Component {
   }
 
   columns = [
+    {
+      title: '组织',
+      dataIndex: 'partyId',
+      render: (id) => {
+        const { groupList } = this.props
+        const data = groupList.filter(item => item.partyId === id)[0] || {}
+        return data.groupName
+      }
+    },
     {
       title: '职位名称',
       dataIndex: 'emplPositionName',
@@ -48,10 +58,6 @@ class Position extends Component {
       },
     },
     {
-      title: 'partyId',
-      dataIndex: 'partyId',
-    },
-    {
       title: 'budgetId',
       dataIndex: 'budgetId',
     },
@@ -60,20 +66,20 @@ class Position extends Component {
       dataIndex: 'budgetItemSeqId',
     },
     {
-      title: 'FromDate',
+      title: '预计开始日期',
       dataIndex: 'estimatedFromDate',
     },
     {
-      title: 'ThruDate',
+      title: '预计结束日期',
       dataIndex: 'estimatedThruDate',
     },
     {
-      title: 'SalaryFlag',
+      title: '是否给薪水',
       dataIndex: 'isSalaryFlag',
       render: text => text === '1' ? '是' : '否',
     },
     {
-      title: 'FulltimeFlag',
+      title: '是否全职',
       dataIndex: 'isFulltimeFlag',
       render: text => text === '1' ? '是' : '否',
     },
@@ -84,22 +90,6 @@ class Position extends Component {
     {
       title: '实际终止时间',
       dataIndex: 'actualThruDate',
-    },
-    {
-      title: '描述',
-      dataIndex: 'description',
-    },
-    {
-      title: '最后修改时间',
-      dataIndex: 'lastUpdatedStamp',
-    },
-    {
-      title: '创建时间',
-      dataIndex: 'createdStamp',
-    },
-    {
-      title: '版本',
-      dataIndex: 'version',
     },
     {
       title: '操作',
@@ -221,7 +211,7 @@ class Position extends Component {
           dataSource={emplPositionList}
           columns={this.columns}
           rowKey={record => record.emplPositionId}
-          scroll={{ x: 2000 }}
+          scroll={{ x: 1500 }}
         />
         <Create 
           visible={isCreateShow} 

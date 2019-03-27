@@ -1460,7 +1460,7 @@ const dataSource = {
     "1": {
       emplPositionTypeId: '1',
       parentTypeId: '',
-      positionTypeName: 'CEO类型',
+      emplPositionTypeName: 'CEO类型',
       hasTable: '0',
       description: 'CEO类型',
       lastUpdatedStamp: '2019-03-17 11:39:38',

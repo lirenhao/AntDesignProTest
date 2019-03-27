@@ -93,10 +93,10 @@ class Create extends React.Component {
         onCancel={hideModal}
       >
         <Form>
-          <Form.Item {...formItemLayout} label="源当事人">
+          <Form.Item {...formItemLayout} label="组织">
             {group.groupName}
           </Form.Item>
-          <Form.Item {...formItemLayout} label='源当事人角色'>
+          <Form.Item {...formItemLayout} label='组织角色'>
             {getFieldDecorator('roleTypeIdFrom', {
               initialValue: info.roleTypeIdFrom,
               rules: [
@@ -114,10 +114,10 @@ class Create extends React.Component {
                 />
               )}
           </Form.Item>
-          <Form.Item {...formItemLayout} label="目标当事人">
+          <Form.Item {...formItemLayout} label="当事人">
             {getFieldDecorator('partyIdTo', {
               initialValue: info.partyIdTo,
-              rules: [{ required: true, message: '请选择目标当事人' }],
+              rules: [{ required: true, message: '请选择当事人' }],
             })(
               <Select 
                 placeholder="请选择"
@@ -130,13 +130,13 @@ class Create extends React.Component {
               </Select>
             )}
           </Form.Item>
-          <Form.Item {...formItemLayout} label='目标当事人角色'>
+          <Form.Item {...formItemLayout} label='当事人角色'>
             {getFieldDecorator('roleTypeIdTo', {
               initialValue: info.roleTypeIdTo,
               rules: [
                 {
                   required: true,
-                  message: '请选择',
+                  message: '请选择当事人角色',
                 },
               ],
               })(
