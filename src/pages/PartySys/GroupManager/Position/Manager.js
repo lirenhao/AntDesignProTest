@@ -5,6 +5,8 @@ import {
   Card,
 } from 'antd'
 import Responsibility from './Responsibility'
+import Fulfillment from './Fulfillment'
+import Reporting from './Reporting'
 
 function Manager(props) {
   const { visible, hideModal, partyId, emplPositionId } = props
@@ -29,12 +31,13 @@ function Manager(props) {
         </Tabs.TabPane>
         <Tabs.TabPane tab="职位履行" key="2">
           <Card title="职位履行" bordered={false}>
-            {partyId}职位履行{emplPositionId}
+            <Fulfillment emplPositionId={emplPositionId} />
           </Card>
         </Tabs.TabPane>
         <Tabs.TabPane tab="职位报告" key="3">
           <Card title="职位报告" bordered={false}>
             {partyId}职位报告{emplPositionId}
+            <Reporting emplPositionId={emplPositionId} />
           </Card>
         </Tabs.TabPane>
       </Tabs>

@@ -315,7 +315,7 @@ class Responsibility extends PureComponent {
           onClick={this.newRow}
           icon="plus"
         >
-          添加职责
+          添加职位职责
         </Button>
       </Fragment>
     );
