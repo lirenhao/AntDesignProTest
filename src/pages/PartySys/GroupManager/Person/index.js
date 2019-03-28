@@ -190,7 +190,7 @@ class Position extends Component {
           visible={isCreateShow} 
           hideModal={() => this.handleCreateModal(false)} 
           handleFormSubmit={this.handleCreateForm}
-          info={{partyIdFrom: partyId}}
+          info={{partyIdFrom: partyId, roleTypeIdFrom: '6', roleTypeIdTo: '11'}}
         />
         <Create 
           visible={isUpdateShow} 

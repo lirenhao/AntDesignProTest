@@ -107,6 +107,7 @@ class Create extends React.Component {
               ],
               })(
                 <TreeSelect
+                  disabled
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                   placeholder="请选择"
                   treeDefaultExpandAll
@@ -141,6 +142,7 @@ class Create extends React.Component {
               ],
               })(
                 <TreeSelect
+                  disabled
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                   placeholder="请选择"
                   treeDefaultExpandAll
