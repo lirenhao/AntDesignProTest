@@ -59,10 +59,6 @@ class PartyPerson extends React.Component {
       }
     },
     {
-      title: '最后姓名',
-      dataIndex: 'lastName',
-    },
-    {
       title: '出生日期',
       dataIndex: 'birthDate',
     },

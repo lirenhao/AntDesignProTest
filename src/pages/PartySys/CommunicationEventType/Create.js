@@ -9,7 +9,7 @@ import {
 } from 'antd'
 
 @connect(({ type: sysType }) => ({
-  contactMechTypeTree: sysType.tree.contactMechType,
+  contactMechTypeTree: sysType.tree.contactMechType || [{children: []}],
 }))
 @Form.create()
 class Create extends React.Component {
