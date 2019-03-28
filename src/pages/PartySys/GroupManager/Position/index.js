@@ -112,7 +112,7 @@ class Position extends Component {
   }
 
   handleCreateForm = (record) => {
-    const { dispatch } = this.props;
+    const { dispatch, partyId } = this.props;
     dispatch({
       type: 'infra/save',
       payload: {
@@ -126,7 +126,18 @@ class Position extends Component {
           actualThruDate: record.actualThruDate.format('YYYY-MM-DD'),
         },
       },
-      callback: () => this.handleCreateModal(false)
+      callback: () => {
+        dispatch({
+          type: 'infra/findByField',
+          payload: {
+            type: 'emplPosition',
+            params: {
+              partyId,
+            }
+          }
+        });
+        this.handleCreateModal(false)
+      }
     });
   }
 

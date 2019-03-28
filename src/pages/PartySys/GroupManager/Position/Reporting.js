@@ -15,9 +15,10 @@ import {
 } from 'antd'
 import moment from 'moment'
 
-@connect(({ party, infra }) => ({
+@connect(({ party, infra, groupManager }) => ({
   list: party.list.emplPositionReportingStruct || [],
   emplPositionList: infra.list.emplPosition,
+  reportingTo: groupManager.reportingTo,
 }))
 class Reporting extends PureComponent {
   index = 0;
@@ -28,7 +29,7 @@ class Reporting extends PureComponent {
   }
 
   componentDidMount() {
-    const { dispatch, emplPositionId } = this.props;
+    const { dispatch, emplPositionId, partyId } = this.props;
     dispatch({
       type: 'party/findByUnionId',
       payload: {
@@ -37,10 +38,8 @@ class Reporting extends PureComponent {
       },
     });
     dispatch({
-      type: 'infra/findAll',
-      payload: {
-        type: 'emplPosition',
-      }
+      type: 'groupManager/reportingTo',
+      payload: partyId,
     });
   }
 
@@ -175,8 +174,7 @@ class Reporting extends PureComponent {
         dataIndex: 'emplPositionIdReportingTo',
         key: 'emplPositionIdReportingTo',
         render: (text, record) => {
-          const { emplPositionList } = this.props
-          // TODO 如何获取上级职位
+          const { reportingTo } = this.props
           if (record.editable) {
             return (
               <Select 
@@ -187,13 +185,13 @@ class Reporting extends PureComponent {
                 dropdownMatchSelectWidth={false}
                 style={{ width: 120 }}
               >
-                {emplPositionList.map(item => (
+                {reportingTo.map(item => (
                   <Select.Option key={item.emplPositionId}>{item.emplPositionName}</Select.Option>
                 ))}
               </Select>
             );
           }
-          const data = emplPositionList.filter(item => item.emplPositionId === text)[0] || {}
+          const data = reportingTo.filter(item => item.emplPositionId === text)[0] || {}
           return data.emplPositionName
         },
       },
