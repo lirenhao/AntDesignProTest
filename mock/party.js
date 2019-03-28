@@ -26,7 +26,7 @@ const dataSource = {
       genderTypeId: "1",
       birthDate:"2019-03-17",
       maritalStatus:"0",
-      defaultPartyIdentificationTypeId: "默认的身份类型标识-身份证",
+      defaultPartyIdentificationTypeId: "1",
       totalYearsWorkExperience:"总的工作年限",
       employmentStatusId:"雇佣状态标识",
       residenceStatusId:"居住状态标识",

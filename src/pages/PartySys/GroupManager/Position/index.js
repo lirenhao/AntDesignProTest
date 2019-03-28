@@ -94,7 +94,7 @@ class Position extends Component {
     {
       title: '操作',
       fixed: 'right',
-        width: 150,
+      width: 150,
       render: (text, record) => (
         <React.Fragment>
           <a onClick={() => this.handleRemove(record)}>删除</a>

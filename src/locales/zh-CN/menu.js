@@ -72,6 +72,7 @@ export default {
   'menu.partySys.contactMechPurposeType': '联系机制用途类型',
   'menu.partySys.communicationEventType': '通讯事件类型',
   'menu.partySys.communicationEventPrpType': '通讯事件目的类型',
+  'menu.partySys.partyPerson': '人员信息',
   'menu.partySys.groupManager': '组织管理',
   'menu.infraSys': '基础设施系统',
   'menu.infraSys.statusItem': '状态项',

@@ -36,7 +36,6 @@ function Manager(props) {
         </Tabs.TabPane>
         <Tabs.TabPane tab="职位报告" key="3">
           <Card title="职位报告" bordered={false}>
-            {partyId}职位报告{emplPositionId}
             <Reporting emplPositionId={emplPositionId} />
           </Card>
         </Tabs.TabPane>

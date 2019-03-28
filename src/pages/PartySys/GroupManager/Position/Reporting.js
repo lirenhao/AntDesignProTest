@@ -176,6 +176,7 @@ class Reporting extends PureComponent {
         key: 'emplPositionIdReportingTo',
         render: (text, record) => {
           const { emplPositionList } = this.props
+          // TODO 如何获取上级职位
           if (record.editable) {
             return (
               <Select 

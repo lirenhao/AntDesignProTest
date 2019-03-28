@@ -308,6 +308,11 @@ export default [
             component: './PartySys/CommunicationEventPrpType',
           },
           {
+            name: 'partyPerson',
+            path: '/partySys/partyPerson',
+            component: './PartySys/PartyPerson',
+          },
+          {
             name: 'groupManager',
             path: '/partySys/groupManager',
             component: './PartySys/GroupManager',
