@@ -9,6 +9,10 @@ export async function getByUnionId(type, key) {
   return request(`/api/party/union/${type}/${key}`);
 }
 
+export async function getByField(type, params) {
+  return request(`/api/party/field/${type}?${stringify(params)}`);
+}
+
 export async function save(type, params) {
   return request(`/api/party/${type}`, {
     method: 'POST',

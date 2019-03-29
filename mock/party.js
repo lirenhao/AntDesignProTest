@@ -1,4 +1,5 @@
 import moment from 'moment'
+import { parse } from 'url'
 
 let index = 100
 
@@ -149,7 +150,21 @@ function saveUnion(req, res, u, b) {
   findByUnionId(req, res)
 }
 
+function findByField(req, res, u) {
+  let url = u;
+  if (!url || Object.prototype.toString.call(url) !== '[object String]') {
+    url = req.url; // eslint-disable-line
+  }
+  const params = parse(url, true).query
+  const { type } = req.params
+  const data = dataSource[type] || {}
+  return res.json( Object.keys(data).map(key => data[key])
+    .filter(item => Object.keys(params).map(key => item[key] === params[key]).reduce((a, b) => a && b, true)
+  ))
+}
+
 export default {
+  'GET /api/party/field/:type': findByField,
   'GET /api/party/union/:type/:key': findByUnionId,
   'POST /api/party/union/:type': saveUnion,
   'GET /api/party/:type': findAll,
