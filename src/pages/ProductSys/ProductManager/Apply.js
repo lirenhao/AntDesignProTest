@@ -19,7 +19,7 @@ import moment from 'moment'
 @connect(({ productFeatureApply, productFeature, type: sysType }) => ({
   list: productFeatureApply.list,
   feature: productFeature.data.list,
-  applTypeTree: sysType.tree.productFeatureApplType,
+  applTypeTree: sysType.tree.productFeatureApplType || [{children: []}],
   featureApplType: sysType.productFeatureApplType || {},
 }))
 class Apply extends PureComponent {

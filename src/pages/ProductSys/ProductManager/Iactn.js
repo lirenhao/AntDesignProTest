@@ -16,8 +16,8 @@ import {
 @connect(({ productFeatureIactn, productFeature, type: sysType }) => ({
   list: productFeatureIactn.list,
   feature: productFeature.data.list,
-  iactnTypeTree: sysType.tree.productFeatureIactnType,
-  featureIactnType: sysType.productFeatureIactnType,
+  iactnTypeTree: sysType.tree.productFeatureIactnType || [{children: []}],
+  featureIactnType: sysType.productFeatureIactnType || {},
 }))
 class Iactn extends PureComponent {
   index = 0;
