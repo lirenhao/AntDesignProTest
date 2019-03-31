@@ -138,7 +138,11 @@ class Assoc extends React.Component {
     const { dispatch } = this.props;
     dispatch({
       type: 'productMember/update',
-      payload: record,
+      payload: {
+        ...record,
+        fromDate: record.fromDate.format('YYYY-MM-DD'),
+        thruDate: record.thruDate.format('YYYY-MM-DD'),
+      },
       callback: () => {
         this.handleUpdateModal(false)
         message.success('编辑成功')

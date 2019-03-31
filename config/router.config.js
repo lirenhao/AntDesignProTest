@@ -52,24 +52,24 @@ export default [
         path: '/infraSys',
         routes: [
           {
+            name: 'statusType',
+            path: '/infraSys/statusType',
+            component: './InfraSys/StatusType'
+          },
+          {
             name: 'statusItem',
             path: '/infraSys/statusItem',
             component: './InfraSys/StatusItem'
           },
           {
-            name: 'dataSource',
-            path: '/infraSys/dataSource',
-            component: './InfraSys/DataSource'
+            name: 'statusValidChange',
+            path: '/infraSys/statusValidChange',
+            component: './InfraSys/StatusItem'
           },
           {
-            name: 'deliverable',
-            path: '/infraSys/deliverable',
-            component: './InfraSys/Deliverable'
-          },
-          {
-            name: 'quantityBreak',
-            path: '/infraSys/quantityBreak',
-            component: './InfraSys/QuantityBreak'
+            name: 'uomType',
+            path: '/infraSys/uomType',
+            component: './InfraSys/UomType'
           },
           {
             name: 'uom',
@@ -77,19 +77,64 @@ export default [
             component: './InfraSys/Uom'
           },
           {
+            name: 'dataSourceType',
+            path: '/infraSys/dataSourceType',
+            component: './InfraSys/DataSourceType'
+          },
+          {
+            name: 'dataSource',
+            path: '/infraSys/dataSource',
+            component: './InfraSys/DataSource'
+          },
+          {
+            name: 'quantityBreakType',
+            path: '/infraSys/quantityBreakType',
+            component: './InfraSys/QuantityBreakType'
+          },
+          {
+            name: 'quantityBreak',
+            path: '/infraSys/quantityBreak',
+            component: './InfraSys/QuantityBreak'
+          },
+          {
+            name: 'rateType',
+            path: '/infraSys/rateType',
+            component: './InfraSys/RateType'
+          },
+          {
+            name: 'deliverableType',
+            path: '/infraSys/deliverableType',
+            component: './InfraSys/DeliverableType'
+          },
+          {
+            name: 'deliverable',
+            path: '/infraSys/deliverable',
+            component: './InfraSys/Deliverable'
+          },
+          {
+            name: 'enumeration',
+            path: '/infraSys/enumeration',
+            component: './InfraSys/DeliverableType'
+          },
+          {
+            name: 'emplPositionType',
+            path: '/infraSys/emplPositionType',
+            component: './InfraSys/EmplPositionType'
+          },
+          {
             name: 'emplPosition',
             path: '/infraSys/emplPosition',
             component: './InfraSys/EmplPosition'
           },
           {
+            name: 'responsibilityType',
+            path: '/infraSys/responsibilityType',
+            component: './InfraSys/ResponsibilityType'
+          },
+          {
             name: 'validResponsibility',
             path: '/infraSys/validResponsibility',
             component: './InfraSys/ValidResponsibility'
-          },
-          {
-            name: 'statusType',
-            path: '/infraSys/statusType',
-            component: './InfraSys/StatusType'
           },
           {
             name: 'contentPurposeType',
@@ -100,16 +145,6 @@ export default [
             name: 'dataResourceType',
             path: '/infraSys/dataResourceType',
             component: './InfraSys/DataResourceType'
-          },
-          {
-            name: 'dataSourceType',
-            path: '/infraSys/dataSourceType',
-            component: './InfraSys/DataSourceType'
-          },
-          {
-            name: 'deliverableType',
-            path: '/infraSys/deliverableType',
-            component: './InfraSys/DeliverableType'
           },
           {
             name: 'mimeType',
@@ -125,16 +160,6 @@ export default [
             name: 'priorityType',
             path: '/infraSys/priorityType',
             component: './InfraSys/PriorityType'
-          },
-          {
-            name: 'quantityBreakType',
-            path: '/infraSys/quantityBreakType',
-            component: './InfraSys/QuantityBreakType'
-          },
-          {
-            name: 'rateType',
-            path: '/infraSys/rateType',
-            component: './InfraSys/RateType'
           },
           {
             name: 'ratingType',
@@ -155,21 +180,6 @@ export default [
             name: 'skillType',
             path: '/infraSys/skillType',
             component: './InfraSys/SkillType'
-          },
-          {
-            name: 'uomType',
-            path: '/infraSys/uomType',
-            component: './InfraSys/UomType'
-          },
-          {
-            name: 'emplPositionType',
-            path: '/infraSys/emplPositionType',
-            component: './InfraSys/EmplPositionType'
-          },
-          {
-            name: 'responsibilityType',
-            path: '/infraSys/responsibilityType',
-            component: './InfraSys/ResponsibilityType'
           },
         ],
       },
