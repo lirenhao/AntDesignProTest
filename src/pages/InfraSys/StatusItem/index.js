@@ -14,7 +14,7 @@ import {
 } from 'antd'
 import PageHeaderWrapper from '@/components/PageHeaderWrapper'
 import Create from './Create'
-import Apply from './Apply'
+import Change from './Change'
 
 import styles from '../table.less'
 
@@ -76,7 +76,7 @@ class Product extends React.Component {
           <Divider type="vertical" />
           <a onClick={() => this.handleUpdate(record)}>修改</a>
           <Divider type="vertical" />
-          <a onClick={() => this.handleDrawer(record)}>状态</a>
+          <a onClick={() => this.handleDrawer(record)}>状态改变</a>
         </React.Fragment>
       ),
     },
@@ -239,7 +239,7 @@ class Product extends React.Component {
           handleFormSubmit={this.handleUpdateForm}
           info={info}
         />
-        <Apply 
+        <Change 
           visible={isDrawerShow} 
           hideModal={() => this.handleDrawerModal(false)} 
           statusId={statusId}

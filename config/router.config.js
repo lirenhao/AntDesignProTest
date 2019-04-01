@@ -62,11 +62,6 @@ export default [
             component: './InfraSys/StatusItem'
           },
           {
-            name: 'statusValidChange',
-            path: '/infraSys/statusValidChange',
-            component: './InfraSys/StatusItem'
-          },
-          {
             name: 'uomType',
             path: '/infraSys/uomType',
             component: './InfraSys/UomType'
@@ -110,11 +105,6 @@ export default [
             name: 'deliverable',
             path: '/infraSys/deliverable',
             component: './InfraSys/Deliverable'
-          },
-          {
-            name: 'enumeration',
-            path: '/infraSys/enumeration',
-            component: './InfraSys/DeliverableType'
           },
           {
             name: 'emplPositionType',

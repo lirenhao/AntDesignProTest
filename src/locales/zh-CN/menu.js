@@ -85,8 +85,8 @@ export default {
   'menu.infraSys.validResponsibility': '有效的职责',
   'menu.infraSys.emplPositionResponsibility': '职位的职责',
   'menu.infraSys.statusType': '状态类型',
-  'menu.infraSys.contentPurposeType': 'contentPurposeType',
-  'menu.infraSys.dataResourceType': 'dataResourceType',
+  'menu.infraSys.contentPurposeType': '内容用途类型',
+  'menu.infraSys.dataResourceType': '数据资源类型',
   'menu.infraSys.dataSourceType': '数据来源类型',
   'menu.infraSys.deliverableType': '可交付成果类型',
   'menu.infraSys.mimeType': '多媒体类型',
@@ -102,4 +102,5 @@ export default {
   'menu.infraSys.uomType': '度量单位类型',
   'menu.infraSys.emplPositionType': '职位类型',
   'menu.infraSys.responsibilityType': '职责类型',
+  'menu.infraSys.enumeration': '枚举',
 };

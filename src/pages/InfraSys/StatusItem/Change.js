@@ -17,7 +17,7 @@ import {
   list: infra.list.statusValidChange || [],
   statusList: infra.list.statusItem || [],
 }))
-class Apply extends PureComponent {
+class Change extends PureComponent {
   index = 0;
 
   state = {
@@ -211,8 +211,9 @@ class Apply extends PureComponent {
                 value={text === '' ? undefined : text}
                 placeholder="有效改变状态"
                 onChange={value => this.handleSelectFieldChange(value, 'statusIdTo', record.key)}
-                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                 dropdownMatchSelectWidth={false}
+                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                style={{ width: 120 }}
               >
                 {statusList.map(item => (
                   <Select.Option key={item.statusId}>{item.statusCode}</Select.Option>
@@ -354,11 +355,11 @@ class Apply extends PureComponent {
           onClick={this.newRow}
           icon="plus"
         >
-          添加职位的职责
+          添加状态有效改变
         </Button>
       </Drawer>
     );
   }
 }
 
-export default Apply
+export default Change
