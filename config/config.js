@@ -80,10 +80,10 @@ export default {
     bizcharts: 'BizCharts',
   },
   // proxy: {
-  //   '/server/api/': {
-  //     target: 'https://preview.pro.ant.design/',
+  //   '/api/': {
+  //     target: 'https://preview.pro.ant.design/api/',
   //     changeOrigin: true,
-  //     pathRewrite: { '^/server': '' },
+  //     pathRewrite: { '^/api': '' },
   //   },
   // },
   ignoreMomentLocale: true,

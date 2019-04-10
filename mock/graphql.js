@@ -2,17 +2,16 @@ import path from 'path';
 import jsonfile from 'jsonfile';
 import graphqlHTTP from 'express-graphql';
 import { importSchema } from 'graphql-import';
-import { makeExecutableSchema } from 'graphql-tools';
+import { makeExecutableSchema, mergeSchemas } from 'graphql-tools';
 
 const typeFile = path.join(__dirname, './data/type.json');
 const productFile = path.join(__dirname, './data/product.json');
 
-const typeDefs = importSchema(path.join(__dirname, './schema/product.graphql'));
+const productTypeDefs = importSchema(path.join(__dirname, './schema/product.graphql'));
 
-const resolvers = {
+const productResolvers = {
   Query: {
-    member: (_, { productId, categoryId }) => {
-      console.log(productId, categoryId);
+    member: (_, { categoryId }) => {
       return jsonfile.readFile(productFile).then(({ categoryMember }) =>
         Object.keys(categoryMember)
           .map(key => categoryMember[key])
@@ -45,10 +44,25 @@ const resolvers = {
   },
 };
 
+const productSchema = makeExecutableSchema({
+  typeDefs: productTypeDefs,
+  resolvers: productResolvers,
+});
+
+const testTypeDefs = importSchema(path.join(__dirname, './schema/test.graphql'));
+
+const testResolvers = {
+  Query: {
+    hello: () => 'this is test',
+    user: (_, { id }) => ({ id, name: 'test' }),
+  },
+};
+
+const testSchema = makeExecutableSchema({ typeDefs: testTypeDefs, resolvers: testResolvers });
+
+const schema = mergeSchemas({ schemas: [productSchema, testSchema] });
+
 export default {
-  'GET /api/graphql': graphqlHTTP({
-    schema: makeExecutableSchema({ typeDefs, resolvers }),
-    graphiql: true,
-  }),
-  'POST /api/graphql': graphqlHTTP({ schema: makeExecutableSchema({ typeDefs, resolvers }) }),
+  'GET /api/graphql': graphqlHTTP({ schema, graphiql: true }),
+  'POST /api/graphql': graphqlHTTP({ schema }),
 };
