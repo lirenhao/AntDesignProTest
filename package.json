@@ -38,6 +38,7 @@
     "bizcharts-plugin-slider": "^2.1.1-beta.1",
     "classnames": "^2.2.6",
     "dva": "^2.4.1",
+    "dva-logger": "^1.0.0",
     "enquire-js": "^0.2.1",
     "express-graphql": "^0.7.1",
     "graphql": "^14.2.1",

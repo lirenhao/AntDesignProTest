@@ -6,6 +6,10 @@ export const dva = {
       err.preventDefault();
     },
   },
+  plugins: [
+    // eslint-disable-next-line global-require
+    require('dva-logger')(),
+  ],
 };
 
 let authRoutes = {};
