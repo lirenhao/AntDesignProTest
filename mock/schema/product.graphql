@@ -1,0 +1,43 @@
+# import ProductType, ProductCategoryType from 'type.graphql'
+type ProductCategoryMember {
+  productCategory: ProductCategory
+  product: Product
+  fromDate: String
+  thruDate: String
+  comments: String
+  sequenceNum: String
+  quantity: Int
+  lastUpdatedStamp: String
+  createdStamp: String
+  version: String
+}
+type Product {
+  productId: ID!
+  productType: ProductType
+  primaryProductCategory: ProductCategory
+  manufacturePartyId: String
+  salesDiscWhenNotAvail: String
+  internalName: String
+  comments: String
+  productName: String!
+  description: String
+  createdByUserLogin: String
+  updatedByUserLogin: String
+  lastUpdatedStamp: String
+  createdStamp: String
+  version: String
+}
+type ProductCategory {
+  productCategoryId: ID!
+  productCategoryType: ProductCategoryType
+  primaryParentCategoryId: String
+  categoryName: String
+  description: String
+  lastUpdatedStamp: String
+  createdStamp: String
+  version: String
+}
+type Query {
+  member(productId: String, categoryId: String): [ProductCategoryMember]
+  hello: String
+}

@@ -1,0 +1,18 @@
+type ProductType {
+  productTypeId: ID!
+  productTypeName: String!
+  parentTypeId: String!
+  descript: String!
+  lastUpdatedStamp: String!
+  createdStamp: String!
+  version: String!
+}
+
+type ProductCategoryType {
+  productCategoryTypeId: ID!
+  parentTypeId: String!
+  description: String!
+  lastUpdatedStamp: String!
+  createdStamp: String!
+  version: String!
+}
