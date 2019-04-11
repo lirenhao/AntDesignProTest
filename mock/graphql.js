@@ -11,11 +11,12 @@ const productTypeDefs = importSchema(path.join(__dirname, './schema/product.grap
 
 const productResolvers = {
   Query: {
-    member: (_, { categoryId }) => {
+    member: (_, { productId, categoryId }) => {
       return jsonfile.readFile(productFile).then(({ categoryMember }) =>
         Object.keys(categoryMember)
           .map(key => categoryMember[key])
-          .filter(item => categoryId && item.productCategoryId === categoryId)
+          .filter(item => (productId ? item.productId === productId : true))
+          .filter(item => (categoryId ? item.productCategoryId === categoryId : true))
       );
     },
     hello: () => 'test',
