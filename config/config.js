@@ -116,6 +116,6 @@ export default {
   manifest: {
     basePath: '/',
   },
-
+  urlLoaderExcludes: [/\.(graphql|gql)$/],
   chainWebpack: webpackPlugin,
 };

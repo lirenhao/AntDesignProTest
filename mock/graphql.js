@@ -57,6 +57,10 @@ const testResolvers = {
     hello: () => 'this is test',
     user: (_, { id }) => ({ id, name: 'test' }),
   },
+  Mutation: {
+    upHello: (_, { hello }) => hello,
+    upUser: (_, { user }) => ({ id: 'a', ...user }),
+  },
 };
 
 const testSchema = makeExecutableSchema({ typeDefs: testTypeDefs, resolvers: testResolvers });

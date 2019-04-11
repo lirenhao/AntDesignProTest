@@ -3,7 +3,16 @@ type Query {
   user(id: ID!): User
 }
 
+type Mutation {
+  upHello(hello: String): String
+  upUser(user: UserInput): User
+}
+
 type User {
   id: ID!
   name: String!
+}
+
+input UserInput {
+  name: String
 }

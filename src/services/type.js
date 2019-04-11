@@ -1,4 +1,9 @@
 import request from '@/utils/request';
+import client from '@/utils/client';
+import { ProudctMember, UpHello } from './graphql/product.gql';
+
+client.query(ProudctMember, { categoryId: '1' }).then(console.log);
+client.mutate(UpHello, { hello: '1', user: { name: 'test' } }).then(console.log);
 
 export async function findAll() {
   return request(`/api/type`);

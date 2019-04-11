@@ -1,0 +1,24 @@
+query ProudctMember($categoryId: String, $productId: String) {
+  member(categoryId: $categoryId, productId: $productId) {
+    product {
+      productId
+      productName
+    }
+    productCategory {
+      productCategoryId
+      description
+    }
+  }
+}
+
+query Hello {
+  hello
+}
+
+mutation UpHello($hello: String, $user: UserInput) {
+  upHello(hello: $hello)
+  upUser(user: $user) {
+    id
+    name
+  }
+}
