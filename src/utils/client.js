@@ -5,7 +5,6 @@ import fetch from 'dva/fetch';
 // [配置说明文档](https://www.apollographql.com/docs/react/essentials/get-started#configuration)
 const client = new ApolloClient({
   uri: '/api/graphql',
-  shouldBatch: true,
   request: operation => {
     console.log('client-request', operation);
   },

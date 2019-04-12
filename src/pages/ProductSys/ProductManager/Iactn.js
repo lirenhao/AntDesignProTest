@@ -17,7 +17,7 @@ import {
   list: productFeatureIactn.list,
   feature: productFeature.data.list,
   iactnTypeTree: sysType.tree.productFeatureIactnType || [{children: []}],
-  featureIactnType: sysType.productFeatureIactnType || {},
+  productFeatureIactnType: sysType.productFeatureIactnType || {},
 }))
 class Iactn extends PureComponent {
   index = 0;
@@ -38,7 +38,7 @@ class Iactn extends PureComponent {
     dispatch({
       type: 'type/tree',
       payload: {
-        type: 'featureIactnType', 
+        type: 'productFeatureIactnType', 
         id: 'productFeatureIactnTypeId', 
         pId: 'parentTypeId', 
         title: 'description',
@@ -134,8 +134,8 @@ class Iactn extends PureComponent {
     const columns = [
       {
         title: '源特征',
-        dataIndex: 'productFeatureId',
-        key: 'productFeatureId',
+        dataIndex: 'productFeature',
+        key: 'productFeature',
         render: (text, record) => {
           const { feature } = this.props
           if (record.editable) {
@@ -152,14 +152,13 @@ class Iactn extends PureComponent {
               </Select>
             );
           }
-          const item = feature.filter(v => v.productFeatureId === text)[0] || {}
-          return item.description;
+          return text.description;
         },
       },
       {
         title: '目标特征',
-        dataIndex: 'productFeatureIdTo',
-        key: 'productFeatureIdTo',
+        dataIndex: 'productFeatureTo',
+        key: 'productFeatureTo',
         render: (text, record) => {
           const { feature } = this.props
           if (record.editable) {
@@ -176,16 +175,15 @@ class Iactn extends PureComponent {
               </Select>
             );
           }
-          const item = feature.filter(v => v.productFeatureId === text)[0] || {}
-          return item.description;
+          return text.description;
         },
       },
       {
         title: '特征互作用类型',
-        dataIndex: 'productFeatureIactnTypeId',
-        key: 'productFeatureIactnTypeId',
+        dataIndex: 'productFeatureIactnType',
+        key: 'productFeatureIactnType',
         render: (text, record) => {
-          const { iactnTypeTree, featureIactnType } = this.props
+          const { iactnTypeTree } = this.props
           if (record.editable) {
             return (
               <TreeSelect
@@ -199,7 +197,7 @@ class Iactn extends PureComponent {
               />
             );
           }
-          return featureIactnType[text] ? featureIactnType[text].description : null;
+          return text.description
         },
       },
       {

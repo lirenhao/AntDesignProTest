@@ -13,7 +13,7 @@ import PageHeaderWrapper from '@/components/PageHeaderWrapper'
 import Form from './Form'
 import Create from './Create'
 
-const type = 'featureApplType'
+const type = 'productFeatureApplType'
 const id = 'productFeatureApplTypeId'
 const pId = 'parentTypeId'
 const title = 'description'

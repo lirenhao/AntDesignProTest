@@ -15,16 +15,18 @@ import {
 import PageHeaderWrapper from '@/components/PageHeaderWrapper'
 import Create from './Create'
 import Manager from './Manager'
+import { objToTree } from '@/utils/utils'
 
-@connect(({ productCategory, productMember, loading }) => ({
-  categoryTree: productCategory.tree,
-  memberList: productMember.list,
+@connect(({ productMember, loading }) => ({
+  productCategory: productMember.data.productCategory,
+  productCategoryMember: productMember.data.productCategoryMember,
   loading: loading.models.productMember,
 }))
 class Assoc extends React.Component {
 
   state = {
     selectedKeys: [],
+    memberList: [],
     title: '',
     isCreateShow: false,
     isUpdateShow: false,
@@ -37,7 +39,7 @@ class Assoc extends React.Component {
   columns = [
     {
       title: '产品名称',
-      dataIndex: 'productName',
+      dataIndex: 'product.productName',
     },
     {
       title: '开始日期',
@@ -76,24 +78,21 @@ class Assoc extends React.Component {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'productCategory/tree',
-      payload: {
-        type: 'category', 
-        id: 'productCategoryId', 
-        pId: 'primaryParentCategoryId', 
-        title: 'categoryName',
-      },
+      type: 'productMember/fetch',
     });
   }
 
   handleTreeSelect = (selectedKeys, e) => {
-    const { dispatch } = this.props;
-    const { value, title} = e.node.props.info
-    this.setState({ selectedKeys, title, currentId: value })
-    dispatch({
-      type: 'productMember/fetch',
-      payload: value,
-    });
+    if(e.selected) {
+      const { dispatch, productCategoryMember } = this.props;
+      const { value, title} = e.node.props.info
+      this.setState({ 
+        selectedKeys, 
+        title, 
+        currentId: value,
+        memberList: productCategoryMember.filter(item => item.productCategory.productCategoryId === selectedKeys[0])
+      })
+    }
   }
 
   handleAddModal = (visible, currentId = '') => {
@@ -155,7 +154,7 @@ class Assoc extends React.Component {
   }
 
   handleManager = (record) => {
-    this.setState({productId: record.productId})
+    this.setState({productId: record.product.productId})
     this.handleManagerModal(true)
   }
 
@@ -177,12 +176,12 @@ class Assoc extends React.Component {
 
   render() {
     const {
-      categoryTree,
-      memberList,
+      productCategory,
       loading,
     } = this.props
     const { 
       selectedKeys,
+      memberList,
       title,
       isCreateShow, 
       isUpdateShow,
@@ -192,13 +191,16 @@ class Assoc extends React.Component {
       productId,
     } = this.state
 
+    const categoryTree = objToTree({ productCategoryId: "", categoryName: "父级节点" }, 
+      productCategory, "productCategoryId", "primaryParentCategoryId", "categoryName")
+
     const loop = data => data.map((item) => {
       if (item.children && item.children.length) {
         return <Tree.TreeNode key={item.value} title={this.renderTreeTitle(item)} info={item}>{loop(item.children)}</Tree.TreeNode>
       }
       return <Tree.TreeNode key={item.value} title={this.renderTreeTitle(item)} info={item} />
     })
-    
+
     return (
       <PageHeaderWrapper>
         <Layout>
@@ -210,7 +212,7 @@ class Assoc extends React.Component {
                 selectedKeys={selectedKeys}
                 onSelect={this.handleTreeSelect}
               >
-                {loop(categoryTree[0] ? categoryTree[0].children : [])}
+                {loop(categoryTree.children)}
               </Tree>
             </Card>
           </Layout.Sider>
@@ -222,7 +224,7 @@ class Assoc extends React.Component {
                   dataSource={memberList}
                   pagination={false}
                   columns={this.columns}
-                  rowKey={record => record.productId}
+                  rowKey={record => record.product.productId}
                 />
               )}
             </Card>

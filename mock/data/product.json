@@ -119,8 +119,33 @@
       "version": "v1.0.0"
     }
   },
-  "featureIactn": {},
-  "featureAppl": {},
+  "featureIactn": {
+    "2-2-1": {
+      "key": "2-2-1",
+      "productId": "1",
+      "productFeatureId": "2",
+      "productFeatureIdTo": "2",
+      "productFeatureIactnTypeId": "3",
+      "lastUpdatedStamp": "2019-04-12 11:03:29",
+      "createdStamp": "2019-04-12 11:03:29",
+      "version": "v1.0.0"
+    }
+  },
+  "featureAppl": {
+    "1-1": {
+      "key": "1-1",
+      "productId": "1",
+      "productFeatureId": "1",
+      "productFeatureApplTypeId": "1",
+      "fromDate": "2019-04-12",
+      "thruDate": "2019-04-30",
+      "sequenceNum": 1,
+      "amount": 10,
+      "lastUpdatedStamp": "2019-04-12 11:09:16",
+      "createdStamp": "2019-04-12 11:09:16",
+      "version": "v1.0.0"
+    }
+  },
   "price": {},
   "priceComponent": {},
   "categoryMember": {

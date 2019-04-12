@@ -26,6 +26,7 @@ function find(req, res) {
 function save(req, res, u, b) {
   const body = (b && b.body) || req.body
   const { type } = req.params
+  console.log(type, body)
   const key = index.toString()
   index += 1
   jsonfile.readFile(file)

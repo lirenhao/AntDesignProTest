@@ -1,21 +1,24 @@
 import {
-  getProductCategoryMember,
   addProductCategoryMember,
   updateProductCategoryMember,
   deleteProductCategoryMember,
 } from '@/services/api';
+import { productCategoryMember } from '@/services/product'
 
 export default {
   namespace: 'productMember',
   state: {
-    list: [],
+    data: {
+      productCategory: [],
+      productCategoryMember: [],
+    }
   },
   effects: {
     *fetch({ payload, callback }, { call, put }) {
-      const response = yield call(getProductCategoryMember, payload);
+      const response = yield call(productCategoryMember);
       yield put({
-        type: 'list',
-        payload: response,
+        type: 'data',
+        payload: response.data,
       });
       if (callback) callback();
     },
@@ -47,10 +50,10 @@ export default {
     },
   },
   reducers: {
-    list(state, action) {
+    data(state, action) {
       return {
         ...state,
-        list: action.payload,
+        data: action.payload,
       };
     },
   },

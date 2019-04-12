@@ -3,6 +3,7 @@ import {
   addProductFeatureIactn,
   deleteProductFeatureIactn,
 } from '@/services/api';
+import { productFeatureIactn } from '@/services/product'
 
 export default {
   namespace: 'productFeatureIactn',
@@ -11,10 +12,10 @@ export default {
   },
   effects: {
     *fetch({ payload, callback }, { call, put }) {
-      const response = yield call(getProductFeatureIactn, payload);
+      const response = yield call(productFeatureIactn, payload);
       yield put({
         type: 'list',
-        payload: response,
+        payload: response.data.productFeatureIactn,
       });
       if (callback) callback();
     },

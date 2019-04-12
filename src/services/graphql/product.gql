@@ -1,24 +1,55 @@
-query ProudctMember($categoryId: String, $productId: String) {
-  member(categoryId: $categoryId, productId: $productId) {
+query ProductCategoryMember {
+  productCategory {
+    productCategoryId
+    primaryParentCategoryId
+    categoryName
+  }
+  productCategoryMember {
+    productCategory{
+      productCategoryId
+    }
     product {
       productId
       productName
     }
-    productCategory {
-      productCategoryId
+    fromDate
+    thruDate
+    comments
+    sequenceNum
+    quantity
+  }
+}
+
+query ProductFeatureIactn($productId: String) {
+  productFeatureIactn(productId: $productId){
+    productFeature{
+      productFeatureId
+      description
+    }
+    productFeatureTo{
+      productFeatureId
+      description
+    }
+    productFeatureIactnType{
+      productFeatureIactnTypeId
       description
     }
   }
 }
 
-query Hello {
-  hello
-}
-
-mutation UpHello($hello: String, $user: UserInput) {
-  upHello(hello: $hello)
-  upUser(user: $user) {
-    id
-    name
+query ProductFeatureAppl($productId: String) {
+  productFeatureAppl(productId: $productId){
+    productFeature{
+      productFeatureId
+      description
+    }
+    productFeatureApplType{
+      parentTypeId
+      description
+    }
+    fromDate
+    thruDate
+    sequenceNum
+    amount
   }
 }

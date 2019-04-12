@@ -20,7 +20,7 @@ import moment from 'moment'
   list: productFeatureApply.list,
   feature: productFeature.data.list,
   applTypeTree: sysType.tree.productFeatureApplType || [{children: []}],
-  featureApplType: sysType.productFeatureApplType || {},
+  productFeatureApplType: sysType.productFeatureApplType || {},
 }))
 class Apply extends PureComponent {
   index = 0;
@@ -41,7 +41,7 @@ class Apply extends PureComponent {
     dispatch({
       type: 'type/tree',
       payload: {
-        type: 'featureApplType', 
+        type: 'productFeatureApplType', 
         id: 'productFeatureApplTypeId', 
         pId: 'parentTypeId', 
         title: 'description',
@@ -130,7 +130,6 @@ class Apply extends PureComponent {
       e.target.focus();
       this.setState({
         loading: false,
-        data: [],
       });
       return;
     }
@@ -161,8 +160,8 @@ class Apply extends PureComponent {
     const columns = [
       {
         title: '产品特征',
-        dataIndex: 'productFeatureId',
-        key: 'productFeatureId',
+        dataIndex: 'productFeature',
+        key: 'productFeature',
         render: (text, record) => {
           const { feature } = this.props
           if (record.editable) {
@@ -180,16 +179,15 @@ class Apply extends PureComponent {
               </Select>
             );
           }
-          const item = feature.filter(v => v.productFeatureId === text)[0] || {}
-          return item.description;
+          return text.description;
         },
       },
       {
         title: '特征适用性类型',
-        dataIndex: 'productFeatureApplTypeId',
-        key: 'productFeatureApplTypeId',
+        dataIndex: 'productFeatureApplType',
+        key: 'productFeatureApplType',
         render: (text, record) => {
-          const { applTypeTree, featureApplType } = this.props
+          const { applTypeTree } = this.props
           if (record.editable) {
             return (
               <TreeSelect
@@ -203,7 +201,7 @@ class Apply extends PureComponent {
               />
             );
           }
-          return featureApplType[text] ? featureApplType[text].description : null;
+          return text.description
         },
       },
       {
