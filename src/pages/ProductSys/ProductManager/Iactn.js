@@ -12,12 +12,12 @@ import {
   Popconfirm,
   Divider
 } from 'antd'
+import { objToTree } from '@/utils/utils'
 
-@connect(({ productFeatureIactn, productFeature, type: sysType }) => ({
-  list: productFeatureIactn.list,
-  feature: productFeature.data.list,
-  iactnTypeTree: sysType.tree.productFeatureIactnType || [{children: []}],
-  productFeatureIactnType: sysType.productFeatureIactnType || {},
+@connect(({ productFeatureIactn }) => ({
+  list: productFeatureIactn.data.productFeatureIactn,
+  productFeature: productFeatureIactn.data.productFeature,
+  productFeatureIactnType: productFeatureIactn.data.productFeatureIactnType,
 }))
 class Iactn extends PureComponent {
   index = 0;
@@ -28,23 +28,7 @@ class Iactn extends PureComponent {
   }
 
   componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'productFeature/findAll',
-      payload: {
-        type: 'feature',
-      },
-    });
-    dispatch({
-      type: 'type/tree',
-      payload: {
-        type: 'productFeatureIactnType', 
-        id: 'productFeatureIactnTypeId', 
-        pId: 'parentTypeId', 
-        title: 'description',
-      },
-    });
-    const { productId } = this.props;
+    const { dispatch, productId } = this.props;
     dispatch({
       type: 'productFeatureIactn/fetch',
       payload: productId,
@@ -137,22 +121,22 @@ class Iactn extends PureComponent {
         dataIndex: 'productFeature',
         key: 'productFeature',
         render: (text, record) => {
-          const { feature } = this.props
+          const { productFeature } = this.props
           if (record.editable) {
             return (
               <Select 
-                value={text === '' ? undefined : text} 
+                value={text.productFeatureId} 
                 onChange={value => this.handleSelectFieldChange(value, 'productFeatureId', record.key)}
                 placeholder="请选择产品特征" 
                 style={{ width: '100%' }}
               >
-                {feature.map(item => (
+                {productFeature.map(item => (
                   <Select.Option key={item.productFeatureId}>{item.description}</Select.Option>
                 ))}
               </Select>
             );
           }
-          return text.description;
+          return text.description
         },
       },
       {
@@ -160,22 +144,22 @@ class Iactn extends PureComponent {
         dataIndex: 'productFeatureTo',
         key: 'productFeatureTo',
         render: (text, record) => {
-          const { feature } = this.props
+          const { productFeature } = this.props
           if (record.editable) {
             return (
               <Select 
-                value={text === '' ? undefined : text} 
+                value={text.productFeatureId} 
                 onChange={value => this.handleSelectFieldChange(value, 'productFeatureIdTo', record.key)}
                 placeholder="请选择产品特征" 
                 style={{ width: '100%' }}
               >
-                {feature.map(item => (
+                {productFeature.map(item => (
                   <Select.Option key={item.productFeatureId}>{item.description}</Select.Option>
                 ))}
               </Select>
             );
           }
-          return text.description;
+          return text.description
         },
       },
       {
@@ -183,14 +167,16 @@ class Iactn extends PureComponent {
         dataIndex: 'productFeatureIactnType',
         key: 'productFeatureIactnType',
         render: (text, record) => {
-          const { iactnTypeTree } = this.props
+          const { productFeatureIactnType } = this.props
+          const iactnTypeTree = objToTree({ productFeatureIactnTypeId: "", description: "父级节点" }, 
+            productFeatureIactnType, "productFeatureIactnTypeId", "parentTypeId", "description")
           if (record.editable) {
             return (
               <TreeSelect
-                value={text}
+                value={text.productFeatureIactnTypeId}
                 onChange={e => this.handleSelectFieldChange(e, 'productFeatureIactnTypeId', record.key)}
                 treeDefaultExpandAll
-                treeData={iactnTypeTree[0].children}
+                treeData={iactnTypeTree.children}
                 placeholder="请选择特征互作用类型"
                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                 style={{ width: '100%' }}

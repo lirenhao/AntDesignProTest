@@ -8,14 +8,18 @@ import { productFeatureIactn } from '@/services/product'
 export default {
   namespace: 'productFeatureIactn',
   state: {
-    list: [],
+    data: {
+      productFeatureIactnType: [],
+      productFeature: [],
+      productFeatureIactn: [],
+    },
   },
   effects: {
     *fetch({ payload, callback }, { call, put }) {
       const response = yield call(productFeatureIactn, payload);
       yield put({
-        type: 'list',
-        payload: response.data.productFeatureIactn,
+        type: 'data',
+        payload: response.data,
       });
       if (callback) callback();
     },
@@ -38,10 +42,10 @@ export default {
     },
   },
   reducers: {
-    list(state, action) {
+    data(state, action) {
       return {
         ...state,
-        list: action.payload,
+        data: action.payload,
       };
     },
   },

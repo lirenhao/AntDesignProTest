@@ -21,6 +21,15 @@ query ProductCategoryMember {
 }
 
 query ProductFeatureIactn($productId: String) {
+  productFeatureIactnType{
+    productFeatureIactnTypeId
+    parentTypeId
+    description
+  }
+  productFeature{
+    productFeatureId
+    description
+  }
   productFeatureIactn(productId: $productId){
     productFeature{
       productFeatureId
@@ -38,13 +47,22 @@ query ProductFeatureIactn($productId: String) {
 }
 
 query ProductFeatureAppl($productId: String) {
+  productFeatureApplType{
+    productFeatureApplTypeId
+    parentTypeId
+    description
+  }
+  productFeature{
+    productFeatureId
+    description
+  }
   productFeatureAppl(productId: $productId){
     productFeature{
       productFeatureId
       description
     }
     productFeatureApplType{
-      parentTypeId
+      productFeatureApplTypeId
       description
     }
     fromDate

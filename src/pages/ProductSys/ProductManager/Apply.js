@@ -15,12 +15,12 @@ import {
   Divider,
 } from 'antd'
 import moment from 'moment'
+import { objToTree } from '@/utils/utils'
 
-@connect(({ productFeatureApply, productFeature, type: sysType }) => ({
-  list: productFeatureApply.list,
-  feature: productFeature.data.list,
-  applTypeTree: sysType.tree.productFeatureApplType || [{children: []}],
-  productFeatureApplType: sysType.productFeatureApplType || {},
+@connect(({ productFeatureApply }) => ({
+  list: productFeatureApply.data.productFeatureAppl,
+  productFeature: productFeatureApply.data.productFeature,
+  productFeatureApplType: productFeatureApply.data.productFeatureApplType,
 }))
 class Apply extends PureComponent {
   index = 0;
@@ -31,13 +31,7 @@ class Apply extends PureComponent {
   }
 
   componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'productFeature/findAll',
-      payload: {
-        type: 'feature',
-      },
-    });
+    const { dispatch, productId } = this.props;
     dispatch({
       type: 'type/tree',
       payload: {
@@ -47,7 +41,6 @@ class Apply extends PureComponent {
         title: 'description',
       },
     });
-    const { productId } = this.props;
     dispatch({
       type: 'productFeatureApply/fetch',
       payload: productId,
@@ -163,23 +156,23 @@ class Apply extends PureComponent {
         dataIndex: 'productFeature',
         key: 'productFeature',
         render: (text, record) => {
-          const { feature } = this.props
+          const { productFeature } = this.props
           if (record.editable) {
             return (
               <Select 
-                value={text === '' ? undefined : text} 
+                value={text.productFeatureId} 
                 onChange={value => this.handleSelectFieldChange(value, 'productFeatureId', record.key)}
                 placeholder="产品特征" 
                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                 style={{ width: 120 }}
               >
-                {feature.map(item => (
+                {productFeature.map(item => (
                   <Select.Option key={item.productFeatureId}>{item.description}</Select.Option>
                 ))}
               </Select>
             );
           }
-          return text.description;
+          return text.description
         },
       },
       {
@@ -187,14 +180,16 @@ class Apply extends PureComponent {
         dataIndex: 'productFeatureApplType',
         key: 'productFeatureApplType',
         render: (text, record) => {
-          const { applTypeTree } = this.props
+          const { productFeatureApplType } = this.props
+          const applTypeTree = objToTree({ productFeatureApplTypeId: "", description: "父级节点" }, 
+            productFeatureApplType, "productFeatureApplTypeId", "parentTypeId", "description")
           if (record.editable) {
             return (
               <TreeSelect
-                value={text}
+                value={text.productFeatureApplTypeId}
                 onChange={e => this.handleSelectFieldChange(e, 'productFeatureApplTypeId', record.key)}
                 treeDefaultExpandAll
-                treeData={applTypeTree[0].children}
+                treeData={applTypeTree.children}
                 placeholder="适用性类型"
                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                 style={{ width: '100%' }}
