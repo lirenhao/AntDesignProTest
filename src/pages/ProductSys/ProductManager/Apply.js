@@ -54,8 +54,8 @@ class Apply extends PureComponent {
     const target = {
       key: `new-${this.index}`,
       productId,
-      productFeatureId: '',
-      productFeatureApplTypeId: '',
+      productFeatureId: undefined,
+      productFeatureApplTypeId: undefined,
       fromDate: '',
       thruDate: '',
       sequenceNum: '',
@@ -69,9 +69,9 @@ class Apply extends PureComponent {
 
   editRow = (e, key) => {
     e.preventDefault();
-    const { list } = this.props;
+    const { list, productId } = this.props;
     const { data } = this.state;
-    const target = list.filter(item => `${item.productFeatureId}-${item.productId}`=== key)[0] || {};
+    const target = list.filter(item => `${item.productFeatureId}-${productId}`=== key)[0] || {};
     this.setState({ data: {...data, [key]: {...target, editable: true}}});
   }
 
@@ -153,14 +153,14 @@ class Apply extends PureComponent {
     const columns = [
       {
         title: '产品特征',
-        dataIndex: 'productFeature',
-        key: 'productFeature',
+        dataIndex: 'productFeatureId',
+        key: 'productFeatureId',
         render: (text, record) => {
           const { productFeature } = this.props
           if (record.editable) {
             return (
               <Select 
-                value={text.productFeatureId} 
+                value={text} 
                 onChange={value => this.handleSelectFieldChange(value, 'productFeatureId', record.key)}
                 placeholder="产品特征" 
                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
@@ -172,13 +172,13 @@ class Apply extends PureComponent {
               </Select>
             );
           }
-          return text.description
+          return record.productFeature.description
         },
       },
       {
         title: '特征适用性类型',
-        dataIndex: 'productFeatureApplType',
-        key: 'productFeatureApplType',
+        dataIndex: 'productFeatureApplTypeId',
+        key: 'productFeatureApplTypeId',
         render: (text, record) => {
           const { productFeatureApplType } = this.props
           const applTypeTree = objToTree({ productFeatureApplTypeId: "", description: "父级节点" }, 
@@ -186,7 +186,7 @@ class Apply extends PureComponent {
           if (record.editable) {
             return (
               <TreeSelect
-                value={text.productFeatureApplTypeId}
+                value={text}
                 onChange={e => this.handleSelectFieldChange(e, 'productFeatureApplTypeId', record.key)}
                 treeDefaultExpandAll
                 treeData={applTypeTree.children}
@@ -196,7 +196,7 @@ class Apply extends PureComponent {
               />
             );
           }
-          return text.description
+          return record.productFeatureApplType.description
         },
       },
       {
@@ -274,6 +274,7 @@ class Apply extends PureComponent {
         key: 'action',
         render: (text, record) => {
           const { loading } = this.state;
+          const { productId } = this.props;
           if (!!record.editable && loading) {
             return null;
           }
@@ -310,12 +311,13 @@ class Apply extends PureComponent {
       },
     ];
 
-    const { list } = this.props;
+    const { list, productId } = this.props;
     const { loading, data } = this.state;
 
     const dataSource = list.map(item => ({
       ...item,
-      ...data[`${item.productFeatureId}-${item.productId}`],
+      ...data[`${item.productFeatureId}-${productId}`],
+      key: `${item.productFeatureId}-${productId}`,
     }))
     Object.keys(data).forEach(key => {
       if(key.split('-')[0] === 'new')

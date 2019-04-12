@@ -90,7 +90,7 @@ class Assoc extends React.Component {
         selectedKeys, 
         title, 
         currentId: value,
-        memberList: productCategoryMember.filter(item => item.productCategory.productCategoryId === selectedKeys[0])
+        memberList: productCategoryMember.filter(item => item.productCategoryId === selectedKeys[0])
       })
     }
   }
@@ -154,7 +154,7 @@ class Assoc extends React.Component {
   }
 
   handleManager = (record) => {
-    this.setState({productId: record.product.productId})
+    this.setState({productId: record.productId})
     this.handleManagerModal(true)
   }
 
@@ -224,7 +224,7 @@ class Assoc extends React.Component {
                   dataSource={memberList}
                   pagination={false}
                   columns={this.columns}
-                  rowKey={record => record.product.productId}
+                  rowKey={record => record.productId}
                 />
               )}
             </Card>

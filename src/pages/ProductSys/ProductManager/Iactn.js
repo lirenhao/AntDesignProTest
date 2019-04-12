@@ -42,9 +42,9 @@ class Iactn extends PureComponent {
     const target = {
       key: `new-${this.index}`,
       productId,
-      productFeatureId: '',
-      productFeatureIdTo: '',
-      productFeatureIactnTypeId: '',
+      productFeatureId: undefined,
+      productFeatureIdTo: undefined,
+      productFeatureIactnTypeId: undefined,
       editable: true,
       isNew: true,
     };
@@ -118,14 +118,14 @@ class Iactn extends PureComponent {
     const columns = [
       {
         title: '源特征',
-        dataIndex: 'productFeature',
-        key: 'productFeature',
+        dataIndex: 'productFeatureId',
+        key: 'productFeatureId',
         render: (text, record) => {
           const { productFeature } = this.props
           if (record.editable) {
             return (
               <Select 
-                value={text.productFeatureId} 
+                value={text} 
                 onChange={value => this.handleSelectFieldChange(value, 'productFeatureId', record.key)}
                 placeholder="请选择产品特征" 
                 style={{ width: '100%' }}
@@ -136,19 +136,19 @@ class Iactn extends PureComponent {
               </Select>
             );
           }
-          return text.description
+          return record.productFeature.description
         },
       },
       {
         title: '目标特征',
-        dataIndex: 'productFeatureTo',
-        key: 'productFeatureTo',
+        dataIndex: 'productFeatureIdTo',
+        key: 'productFeatureIdTo',
         render: (text, record) => {
           const { productFeature } = this.props
           if (record.editable) {
             return (
               <Select 
-                value={text.productFeatureId} 
+                value={text} 
                 onChange={value => this.handleSelectFieldChange(value, 'productFeatureIdTo', record.key)}
                 placeholder="请选择产品特征" 
                 style={{ width: '100%' }}
@@ -159,13 +159,13 @@ class Iactn extends PureComponent {
               </Select>
             );
           }
-          return text.description
+          return record.productFeatureTo.description
         },
       },
       {
         title: '特征互作用类型',
-        dataIndex: 'productFeatureIactnType',
-        key: 'productFeatureIactnType',
+        dataIndex: 'productFeatureIactnTypeId',
+        key: 'productFeatureIactnTypeId',
         render: (text, record) => {
           const { productFeatureIactnType } = this.props
           const iactnTypeTree = objToTree({ productFeatureIactnTypeId: "", description: "父级节点" }, 
@@ -173,7 +173,7 @@ class Iactn extends PureComponent {
           if (record.editable) {
             return (
               <TreeSelect
-                value={text.productFeatureIactnTypeId}
+                value={text}
                 onChange={e => this.handleSelectFieldChange(e, 'productFeatureIactnTypeId', record.key)}
                 treeDefaultExpandAll
                 treeData={iactnTypeTree.children}
@@ -183,7 +183,7 @@ class Iactn extends PureComponent {
               />
             );
           }
-          return text.description
+          return record.productFeatureIactnType.description
         },
       },
       {

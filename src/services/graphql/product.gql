@@ -5,11 +5,9 @@ query ProductCategoryMember {
     categoryName
   }
   productCategoryMember {
-    productCategory{
-      productCategoryId
-    }
+    productCategoryId
+    productId
     product {
-      productId
       productName
     }
     fromDate
@@ -31,16 +29,16 @@ query ProductFeatureIactn($productId: String) {
     description
   }
   productFeatureIactn(productId: $productId){
+    productFeatureId
     productFeature{
-      productFeatureId
       description
     }
+    productFeatureIdTo
     productFeatureTo{
-      productFeatureId
       description
     }
+    productFeatureIactnTypeId
     productFeatureIactnType{
-      productFeatureIactnTypeId
       description
     }
   }
@@ -57,12 +55,12 @@ query ProductFeatureAppl($productId: String) {
     description
   }
   productFeatureAppl(productId: $productId){
+    productFeatureId
     productFeature{
-      productFeatureId
       description
     }
+    productFeatureApplTypeId
     productFeatureApplType{
-      productFeatureApplTypeId
       description
     }
     fromDate
