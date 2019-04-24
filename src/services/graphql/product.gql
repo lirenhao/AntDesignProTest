@@ -55,6 +55,7 @@ query ProductFeatureAppl($productId: String) {
     description
   }
   productFeatureAppl(productId: $productId){
+    productId
     productFeatureId
     productFeature{
       description
@@ -69,3 +70,4 @@ query ProductFeatureAppl($productId: String) {
     amount
   }
 }
+
