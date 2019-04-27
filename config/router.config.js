@@ -342,11 +342,6 @@ export default [
               },
             ],
           },
-          {
-            name: 'pending',
-            path: '/test/pending',
-            component: './Test/Work/Pending/PendingList',
-          },
         ]
       },
       // forms

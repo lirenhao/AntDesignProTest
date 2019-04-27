@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'dva'
 import {
   Layout,
   Card,
@@ -8,17 +7,28 @@ import {
   Menu,
   Dropdown,
   Input,
+  Empty,
   message,
 } from 'antd'
 import PageHeaderWrapper from '@/components/PageHeaderWrapper'
-import Form from './Form'
-import Create from './Create'
+import Create from '@/components/MyTree/Create'
+import Update from '@/components/MyTree/Update'
 
-class Type extends React.Component {
+class MyTree extends React.Component {
 
-  static defaultProps = {}
+  static defaultProps = {
+    tree: []
+  }
 
-  static propsTypes = {}
+  static propsTypes = {
+    header: PropTypes.string,
+    tree: PropTypes.array,
+    formInfo: PropTypes.object,
+    getInfo: PropTypes.func,
+    createSubmit: PropTypes.func,
+    updateSubmit: PropTypes.func,
+    removeSubmit: PropTypes.func,
+  }
 
   constructor(props){
     super(props)
@@ -26,8 +36,8 @@ class Type extends React.Component {
       expandedKeys: ["0-0"],
       selectedKeys: [],
       isCreateShow: false,
-      parentTypeId: "",
       info: {},
+      parentTypeId: "",
     }
   }
 
@@ -36,31 +46,17 @@ class Type extends React.Component {
   }
 
   handleCreateForm = (values) => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'type/add',
-      payload: {
-        type,
-        id,
-        pId,
-        title,
-        isTree: true,
-        payload: {
-          ...values,
-          id,
-        },
-      },
-      callback: () =>  {
-        this.handleCreateModal(false)
-      },
-    });
+    const { createSubmit } = this.props;
+    createSubmit(values, () =>  {
+      this.handleCreateModal(false)
+      message.success('创建成功')
+    })
   }
 
   handleTreeSelect = (selectedKeys, e) => {
-    const { sysType } = this.props
+    const { getInfo } = this.props
     const key = e.node.props.eventKey
-    const data = sysType[type] || {}
-    this.setState({selectedKeys, info: { ...data[key], key }})
+    this.setState({selectedKeys, info: getInfo(key)})
   }
 
   handleTreeExpand = (expandedKeys) => {
@@ -68,41 +64,18 @@ class Type extends React.Component {
   }
 
   handleUpdateForm = (record) => {
-    const { dispatch } = this.props
-    dispatch({
-      type: 'type/edit',
-      payload: {
-        isTree: true,
-        type,
-        id,
-        pId,
-        title,
-        key: record.key,
-        payload: record,
-      },
-      callback: () => {
-        this.setState({ info: record})
-        message.success('提交成功')
-      },
-    });
+    const { updateSubmit } = this.props
+    updateSubmit(record, () => {
+      this.setState({ info: record})
+      message.success('更新成功')
+    })
   }
 
   handleRemove = (key) => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'type/remove',
-      payload: {
-        type,
-        id,
-        pId,
-        title,
-        key,
-        isTree: true,
-      },
-      callback: () => {
-        message.success('删除成功')
-      },
-    });
+    const { removeSubmit } = this.props
+    removeSubmit(key, () => {
+      message.success('删除成功')
+    })
   }
 
   renderRightMenu(record) {
@@ -131,14 +104,16 @@ class Type extends React.Component {
 
   render() {
     const {
+      header,
       tree,
+      formInfo,
     } = this.props
     const { 
       expandedKeys,
       selectedKeys,
       isCreateShow,
-      parentTypeId,
       info,
+      parentTypeId,
     } = this.state
 
     const loop = data => data.map((item) => {
@@ -151,7 +126,7 @@ class Type extends React.Component {
       }
       return <Tree.TreeNode key={item.value} title={this.renderTreeTitle(item)} info={item} />;
     })
-    
+
     return (
       <PageHeaderWrapper title={header}>
         <Layout>
@@ -171,16 +146,20 @@ class Type extends React.Component {
           </Layout.Sider>
           <Layout.Content>
             <Card title={`${header}编辑`}>
-              <Form 
-                info={info}
-                tree={tree}
-                handleFormSubmit={this.handleUpdateForm}
-              />
+              {Object.keys(info).length < 1 ? (<Empty description="点击节点" />) : (
+                <Update 
+                  formInfo={formInfo}
+                  info={info}
+                  tree={tree}
+                  handleFormSubmit={this.handleUpdateForm}
+                />
+              )}
             </Card>
             <Create 
               visible={isCreateShow} 
               hideModal={() => this.handleCreateModal(false)} 
               handleFormSubmit={this.handleCreateForm}
+              formInfo={formInfo}
               info={{parentTypeId}}
               tree={tree}
             />
@@ -191,4 +170,4 @@ class Type extends React.Component {
   }
 }
 
-export default Type
+export default MyTree

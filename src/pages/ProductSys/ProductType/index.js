@@ -1,17 +1,7 @@
 import React from 'react'
 import { connect } from 'dva'
-import {
-  Layout,
-  Card,
-  Tree,
-  Menu,
-  Dropdown,
-  Input,
-  message,
-} from 'antd'
-import PageHeaderWrapper from '@/components/PageHeaderWrapper'
-import Form from './Form'
-import Create from './Create'
+import { objToTree } from '@/utils/utils'
+import MyTree from '@/components/MyTree'
 
 const type = 'productType'
 const id = 'productTypeId'
@@ -19,190 +9,112 @@ const pId = 'parentTypeId'
 const title = 'productTypeName'
 const header = '产品类型'
 
-@connect(({ type: sysType, loading }) => ({
-  sysType,
-  tree: sysType.tree[type] || [],
-  loading: loading.models[type],
+@connect(({ [type]: state }) => ({
+  list: state.list
 }))
 class Type extends React.Component {
 
-  state = {
-    expandedKeys: ["0-0"],
-    selectedKeys: [],
-    isCreateShow: false,
-    parentTypeId: "",
-    info: {},
-  }
-
   componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'type/tree',
-      payload: {
-        type,
-        id,
-        pId,
-        title,
-      }
-    });
-  }
-
-  handleCreateModal = (visible, parentTypeId = "") => {
-    this.setState({isCreateShow: visible, parentTypeId})
-  }
-
-  handleCreateForm = (values) => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'type/add',
-      payload: {
-        type,
-        id,
-        pId,
-        title,
-        isTree: true,
-        payload: {
-          ...values,
-          id,
-        },
-      },
-      callback: () =>  {
-        this.handleCreateModal(false)
-      },
-    });
-  }
-
-  handleTreeSelect = (selectedKeys, e) => {
-    const { sysType } = this.props
-    const key = e.node.props.eventKey
-    const data = sysType[type] || {}
-    this.setState({selectedKeys, info: { ...data[key], key }})
-  }
-
-  handleTreeExpand = (expandedKeys) => {
-    this.setState({expandedKeys})
-  }
-
-  handleUpdateForm = (record) => {
     const { dispatch } = this.props
     dispatch({
-      type: 'type/edit',
-      payload: {
-        isTree: true,
-        type,
-        id,
-        pId,
-        title,
-        key: record.key,
-        payload: record,
-      },
-      callback: () => {
-        this.setState({ info: record})
-        message.success('提交成功')
-      },
-    });
+      type: `${type}/list`
+    })
   }
 
-  handleRemove = (key) => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'type/remove',
-      payload: {
-        type,
-        id,
-        pId,
-        title,
-        key,
-        isTree: true,
-      },
-      callback: () => {
-        message.success('删除成功')
-      },
-    });
+  getInfo = (key) => {
+    const { list } = this.props
+    return {}
   }
 
-  renderRightMenu(record) {
-    if(record.children && record.children.length){
-      return (
-        <Menu>
-          <Menu.Item onClick={() => this.handleCreateModal(true, record.value)}>添加节点</Menu.Item>
-        </Menu>
-      )
-    }
-    return (
-      <Menu>
-        <Menu.Item onClick={() => this.handleCreateModal(true, record.value)}>添加节点</Menu.Item>
-        <Menu.Item onClick={() => this.handleRemove(record.value)}>删除节点</Menu.Item>
-      </Menu>
-    )
+  createSubmit = (record, callback) => {
+    console.log(record)
   }
 
-  renderTreeTitle(record) {
-    return (
-      <Dropdown overlay={this.renderRightMenu(record)} trigger={['contextMenu']}>
-        <span>{record.title}</span>
-      </Dropdown>
-    )
+  updateSubmit = (record, callback) => {
+    console.log(record)
+  }
+
+  removeSubmit = (key, callback) => {
+    console.log(key)
   }
 
   render() {
-    const {
-      tree,
-    } = this.props
-    const { 
-      expandedKeys,
-      selectedKeys,
-      isCreateShow,
-      parentTypeId,
-      info,
-    } = this.state
+    const { list } = this.props
+    const tree = objToTree({[id]: '', [title]: '父级节点'}, list, id, pId, title)
+    const formInfo = {
+      parentTypeId: {
+        type: 'treeSelect',
+        label: '所属父级',
+        treeData: [tree],
+      },
+      productTypeName: {
+        type: 'input',
+        label: '产品类型名称',
+        rules: [
+          {
+            required: true,
+            message: '请输入产品类型名称',
+          },
+        ]
+      },
+      isPhysical: {
+        type: 'radio',
+        label: '是否实物',
+        rules: [
+          {
+            required: true,
+            message: '请选择是否实物',
+          },
+        ],
+        radios: {
+            '0': '否',
+            '1': '是',
+        },
+      },
+      isDigital: {
+        type: 'radio',
+        label: '是否虚拟',
+        rules: [
+          {
+            required: true,
+            message: '请选择是否虚拟',
+          },
+        ],
+        radios: {
+          '0': '否',
+          '1': '是',
+        },
+      },
+      hasTable: {
+        type: 'radio',
+        label: '是否有表',
+        rules: [
+          {
+            required: true,
+            message: '请选择是否有表',
+          },
+        ],
+        radios: {
+          '0': '否',
+          '1': '是',
+        },
+      },
+      descript: {
+        type: 'textArea',
+        label: '描述'
+      },
+    }
 
-    const loop = data => data.map((item) => {
-      if (item.children && item.children.length) {
-        return (
-          <Tree.TreeNode key={item.value} title={this.renderTreeTitle(item)} info={item}>
-            {loop(item.children)}
-          </Tree.TreeNode>
-        );
-      }
-      return <Tree.TreeNode key={item.value} title={this.renderTreeTitle(item)} info={item} />;
-    })
-    
     return (
-      <PageHeaderWrapper title={header}>
-        <Layout>
-          <Layout.Sider theme="light" width="200">
-            <Card bordered={false}>
-              <Input.Search style={{ marginBottom: 8 }} placeholder="Search" />
-              <Tree 
-                showLine
-                expandedKeys={expandedKeys}
-                selectedKeys={selectedKeys}
-                onExpand={this.handleTreeExpand}
-                onSelect={this.handleTreeSelect}
-              >
-                {loop(tree)}
-              </Tree>
-            </Card>
-          </Layout.Sider>
-          <Layout.Content>
-            <Card title={`${header}编辑`}>
-              <Form 
-                info={info}
-                tree={tree}
-                handleFormSubmit={this.handleUpdateForm}
-              />
-            </Card>
-            <Create 
-              visible={isCreateShow} 
-              hideModal={() => this.handleCreateModal(false)} 
-              handleFormSubmit={this.handleCreateForm}
-              info={{parentTypeId}}
-              tree={tree}
-            />
-          </Layout.Content>
-        </Layout>
-      </PageHeaderWrapper>
+      <MyTree 
+        header={header}
+        tree={[tree]} 
+        formInfo={formInfo} 
+        getInfo={this.getInfo}
+        createSubmit={this.createSubmit} 
+        updateSubmit={this.updateSubmit}
+        removeSubmit={this.removeSubmit}
+      />
     )
   }
 }
