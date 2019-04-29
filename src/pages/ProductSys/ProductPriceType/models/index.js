@@ -2,7 +2,7 @@ import { query, mutate } from '@/services/graphql';
 import gql from 'graphql-tag';
 
 export default {
-  namespace: 'productType',
+  namespace: 'productPriceType',
   state: {
     list: [],
   },
@@ -13,10 +13,9 @@ export default {
           query,
           gql`
             query {
-              list: productTypeAll {
-                productTypeId
-                parentTypeId
-                productTypeName
+              list: productPriceTypeAll {
+                productPriceTypeId
+                productPriceTypeName
                 description
               }
             }
@@ -38,20 +37,17 @@ export default {
         const response = yield call(
           mutate,
           gql`
-            mutation($record: ProductTypeInput) {
-              item: productTypeInsert(record: $record) {
-                productTypeId
-                parentTypeId
-                productTypeName
+            mutation($record: ProductPriceTypeInput) {
+              item: productPriceTypeInsert(record: $record) {
+                productPriceTypeId
+                productPriceTypeName
                 description
               }
             }
           `,
           {
             record: {
-              productTypeId: payload.productTypeId,
-              parentTypeId: payload.parentTypeId,
-              productTypeName: payload.productTypeName,
+              productPriceTypeName: payload.productPriceTypeName,
               description: payload.description,
             },
           }
@@ -73,20 +69,18 @@ export default {
         const response = yield call(
           mutate,
           gql`
-            mutation($id: String, $record: ProductTypeInput) {
-              item: productTypeUpdateById(id: $id, record: $record) {
-                productTypeId
-                parentTypeId
-                productTypeName
+            mutation($id: String, $record: ProductPriceTypeInput) {
+              item: productPriceTypeUpdateById(id: $id, record: $record) {
+                productPriceTypeId
+                productPriceTypeName
                 description
               }
             }
           `,
           {
-            id: payload.productTypeId,
+            id: payload.productPriceTypeId,
             record: {
-              parentTypeId: payload.parentTypeId,
-              productTypeName: payload.productTypeName,
+              productPriceTypeName: payload.productPriceTypeName,
               description: payload.description,
             },
           }
@@ -109,7 +103,7 @@ export default {
           mutate,
           gql`
             mutation($id: String) {
-              result: productTypeDeleteById(id: $id)
+              result: productPriceTypeDeleteById(id: $id)
             }
           `,
           { id: payload }
@@ -146,7 +140,7 @@ export default {
       return {
         ...state,
         list: state.list.map(item =>
-          item.productTypeId === action.payload.productTypeId
+          item.productPriceTypeId === action.payload.productPriceTypeId
             ? { ...item, ...action.payload }
             : item
         ),
@@ -155,7 +149,7 @@ export default {
     removeList(state, action) {
       return {
         ...state,
-        list: state.list.filter(item => item.productTypeId !== action.payload),
+        list: state.list.filter(item => item.productPriceTypeId !== action.payload),
       };
     },
   },

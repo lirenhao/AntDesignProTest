@@ -1,19 +1,15 @@
-import React from 'react'
-import {
-  Modal,
-  Form,
-  Input,
-} from 'antd'
+import React from 'react';
+import { Modal, Form } from 'antd';
+import Item from '@/components/MyTable/Item';
 
 @Form.create()
 class Create extends React.Component {
-
   handleSubmit = e => {
     const { handleFormSubmit, form, info } = this.props;
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        handleFormSubmit({ ...info,  ...values});
+        handleFormSubmit({ ...info, ...values });
         form.resetFields();
       }
     });
@@ -21,6 +17,7 @@ class Create extends React.Component {
 
   render() {
     const {
+      formInfo,
       form: { getFieldDecorator },
       title,
       visible,
@@ -38,10 +35,10 @@ class Create extends React.Component {
         sm: { span: 12 },
         md: { span: 10 },
       },
-    }
+    };
 
     return (
-      <Modal 
+      <Modal
         width="60%"
         bodyStyle={{ padding: '32px 40px 48px' }}
         title={title}
@@ -52,20 +49,21 @@ class Create extends React.Component {
         onCancel={hideModal}
       >
         <Form>
-          <Form.Item {...formItemLayout} label='描述'>
-            {getFieldDecorator('description', {
-              initialValue: info.description,
-              rules: [
-                {
-                  required: true,
-                  message: '请输入描述',
-                },
-              ],
-              })(<Input placeholder='请输入' />)}
-          </Form.Item>
+          {Object.keys(formInfo).map(name => {
+            return (
+              <Item
+                key={name}
+                {...formInfo[name]}
+                name={name}
+                value={info[name]}
+                layout={formItemLayout}
+                getFieldDecorator={getFieldDecorator}
+              />
+            );
+          })}
         </Form>
       </Modal>
-    )
+    );
   }
 }
 
