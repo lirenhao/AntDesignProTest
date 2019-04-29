@@ -1,46 +1,60 @@
-import React from 'react'
-import { connect } from 'dva'
-import { objToTree } from '@/utils/utils'
-import MyTree from '@/components/MyTree'
+import React from 'react';
+import { connect } from 'dva';
+import { objToTree } from '@/utils/utils';
+import MyTree from '@/components/MyTree';
 
-const type = 'productType'
-const id = 'productTypeId'
-const pId = 'parentTypeId'
-const title = 'productTypeName'
-const header = '产品类型'
+const type = 'productType';
+const id = 'productTypeId';
+const pId = 'parentTypeId';
+const title = 'productTypeName';
+const header = '产品类型';
 
 @connect(({ [type]: state }) => ({
-  list: state.list
+  list: state.list,
 }))
 class Type extends React.Component {
-
   componentDidMount() {
-    const { dispatch } = this.props
+    const { dispatch } = this.props;
     dispatch({
-      type: `${type}/list`
-    })
+      type: `${type}/list`,
+    });
   }
 
-  getInfo = (key) => {
-    const { list } = this.props
-    return {}
-  }
+  getInfo = key => {
+    const { list } = this.props;
+    return list.filter(item => item[id] === key)[0] || {};
+  };
 
   createSubmit = (record, callback) => {
-    console.log(record)
-  }
+    const { dispatch } = this.props;
+    dispatch({
+      type: `${type}/create`,
+      payload: record,
+      callback,
+    });
+  };
 
   updateSubmit = (record, callback) => {
-    console.log(record)
-  }
+    const { dispatch } = this.props;
+    dispatch({
+      type: `${type}/update`,
+      payload: record,
+      callback,
+    });
+  };
 
   removeSubmit = (key, callback) => {
-    console.log(key)
-  }
+    const { dispatch } = this.props;
+    dispatch({
+      type: `${type}/remove`,
+      payload: key,
+      callback,
+    });
+  };
 
   render() {
-    const { list } = this.props
-    const tree = objToTree({[id]: '', [title]: '父级节点'}, list, id, pId, title)
+    const { list } = this.props;
+    const tree = objToTree({ [id]: '', [title]: '父级节点' }, list, id, pId, title);
     const formInfo = {
       parentTypeId: {
         type: 'treeSelect',
@@ -55,7 +69,7 @@ class Type extends React.Component {
             required: true,
             message: '请输入产品类型名称',
           },
-        ]
+        ],
       },
       isPhysical: {
         type: 'radio',
@@ -67,8 +81,8 @@ class Type extends React.Component {
           },
         ],
         radios: {
-            '0': '否',
-            '1': '是',
+          '0': '否',
+          '1': '是',
         },
       },
       isDigital: {
@@ -101,22 +115,22 @@ class Type extends React.Component {
       },
       descript: {
         type: 'textArea',
-        label: '描述'
+        label: '描述',
       },
-    }
+    };
 
     return (
-      <MyTree 
+      <MyTree
         header={header}
-        tree={[tree]} 
-        formInfo={formInfo} 
+        tree={[tree]}
+        formInfo={formInfo}
         getInfo={this.getInfo}
-        createSubmit={this.createSubmit} 
+        createSubmit={this.createSubmit}
         updateSubmit={this.updateSubmit}
         removeSubmit={this.removeSubmit}
       />
-    )
+    );
   }
 }
 
-export default Type
+export default Type;

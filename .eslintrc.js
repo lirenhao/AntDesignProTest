@@ -32,25 +32,6 @@ module.exports = {
     'jsx-a11y/no-static-element-interactions': 0,
     'jsx-a11y/anchor-is-valid': 0,
     'linebreak-style': 0,
-    'graphql/template-strings': [
-      'error',
-      {
-        // Import default settings for your GraphQL client. Supported values:
-        // 'apollo', 'relay', 'lokka', 'fraql', 'literal'
-        env: 'apollo',
-
-        // Import your schema JSON here
-        schemaJson: require('./schema.json'),
-
-        // OR provide absolute path to your schema JSON (but not if using `eslint --cache`!)
-        // schemaJsonFilepath: path.resolve(__dirname, './schema.json'),
-
-        // OR provide the schema in the Schema Language format
-        // schemaString: printSchema(schema),
-
-        // tagName is gql by default
-      },
-    ],
   },
   settings: {
     polyfills: ['fetch', 'promises', 'url'],
