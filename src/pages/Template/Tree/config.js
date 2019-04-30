@@ -46,7 +46,7 @@ export default {
         ],
       },
       isPhysical: {
-        type: 'radio',
+        type: 'switch',
         label: '是否实物',
         rules: [
           {
@@ -54,13 +54,9 @@ export default {
             message: '请选择是否实物',
           },
         ],
-        radios: {
-          '0': '否',
-          '1': '是',
-        },
       },
       isDigital: {
-        type: 'radio',
+        type: 'switch',
         label: '是否虚拟',
         rules: [
           {
@@ -68,13 +64,9 @@ export default {
             message: '请选择是否虚拟',
           },
         ],
-        radios: {
-          '0': '否',
-          '1': '是',
-        },
       },
       hasTable: {
-        type: 'radio',
+        type: 'switch',
         label: '是否有表',
         rules: [
           {
@@ -82,10 +74,6 @@ export default {
             message: '请选择是否有表',
           },
         ],
-        radios: {
-          '0': '否',
-          '1': '是',
-        },
       },
       description: {
         type: 'textArea',

@@ -92,7 +92,9 @@ class Item extends React.Component {
     const { layout, getFieldDecorator, name, label, value, rules } = this.props;
     return (
       <Form.Item {...layout} label={label}>
-        {getFieldDecorator(name, { initialValue: !!value, rules })(<Switch />)}
+        {getFieldDecorator(name, { initialValue: !!value, valuePropName: 'checked', rules })(
+          <Switch />
+        )}
       </Form.Item>
     );
   };
