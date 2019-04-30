@@ -1,19 +1,15 @@
-import React from 'react'
-import {
-  Form,
-  Button,
-} from 'antd'
-import Item from '@/components/MyTree/Item'
+import React from 'react';
+import { Form, Button } from 'antd';
+import Item from '@/components/MyItem';
 
 @Form.create()
 class Create extends React.Component {
-
   handleSubmit = e => {
     const { handleFormSubmit, form, info } = this.props;
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        handleFormSubmit({ ...info,  ...values});
+        handleFormSubmit({ ...info, ...values });
         form.resetFields();
       }
     });
@@ -22,11 +18,8 @@ class Create extends React.Component {
   render() {
     const {
       formInfo,
-      form: {
-        getFieldDecorator
-      },
+      form: { getFieldDecorator },
       info,
-      tree,
     } = this.props;
 
     const formItemLayout = {
@@ -40,30 +33,35 @@ class Create extends React.Component {
         md: { span: 10 },
       },
     };
-    
+
     const submitFormLayout = {
       wrapperCol: {
         xs: { span: 24, offset: 0 },
         sm: { span: 10, offset: 7 },
       },
     };
-    
+
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 8 }}>
         {Object.keys(formInfo).map(name => {
-          return (<Item key={name}
-            {...formInfo[name]}
-            name={name}
-            value={info[name]}
-            layout={formItemLayout}
-            getFieldDecorator={getFieldDecorator}
-          />)
+          return (
+            <Item
+              key={name}
+              {...formInfo[name]}
+              name={name}
+              value={info[name]}
+              layout={formItemLayout}
+              getFieldDecorator={getFieldDecorator}
+            />
+          );
         })}
         <Form.Item {...submitFormLayout} style={{ marginTop: 32 }}>
-          <Button type="primary" htmlType="submit">提交</Button>
+          <Button type="primary" htmlType="submit">
+            提交
+          </Button>
         </Form.Item>
       </Form>
-    )
+    );
   }
 }
 

@@ -2,7 +2,7 @@ import React from 'react';
 import PropsTypes from 'prop-types';
 import { Form, TreeSelect, Input, Radio, Switch } from 'antd';
 
-class Item extends React.Component {
+class MyItem extends React.Component {
   static defaultProps = {
     layout: {},
     type: 'input',
@@ -134,4 +134,4 @@ class Item extends React.Component {
   }
 }
 
-export default Item;
+export default MyItem;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, Form } from 'antd';
-import Item from '@/components/MyTable/Item';
+import Item from '@/components/MyItem';
 
 @Form.create()
 class Create extends React.Component {
