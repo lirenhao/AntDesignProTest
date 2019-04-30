@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, Table, Button, Popconfirm, Divider, message } from 'antd';
+import { Card, Table, Input, Button, Icon, Popconfirm, Divider, message } from 'antd';
+import Highlighter from 'react-highlight-words';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import Create from '@/components/MyTable/Create';
 import styles from '@/components/MyTable/table.less';
@@ -25,11 +26,73 @@ class MyTable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      searchText: '',
       isCreateShow: false,
       isUpdateShow: false,
       info: {},
     };
   }
+
+  getColumnSearchProps = dataIndex => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+      <div style={{ padding: 8 }}>
+        <Input
+          ref={node => {
+            this.searchInput = node;
+          }}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => this.handleSearch(selectedKeys, confirm)}
+          style={{ width: 188, marginBottom: 8, display: 'block' }}
+        />
+        <Button
+          type="primary"
+          onClick={() => this.handleSearch(selectedKeys, confirm)}
+          icon="search"
+          size="small"
+          style={{ width: 90, marginRight: 8 }}
+        >
+          Search
+        </Button>
+        <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{ width: 90 }}>
+          Reset
+        </Button>
+      </div>
+    ),
+    filterIcon: filtered => (
+      <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex]
+        .toString()
+        .toLowerCase()
+        .includes(value.toLowerCase()),
+    onFilterDropdownVisibleChange: visible => {
+      if (visible) {
+        setTimeout(() => this.searchInput.select());
+      }
+    },
+    render: text => (
+      <Highlighter
+        highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+        // eslint-disable-next-line react/destructuring-assignment
+        searchWords={[this.state.searchText]}
+        autoEscape
+        textToHighlight={text.toString()}
+      />
+    ),
+  });
+
+  handleSearch = (selectedKeys, confirm) => {
+    confirm();
+    this.setState({ searchText: selectedKeys[0] });
+  };
+
+  handleReset = clearFilters => {
+    clearFilters();
+    this.setState({ searchText: '' });
+  };
 
   handleCreateForm = values => {
     const { createSubmit } = this.props;
@@ -79,7 +142,9 @@ class MyTable extends React.Component {
             <Table
               dataSource={list}
               columns={[
-                ...columns,
+                ...columns.map(item =>
+                  item.isSearch ? { ...item, ...this.getColumnSearchProps(item.dataIndex) } : item
+                ),
                 {
                   title: '操作',
                   render: (_, record) => (

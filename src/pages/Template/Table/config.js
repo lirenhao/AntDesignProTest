@@ -8,6 +8,7 @@ export default {
       {
         title: '产品价格类型名称',
         dataIndex: 'productPriceTypeName',
+        isSearch: true,
       },
       {
         title: '描述',
