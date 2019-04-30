@@ -1,22 +1,29 @@
 import { query, mutate } from '@/services/graphql';
 import gql from 'graphql-tag';
+import { capitalize } from '@/utils/utils';
+import config from '../Table/config';
 
 export default {
-  namespace: 'productPriceType',
+  namespace: 'tempTable',
   state: {
+    type: '',
     list: [],
   },
   effects: {
-    *list(action, { call, put }) {
+    *list({ payload }, { call, put, select }) {
+      yield put({
+        type: 'type',
+        payload,
+      });
+      const type = yield select(state => state.tempTable.type);
+      const queryFileds = config[type].queryFileds || [];
       try {
         const response = yield call(
           query,
           gql`
             query {
-              list: productPriceTypeAll {
-                productPriceTypeId
-                productPriceTypeName
-                description
+              list: ${type}All {
+                ${queryFileds.join(' ')}
               }
             }
           `
@@ -32,24 +39,22 @@ export default {
         });
       }
     },
-    *create({ payload, callback }, { call, put }) {
+    *create({ payload, callback }, { call, put, select }) {
+      const type = yield select(state => state.tempTable.type);
+      const { queryFileds, mutateFileds } = config[type];
+      const record = mutateFileds.reduce((r, f) => ({ ...r, [f]: payload[f] }), {});
       try {
         const response = yield call(
           mutate,
           gql`
-            mutation($record: ProductPriceTypeInput) {
-              item: productPriceTypeInsert(record: $record) {
-                productPriceTypeId
-                productPriceTypeName
-                description
+            mutation($record: ${capitalize(type)}Input) {
+              item: ${type}Insert(record: $record) {
+                ${queryFileds.join(' ')}
               }
             }
           `,
           {
-            record: {
-              productPriceTypeName: payload.productPriceTypeName,
-              description: payload.description,
-            },
+            record,
           }
         );
         yield put({
@@ -64,25 +69,23 @@ export default {
         });
       }
     },
-    *update({ payload, callback }, { call, put }) {
+    *update({ payload, callback }, { call, put, select }) {
+      const type = yield select(state => state.tempTable.type);
+      const { genKey, queryFileds, mutateFileds } = config[type];
+      const record = mutateFileds.reduce((r, f) => ({ ...r, [f]: payload[f] }), {});
       try {
         const response = yield call(
           mutate,
           gql`
-            mutation($id: String, $record: ProductPriceTypeInput) {
-              item: productPriceTypeUpdateById(id: $id, record: $record) {
-                productPriceTypeId
-                productPriceTypeName
-                description
+            mutation($id: String, $record:  ${capitalize(type)}Input) {
+              item: ${type}UpdateById(id: $id, record: $record) {
+                ${queryFileds.join(' ')}
               }
             }
           `,
           {
-            id: payload.productPriceTypeId,
-            record: {
-              productPriceTypeName: payload.productPriceTypeName,
-              description: payload.description,
-            },
+            id: genKey(payload),
+            record,
           }
         );
         yield put({
@@ -97,13 +100,14 @@ export default {
         });
       }
     },
-    *remove({ payload, callback }, { call, put }) {
+    *remove({ payload, callback }, { call, put, select }) {
+      const type = yield select(state => state.tempTable.type);
       try {
         const response = yield call(
           mutate,
           gql`
             mutation($id: String) {
-              result: productPriceTypeDeleteById(id: $id)
+              result: ${type}DeleteById(id: $id)
             }
           `,
           { id: payload }
@@ -124,6 +128,12 @@ export default {
     },
   },
   reducers: {
+    type(state, action) {
+      return {
+        ...state,
+        type: action.payload,
+      };
+    },
     setList(state, action) {
       return {
         ...state,
@@ -137,19 +147,21 @@ export default {
       };
     },
     updateList(state, action) {
+      const { type } = state;
+      const { genKey } = config[type];
       return {
         ...state,
         list: state.list.map(item =>
-          item.productPriceTypeId === action.payload.productPriceTypeId
-            ? { ...item, ...action.payload }
-            : item
+          genKey(item) === genKey(action.payload) ? { ...item, ...action.payload } : item
         ),
       };
     },
     removeList(state, action) {
+      const { type } = state;
+      const { genKey } = config[type];
       return {
         ...state,
-        list: state.list.filter(item => item.productPriceTypeId !== action.payload),
+        list: state.list.filter(item => genKey(item) !== action.payload),
       };
     },
   },

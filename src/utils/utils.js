@@ -194,11 +194,17 @@ export const importCDN = (url, name) =>
   });
 
 export const objToTree = (node, data, id, pId, title) => {
-  const root = {value: node[id], title: node[title], children: []}
-  const keys =  Object.keys(data)
-    .filter(key => data[key][pId] === root.value)
-  if(keys.length > 0) {
-    keys.forEach(key => root.children.push(objToTree(data[key], data, id, pId, title)))
+  const root = { value: node[id], title: node[title], children: [] };
+  const keys = Object.keys(data).filter(key => data[key][pId] === root.value);
+  if (keys.length > 0) {
+    keys.forEach(key => root.children.push(objToTree(data[key], data, id, pId, title)));
   }
-  return root
-}
+  return root;
+};
+
+// 单词首字母大写
+export const capitalize = type =>
+  type
+    .split('')
+    .map((k, i) => (i === 0 ? k.toUpperCase() : k))
+    .reduce((a, b) => a + b, '');

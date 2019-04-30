@@ -8,7 +8,7 @@ export const dva = {
   },
   plugins: [
     // eslint-disable-next-line global-require
-    require('dva-logger')(),
+    // require('dva-logger')(),
   ],
 };
 

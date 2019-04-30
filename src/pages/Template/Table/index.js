@@ -1,32 +1,35 @@
 import React from 'react';
 import { connect } from 'dva';
 import MyTable from '@/components/MyTable';
+import config from './config';
 
-const type = 'productPriceType';
-const id = 'productPriceTypeId';
-const header = '产品价格类型';
-const genKey = record => record[id];
-
-@connect(({ [type]: state }) => ({
-  list: state.list,
+@connect(({ tempTable }) => ({
+  list: tempTable.list,
 }))
-class Type extends React.Component {
+class Table extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = config[props.route.name];
+  }
+
   componentDidMount() {
-    const { dispatch } = this.props;
+    const { dispatch, route } = this.props;
     dispatch({
-      type: `${type}/list`,
+      type: `tempTable/list`,
+      payload: route.name,
     });
   }
 
   getInfo = key => {
     const { list } = this.props;
+    const { genKey } = this.state;
     return list.filter(item => genKey(item) === key)[0] || {};
   };
 
   createSubmit = (record, callback) => {
     const { dispatch } = this.props;
     dispatch({
-      type: `${type}/create`,
+      type: `tempTable/create`,
       payload: record,
       callback,
     });
@@ -35,7 +38,7 @@ class Type extends React.Component {
   updateSubmit = (record, callback) => {
     const { dispatch } = this.props;
     dispatch({
-      type: `${type}/update`,
+      type: `tempTable/update`,
       payload: record,
       callback,
     });
@@ -44,7 +47,7 @@ class Type extends React.Component {
   removeSubmit = (key, callback) => {
     const { dispatch } = this.props;
     dispatch({
-      type: `${type}/remove`,
+      type: `tempTable/remove`,
       payload: key,
       callback,
     });
@@ -52,34 +55,8 @@ class Type extends React.Component {
 
   render() {
     const { list } = this.props;
+    const { genKey, header, columns, formInfo } = this.state;
     const dataSource = list.map(item => ({ ...item, key: genKey(item) }));
-    const columns = [
-      {
-        title: `${header}名称`,
-        dataIndex: `${type}Name`,
-      },
-      {
-        title: '描述',
-        dataIndex: 'description',
-      },
-    ];
-
-    const formInfo = {
-      [`${type}Name`]: {
-        type: 'input',
-        label: `${header}名称`,
-        rules: [
-          {
-            required: true,
-            message: `请输入${header}`,
-          },
-        ],
-      },
-      description: {
-        type: 'textArea',
-        label: '描述',
-      },
-    };
 
     return (
       <MyTable
@@ -96,4 +73,4 @@ class Type extends React.Component {
   }
 }
 
-export default Type;
+export default Table;
