@@ -170,22 +170,22 @@ export default [
           {
             name: 'productCategoryType',
             path: '/productSys/productCategoryType',
-            component: './ProductSys/ProductCategoryType',
+            component: './Template/Tree',
           },
           {
             name: 'productFeatureType',
             path: '/productSys/productFeatureType',
-            component: './ProductSys/ProductFeatureType',
+            component: './Template/Tree',
           },
           {
             name: 'productFeatureIactnType',
             path: '/productSys/productFeatureIactnType',
-            component: './ProductSys/ProductFeatureIactnType',
+            component: './Template/Tree',
           },
           {
             name: 'productFeatureApplType',
             path: '/productSys/productFeatureApplType',
-            component: './ProductSys/ProductFeatureApplType',
+            component: './Template/Tree',
           },
           {
             name: 'productPriceType',
@@ -195,7 +195,7 @@ export default [
           {
             name: 'productPricePurpose',
             path: '/productSys/productPricePurpose',
-            component: './ProductSys/ProductPricePurpose',
+            component: './Template/Table',
           },
           {
             name: 'productCategory',

@@ -114,9 +114,9 @@ class MyTree extends React.Component {
 
   renderTreeTitle(record) {
     const { searchValue } = this.state;
-    const index = record.title.indexOf(searchValue);
-    const beforeStr = record.title.substr(0, index);
-    const afterStr = record.title.substr(index + searchValue.length);
+    const index = (record.title || '').indexOf(searchValue);
+    const beforeStr = (record.title || '').substr(0, index);
+    const afterStr = (record.title || '').substr(index + searchValue.length);
     const title =
       index > -1 ? (
         <span>

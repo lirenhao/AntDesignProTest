@@ -79,7 +79,7 @@ class MyTable extends React.Component {
         // eslint-disable-next-line react/destructuring-assignment
         searchWords={[this.state.searchText]}
         autoEscape
-        textToHighlight={text.toString()}
+        textToHighlight={text || ''}
       />
     ),
   });
