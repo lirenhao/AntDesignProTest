@@ -1,6 +1,6 @@
 import React from 'react';
 import PropsTypes from 'prop-types';
-import { Form, TreeSelect, Input, Radio } from 'antd';
+import { Form, TreeSelect, Input, Radio, Switch } from 'antd';
 
 class Item extends React.Component {
   static defaultProps = {
@@ -12,7 +12,7 @@ class Item extends React.Component {
   static propsTypes = {
     layout: PropsTypes.object,
     getFieldDecorator: PropsTypes.func,
-    type: PropsTypes.oneOf(['input', 'treeSelect', 'radio', 'textArea']),
+    type: PropsTypes.oneOf(['input', 'treeSelect', 'radio', 'switch', 'textArea']),
     name: PropsTypes.string,
     label: PropsTypes.string,
     value: PropsTypes.string,
@@ -88,6 +88,15 @@ class Item extends React.Component {
     );
   };
 
+  renderSwitch = () => {
+    const { layout, getFieldDecorator, name, label, value, rules } = this.props;
+    return (
+      <Form.Item {...layout} label={label}>
+        {getFieldDecorator(name, { initialValue: !!value, rules })(<Switch />)}
+      </Form.Item>
+    );
+  };
+
   renderTextArea = () => {
     const {
       layout,
@@ -117,6 +126,7 @@ class Item extends React.Component {
     if (type === 'input') return this.renderInput();
     if (type === 'treeSelect') return this.renderTreeSelect();
     if (type === 'radio') return this.renderRadio();
+    if (type === 'switch') return this.renderSwitch();
     if (type === 'textArea') return this.renderTextArea();
     return this.renderInput();
   }
