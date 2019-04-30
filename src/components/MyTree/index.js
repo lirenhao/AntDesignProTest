@@ -23,13 +23,43 @@ class MyTree extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      expandedKeys: ['0-0'],
+      expandedKeys: [],
+      searchValue: '',
+      autoExpandParent: true,
       selectedKeys: [],
       isCreateShow: false,
       info: {},
       parentTypeId: '',
     };
   }
+
+  onExpand = expandedKeys => {
+    this.setState({
+      expandedKeys,
+      autoExpandParent: false,
+    });
+  };
+
+  onChange = e => {
+    const { tree } = this.props;
+    const { value } = e.target;
+    const expandedKeys = [];
+    const loop = data => {
+      data.forEach(item => {
+        if (item.children && item.children.length) {
+          if (item.children.filter(child => child.title.indexOf(value) > -1).length > 0)
+            expandedKeys.push(item.value === '' ? '0-0' : item.value);
+          loop(item.children);
+        }
+      });
+    };
+    loop(tree);
+    this.setState({
+      expandedKeys,
+      searchValue: value,
+      autoExpandParent: true,
+    });
+  };
 
   handleCreateModal = (visible, parentTypeId = '') => {
     this.setState({ isCreateShow: visible, parentTypeId });
@@ -47,10 +77,6 @@ class MyTree extends React.Component {
     const { getInfo } = this.props;
     const key = e.node.props.eventKey;
     this.setState({ selectedKeys, info: e.selected ? getInfo(key) : {} });
-  };
-
-  handleTreeExpand = expandedKeys => {
-    this.setState({ expandedKeys });
   };
 
   handleUpdateForm = record => {
@@ -87,16 +113,37 @@ class MyTree extends React.Component {
   }
 
   renderTreeTitle(record) {
+    const { searchValue } = this.state;
+    const index = record.title.indexOf(searchValue);
+    const beforeStr = record.title.substr(0, index);
+    const afterStr = record.title.substr(index + searchValue.length);
+    const title =
+      index > -1 ? (
+        <span>
+          {beforeStr}
+          <span style={{ color: '#f50' }}>{searchValue}</span>
+          {afterStr}
+        </span>
+      ) : (
+        <span>{record.title}</span>
+      );
     return (
       <Dropdown overlay={this.renderRightMenu(record)} trigger={['contextMenu']}>
-        <span>{record.title}</span>
+        {title}
       </Dropdown>
     );
   }
 
   render() {
     const { header, tree, formInfo } = this.props;
-    const { expandedKeys, selectedKeys, isCreateShow, info, parentTypeId } = this.state;
+    const {
+      expandedKeys,
+      autoExpandParent,
+      selectedKeys,
+      isCreateShow,
+      info,
+      parentTypeId,
+    } = this.state;
 
     const loop = data =>
       data.map(item => {
@@ -115,12 +162,16 @@ class MyTree extends React.Component {
         <Layout>
           <Layout.Sider theme="light" width="200">
             <Card bordered={false}>
-              <Input.Search style={{ marginBottom: 8 }} placeholder="Search" />
+              <Input.Search
+                style={{ marginBottom: 8 }}
+                placeholder="Search"
+                onChange={this.onChange}
+              />
               <Tree
-                showLine
+                onExpand={this.onExpand}
                 expandedKeys={expandedKeys}
+                autoExpandParent={autoExpandParent}
                 selectedKeys={selectedKeys}
-                onExpand={this.handleTreeExpand}
                 onSelect={this.handleTreeSelect}
               >
                 {loop(tree)}
