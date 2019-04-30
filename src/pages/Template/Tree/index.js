@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'dva';
-import MyTable from '@/components/MyTable';
+import MyTree from '@/components/MyTree';
 import config from './config';
 
 @connect(({ template }) => ({
   list: template.list,
 }))
-class Table extends React.Component {
+class Tree extends React.Component {
   constructor(props) {
     super(props);
     this.state = config[props.route.name];
@@ -55,14 +55,13 @@ class Table extends React.Component {
 
   render() {
     const { list } = this.props;
-    const { genKey, header, columns, formInfo } = this.state;
-    const dataSource = list.map(item => ({ ...item, key: genKey(item) }));
-
+    const { listToTree, header, formInfo } = this.state;
+    const tree = listToTree(list);
+    formInfo.parentTypeId.treeData = tree;
     return (
-      <MyTable
+      <MyTree
         header={header}
-        list={dataSource}
-        columns={columns}
+        tree={tree}
         formInfo={formInfo}
         getInfo={this.getInfo}
         createSubmit={this.createSubmit}
@@ -73,4 +72,4 @@ class Table extends React.Component {
   }
 }
 
-export default Table;
+export default Tree;

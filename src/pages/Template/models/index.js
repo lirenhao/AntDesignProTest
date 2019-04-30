@@ -1,22 +1,20 @@
 import { query, mutate } from '@/services/graphql';
 import gql from 'graphql-tag';
 import { capitalize } from '@/utils/utils';
-import config from '../Table/config';
 
 export default {
-  namespace: 'tempTable',
+  namespace: 'template',
   state: {
-    type: '',
+    config: {},
     list: [],
   },
   effects: {
     *list({ payload }, { call, put, select }) {
       yield put({
-        type: 'type',
+        type: 'config',
         payload,
       });
-      const type = yield select(state => state.tempTable.type);
-      const queryFileds = config[type].queryFileds || [];
+      const { type, queryFileds } = yield select(state => state.template.config);
       try {
         const response = yield call(
           query,
@@ -40,8 +38,7 @@ export default {
       }
     },
     *create({ payload, callback }, { call, put, select }) {
-      const type = yield select(state => state.tempTable.type);
-      const { queryFileds, mutateFileds } = config[type];
+      const { type, queryFileds, mutateFileds } = yield select(state => state.template.config);
       const record = mutateFileds.reduce((r, f) => ({ ...r, [f]: payload[f] }), {});
       try {
         const response = yield call(
@@ -70,8 +67,9 @@ export default {
       }
     },
     *update({ payload, callback }, { call, put, select }) {
-      const type = yield select(state => state.tempTable.type);
-      const { genKey, queryFileds, mutateFileds } = config[type];
+      const { type, genKey, queryFileds, mutateFileds } = yield select(
+        state => state.template.config
+      );
       const record = mutateFileds.reduce((r, f) => ({ ...r, [f]: payload[f] }), {});
       try {
         const response = yield call(
@@ -101,7 +99,7 @@ export default {
       }
     },
     *remove({ payload, callback }, { call, put, select }) {
-      const type = yield select(state => state.tempTable.type);
+      const { type } = yield select(state => state.template.config);
       try {
         const response = yield call(
           mutate,
@@ -128,10 +126,10 @@ export default {
     },
   },
   reducers: {
-    type(state, action) {
+    config(state, action) {
       return {
         ...state,
-        type: action.payload,
+        config: action.payload,
       };
     },
     setList(state, action) {
@@ -147,8 +145,7 @@ export default {
       };
     },
     updateList(state, action) {
-      const { type } = state;
-      const { genKey } = config[type];
+      const { genKey } = state.config;
       return {
         ...state,
         list: state.list.map(item =>
@@ -157,8 +154,7 @@ export default {
       };
     },
     removeList(state, action) {
-      const { type } = state;
-      const { genKey } = config[type];
+      const { genKey } = state.config;
       return {
         ...state,
         list: state.list.filter(item => genKey(item) !== action.payload),

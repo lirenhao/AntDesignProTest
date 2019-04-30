@@ -1,5 +1,6 @@
 export default {
   productPriceType: {
+    // TODO 检索字段
     header: '产品价格类型',
     genKey: record => record.productPriceTypeId,
     queryFileds: ['productPriceTypeId', 'productPriceTypeName', 'description'],
