@@ -33,14 +33,14 @@ class MyTable extends React.Component {
     };
   }
 
-  getColumnSearchProps = dataIndex => ({
+  getColumnSearchProps = ({ dataIndex, title }) => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
       <div style={{ padding: 8 }}>
         <Input
           ref={node => {
             this.searchInput = node;
           }}
-          placeholder={`Search ${dataIndex}`}
+          placeholder={`${title}`}
           value={selectedKeys[0]}
           onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
           onPressEnter={() => this.handleSearch(selectedKeys, confirm)}
@@ -143,7 +143,7 @@ class MyTable extends React.Component {
               dataSource={list}
               columns={[
                 ...columns.map(item =>
-                  item.isSearch ? { ...item, ...this.getColumnSearchProps(item.dataIndex) } : item
+                  item.isSearch ? { ...item, ...this.getColumnSearchProps(item) } : item
                 ),
                 {
                   title: '操作',
