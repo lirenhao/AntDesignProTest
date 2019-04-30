@@ -1,20 +1,25 @@
 import { query, mutate } from '@/services/graphql';
 import gql from 'graphql-tag';
 import { capitalize } from '@/utils/utils';
+import tableConfig from '../Table/config';
+import treeConfig from '../Tree/config';
+
+const config = { ...tableConfig, ...treeConfig };
 
 export default {
   namespace: 'template',
   state: {
-    config: {},
-    list: [],
+    type: '',
+    list: {},
   },
   effects: {
     *list({ payload }, { call, put, select }) {
       yield put({
-        type: 'config',
+        type: 'setType',
         payload,
       });
-      const { type, queryFileds } = yield select(state => state.template.config);
+      const type = yield select(state => state.template.type);
+      const { queryFileds } = config[type];
       try {
         const response = yield call(
           query,
@@ -38,7 +43,8 @@ export default {
       }
     },
     *create({ payload, callback }, { call, put, select }) {
-      const { type, queryFileds, mutateFileds } = yield select(state => state.template.config);
+      const type = yield select(state => state.template.type);
+      const { queryFileds, mutateFileds } = config[type];
       const record = mutateFileds.reduce((r, f) => ({ ...r, [f]: payload[f] }), {});
       try {
         const response = yield call(
@@ -67,9 +73,8 @@ export default {
       }
     },
     *update({ payload, callback }, { call, put, select }) {
-      const { type, genKey, queryFileds, mutateFileds } = yield select(
-        state => state.template.config
-      );
+      const type = yield select(state => state.template.type);
+      const { genKey, queryFileds, mutateFileds } = config[type];
       const record = mutateFileds.reduce((r, f) => ({ ...r, [f]: payload[f] }), {});
       try {
         const response = yield call(
@@ -99,7 +104,7 @@ export default {
       }
     },
     *remove({ payload, callback }, { call, put, select }) {
-      const { type } = yield select(state => state.template.config);
+      const type = yield select(state => state.template.type);
       try {
         const response = yield call(
           mutate,
@@ -126,38 +131,47 @@ export default {
     },
   },
   reducers: {
-    config(state, action) {
+    setType(state, action) {
       return {
         ...state,
-        config: action.payload,
+        type: action.payload,
       };
     },
     setList(state, action) {
       return {
         ...state,
-        list: action.payload,
+        list: {
+          ...state.list,
+          [state.type]: action.payload,
+        },
       };
     },
     addList(state, action) {
       return {
         ...state,
-        list: [...state.list, action.payload],
+        list: { ...state.list, [state.type]: [...state.list[state.type], action.payload] },
       };
     },
     updateList(state, action) {
-      const { genKey } = state.config;
+      const { genKey } = config[state.type];
       return {
         ...state,
-        list: state.list.map(item =>
-          genKey(item) === genKey(action.payload) ? { ...item, ...action.payload } : item
-        ),
+        list: {
+          ...state.list,
+          [state.type]: state.list[state.type].map(item =>
+            genKey(item) === genKey(action.payload) ? { ...item, ...action.payload } : item
+          ),
+        },
       };
     },
     removeList(state, action) {
-      const { genKey } = state.config;
+      const { genKey } = config[state.type];
       return {
         ...state,
-        list: state.list.filter(item => genKey(item) !== action.payload),
+        list: {
+          ...state.list,
+          [state.type]: state.list[state.type].filter(item => genKey(item) !== action.payload),
+        },
       };
     },
   },

@@ -165,7 +165,7 @@ export default [
           {
             name: 'productAssocType',
             path: '/productSys/productAssocType',
-            component: './ProductSys/ProductAssocType',
+            component: './Template/Tree',
           },
           {
             name: 'productCategoryType',

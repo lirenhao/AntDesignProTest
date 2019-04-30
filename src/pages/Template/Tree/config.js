@@ -81,5 +81,55 @@ export default {
       },
     },
   },
-  productAssocType: {},
+  productAssocType: {
+    header: '产品关联类型',
+    genKey: record => record.productAssocTypeId,
+    listToTree: list => [
+      objToTree(
+        { productAssocTypeId: '', description: '父级节点' },
+        list,
+        'productAssocTypeId',
+        'parentTypeId',
+        'description'
+      ),
+    ],
+    queryFileds: [
+      'productAssocTypeId',
+      'parentTypeId',
+      'productAssocTypeName',
+      'isTable',
+      'description',
+    ],
+    mutateFileds: ['parentTypeId', 'productAssocTypeName', 'isTable', 'description'],
+    formInfo: {
+      parentTypeId: {
+        type: 'treeSelect',
+        label: '所属父级',
+      },
+      productAssocTypeName: {
+        type: 'input',
+        label: '产品关联类型名称',
+        rules: [
+          {
+            required: true,
+            message: '请输入产品关联类型名称',
+          },
+        ],
+      },
+      isTable: {
+        type: 'switch',
+        label: '是否有表',
+        rules: [
+          {
+            required: true,
+            message: '请选择是否有表',
+          },
+        ],
+      },
+      description: {
+        type: 'textArea',
+        label: '描述',
+      },
+    },
+  },
 };

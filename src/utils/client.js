@@ -20,6 +20,7 @@ export default {
     client.query({
       query,
       variables,
+      fetchPolicy: 'network-only',
     }),
   mutate: (mutation, variables) =>
     client.mutate({

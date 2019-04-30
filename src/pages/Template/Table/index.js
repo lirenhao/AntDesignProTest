@@ -16,14 +16,15 @@ class Table extends React.Component {
     const { dispatch, route } = this.props;
     dispatch({
       type: 'template/list',
-      payload: { ...config[route.name], type: route.name },
+      payload: route.name,
     });
   }
 
   getInfo = key => {
-    const { list } = this.props;
+    const { list, route } = this.props;
     const { genKey } = this.state;
-    return list.filter(item => genKey(item) === key)[0] || {};
+    const data = list[route.name] || [];
+    return data.filter(item => genKey(item) === key)[0] || {};
   };
 
   createSubmit = (record, callback) => {
@@ -54,9 +55,9 @@ class Table extends React.Component {
   };
 
   render() {
-    const { list } = this.props;
+    const { list, route } = this.props;
     const { genKey, header, columns, formInfo } = this.state;
-    const dataSource = list.map(item => ({ ...item, key: genKey(item) }));
+    const dataSource = (list[route.name] || []).map(item => ({ ...item, key: genKey(item) }));
 
     return (
       <MyTable
