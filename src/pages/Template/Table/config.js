@@ -190,4 +190,7 @@ export default {
       },
     },
   },
+  productFeature: {
+    header: '产品特征',
+  },
 };

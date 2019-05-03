@@ -13,6 +13,17 @@ const filedsToGql = fileds =>
         .join(' ')
     : '';
 
+const filedsToObj = (fileds, payload = {}) =>
+  fileds
+    ? Object.keys(fileds).reduce(
+        (r, f) => ({
+          ...r,
+          [f]: fileds[f].type === 'date' ? payload[f].format('YYYY-MM-DD') : payload[f],
+        }),
+        {}
+      )
+    : {};
+
 export default {
   namespace: 'template',
   state: {
@@ -53,7 +64,7 @@ export default {
     *create({ payload, callback }, { call, put, select }) {
       const type = yield select(state => state.template.type);
       const { queryFileds, mutateFileds } = config[type];
-      const record = Object.keys(mutateFileds).reduce((r, f) => ({ ...r, [f]: payload[f] }), {});
+      const record = filedsToObj(mutateFileds, payload);
       try {
         const response = yield call(
           mutate,
@@ -83,7 +94,7 @@ export default {
     *update({ payload, callback }, { call, put, select }) {
       const type = yield select(state => state.template.type);
       const { genKey, queryFileds, mutateFileds } = config[type];
-      const record = Object.keys(mutateFileds).reduce((r, f) => ({ ...r, [f]: payload[f] }), {});
+      const record = filedsToObj(mutateFileds, payload);
       try {
         const response = yield call(
           mutate,
