@@ -56,15 +56,35 @@ class Table extends React.Component {
 
   render() {
     const { list, route } = this.props;
-    const { genKey, header, columns, formInfo } = this.state;
+    const { genKey, header, queryFileds, attachFileds, mutateFileds } = this.state;
     const dataSource = (list[route.name] || []).map(item => ({ ...item, key: genKey(item) }));
-
+    const columns = Object.keys(queryFileds)
+      .filter(key => queryFileds[key])
+      .map(key => {
+        if (typeof queryFileds[key] === 'object') {
+          return {
+            ...queryFileds[key],
+            title: queryFileds[key].title,
+            dataIndex: queryFileds[key].dataIndex || key,
+          };
+        }
+        return {
+          title: queryFileds[key],
+          dataIndex: key,
+        };
+      });
+    if (attachFileds) {
+      Object.keys(attachFileds).forEach(key => {
+        const { filed, getData } = attachFileds[key];
+        mutateFileds[filed].treeData = getData(list);
+      });
+    }
     return (
       <MyTable
         header={header}
         list={dataSource}
         columns={columns}
-        formInfo={formInfo}
+        formInfo={mutateFileds}
         getInfo={this.getInfo}
         createSubmit={this.createSubmit}
         updateSubmit={this.updateSubmit}

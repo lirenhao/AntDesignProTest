@@ -200,12 +200,12 @@ export default [
           {
             name: 'productCategory',
             path: '/productSys/productCategory',
-            component: './ProductSys/ProductCategory',
+            component: './Template/Tree',
           },
           {
             name: 'product',
             path: '/productSys/product',
-            component: './ProductSys/Product',
+            component: './Template/Table',
           },
           {
             name: 'productAssoc',

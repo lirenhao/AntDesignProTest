@@ -6,6 +6,13 @@ import treeConfig from '../Tree/config';
 
 const config = { ...tableConfig, ...treeConfig };
 
+const filedsToGql = fileds =>
+  fileds
+    ? Object.keys(fileds)
+        .map(key => (typeof fileds[key] === 'object' ? fileds[key].queryGql || key : key))
+        .join(' ')
+    : '';
+
 export default {
   namespace: 'template',
   state: {
@@ -19,21 +26,22 @@ export default {
         payload,
       });
       const type = yield select(state => state.template.type);
-      const { queryFileds } = config[type];
+      const { queryFileds, attachFileds } = config[type];
       try {
         const response = yield call(
           query,
           gql`
             query {
-              list: ${type}All {
-                ${queryFileds.join(' ')}
+              ${type}: ${type}All {
+                ${filedsToGql(queryFileds)}
               }
+              ${filedsToGql(attachFileds)}
             }
           `
         );
         yield put({
           type: 'setList',
-          payload: response.data.list,
+          payload: response.data,
         });
       } catch (error) {
         yield put({
@@ -45,14 +53,14 @@ export default {
     *create({ payload, callback }, { call, put, select }) {
       const type = yield select(state => state.template.type);
       const { queryFileds, mutateFileds } = config[type];
-      const record = mutateFileds.reduce((r, f) => ({ ...r, [f]: payload[f] }), {});
+      const record = Object.keys(mutateFileds).reduce((r, f) => ({ ...r, [f]: payload[f] }), {});
       try {
         const response = yield call(
           mutate,
           gql`
             mutation($record: ${capitalize(type)}Input) {
               item: ${type}Insert(record: $record) {
-                ${queryFileds.join(' ')}
+                ${filedsToGql(queryFileds)}
               }
             }
           `,
@@ -75,14 +83,14 @@ export default {
     *update({ payload, callback }, { call, put, select }) {
       const type = yield select(state => state.template.type);
       const { genKey, queryFileds, mutateFileds } = config[type];
-      const record = mutateFileds.reduce((r, f) => ({ ...r, [f]: payload[f] }), {});
+      const record = Object.keys(mutateFileds).reduce((r, f) => ({ ...r, [f]: payload[f] }), {});
       try {
         const response = yield call(
           mutate,
           gql`
             mutation($id: String, $record:  ${capitalize(type)}Input) {
               item: ${type}UpdateById(id: $id, record: $record) {
-                ${queryFileds.join(' ')}
+                ${filedsToGql(queryFileds)}
               }
             }
           `,
@@ -142,7 +150,7 @@ export default {
         ...state,
         list: {
           ...state.list,
-          [state.type]: action.payload,
+          ...action.payload,
         },
       };
     },

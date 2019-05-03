@@ -1,6 +1,7 @@
 import React from 'react';
 import PropsTypes from 'prop-types';
-import { Form, TreeSelect, Input, Radio, Switch } from 'antd';
+import { Form, TreeSelect, Input, Radio, Switch, DatePicker } from 'antd';
+import moment from 'moment';
 
 class MyItem extends React.Component {
   static defaultProps = {
@@ -12,7 +13,7 @@ class MyItem extends React.Component {
   static propsTypes = {
     layout: PropsTypes.object,
     getFieldDecorator: PropsTypes.func,
-    type: PropsTypes.oneOf(['input', 'treeSelect', 'radio', 'switch', 'textArea']),
+    type: PropsTypes.oneOf(['input', 'treeSelect', 'radio', 'switch', 'textArea', 'date']),
     name: PropsTypes.string,
     label: PropsTypes.string,
     value: PropsTypes.string,
@@ -123,6 +124,17 @@ class MyItem extends React.Component {
     );
   };
 
+  renderDate = () => {
+    const { layout, getFieldDecorator, name, label, value, rules, placeholder } = this.props;
+    return (
+      <Form.Item {...layout} label={label}>
+        {getFieldDecorator(name, { initialValue: moment(value), rules })(
+          <DatePicker style={{ width: '100%' }} placeholder={placeholder || '请选择'} />
+        )}
+      </Form.Item>
+    );
+  };
+
   render() {
     const { type } = this.props;
     if (type === 'input') return this.renderInput();
@@ -130,6 +142,7 @@ class MyItem extends React.Component {
     if (type === 'radio') return this.renderRadio();
     if (type === 'switch') return this.renderSwitch();
     if (type === 'textArea') return this.renderTextArea();
+    if (type === 'date') return this.renderDate();
     return this.renderInput();
   }
 }

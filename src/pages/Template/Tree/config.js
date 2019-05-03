@@ -13,24 +13,16 @@ export default {
         'productTypeName'
       ),
     ],
-    queryFileds: [
-      'productTypeId',
-      'parentTypeId',
-      'productTypeName',
-      'isPhysical',
-      'isDigital',
-      'hasTable',
-      'description',
-    ],
-    mutateFileds: [
-      'parentTypeId',
-      'productTypeName',
-      'isPhysical',
-      'isDigital',
-      'hasTable',
-      'description',
-    ],
-    formInfo: {
+    queryFileds: {
+      productTypeId: undefined,
+      parentTypeId: undefined,
+      productTypeName: undefined,
+      isPhysical: undefined,
+      isDigital: undefined,
+      hasTable: undefined,
+      description: undefined,
+    },
+    mutateFileds: {
       parentTypeId: {
         type: 'treeSelect',
         label: '所属父级',
@@ -93,15 +85,14 @@ export default {
         'productAssocTypeName'
       ),
     ],
-    queryFileds: [
-      'productAssocTypeId',
-      'parentTypeId',
-      'productAssocTypeName',
-      'isTable',
-      'description',
-    ],
-    mutateFileds: ['parentTypeId', 'productAssocTypeName', 'isTable', 'description'],
-    formInfo: {
+    queryFileds: {
+      productAssocTypeId: undefined,
+      parentTypeId: undefined,
+      productAssocTypeName: undefined,
+      isTable: undefined,
+      description: undefined,
+    },
+    mutateFileds: {
       parentTypeId: {
         type: 'treeSelect',
         label: '所属父级',
@@ -144,15 +135,14 @@ export default {
         'productCategoryTypeName'
       ),
     ],
-    queryFileds: [
-      'productCategoryTypeId',
-      'parentTypeId',
-      'productCategoryTypeName',
-      'hasTable',
-      'description',
-    ],
-    mutateFileds: ['parentTypeId', 'productCategoryTypeName', 'hasTable', 'description'],
-    formInfo: {
+    queryFileds: {
+      productCategoryTypeId: undefined,
+      parentTypeId: undefined,
+      productCategoryTypeName: undefined,
+      hasTable: undefined,
+      description: undefined,
+    },
+    mutateFileds: {
       parentTypeId: {
         type: 'treeSelect',
         label: '所属父级',
@@ -195,15 +185,14 @@ export default {
         'productFeatureTypeName'
       ),
     ],
-    queryFileds: [
-      'productFeatureTypeId',
-      'parentTypeId',
-      'productFeatureTypeName',
-      'hasTable',
-      'description',
-    ],
-    mutateFileds: ['parentTypeId', 'productFeatureTypeName', 'hasTable', 'description'],
-    formInfo: {
+    queryFileds: {
+      productFeatureTypeId: undefined,
+      parentTypeId: undefined,
+      productFeatureTypeName: undefined,
+      hasTable: undefined,
+      description: undefined,
+    },
+    mutateFileds: {
       parentTypeId: {
         type: 'treeSelect',
         label: '所属父级',
@@ -246,15 +235,14 @@ export default {
         'productFeatureIactnTypeName'
       ),
     ],
-    queryFileds: [
-      'productFeatureIactnTypeId',
-      'parentTypeId',
-      'productFeatureIactnTypeName',
-      'hasTable',
-      'description',
-    ],
-    mutateFileds: ['parentTypeId', 'productFeatureIactnTypeName', 'hasTable', 'description'],
-    formInfo: {
+    queryFileds: {
+      productFeatureIactnTypeId: undefined,
+      parentTypeId: undefined,
+      productFeatureIactnTypeName: undefined,
+      hasTable: undefined,
+      description: undefined,
+    },
+    mutateFileds: {
       parentTypeId: {
         type: 'treeSelect',
         label: '所属父级',
@@ -297,15 +285,14 @@ export default {
         'productFeatureApplTypeName'
       ),
     ],
-    queryFileds: [
-      'productFeatureApplTypeId',
-      'parentTypeId',
-      'productFeatureApplTypeName',
-      'hasTable',
-      'description',
-    ],
-    mutateFileds: ['parentTypeId', 'productFeatureApplTypeName', 'hasTable', 'description'],
-    formInfo: {
+    queryFileds: {
+      productFeatureApplTypeId: undefined,
+      parentTypeId: undefined,
+      productFeatureApplTypeName: undefined,
+      hasTable: undefined,
+      description: undefined,
+    },
+    mutateFileds: {
       parentTypeId: {
         type: 'treeSelect',
         label: '所属父级',
@@ -329,6 +316,79 @@ export default {
             message: '请选择是否有表',
           },
         ],
+      },
+      description: {
+        type: 'textArea',
+        label: '描述',
+      },
+    },
+  },
+  productCategory: {
+    type: 'productCategory',
+    header: '产品类别',
+    genKey: record => record.productCategoryId,
+    listToTree: list => [
+      objToTree(
+        { productCategoryId: '', categoryName: '父级节点' },
+        list,
+        'productCategoryId',
+        'primaryParentCategoryId',
+        'categoryName'
+      ),
+    ],
+    queryFileds: {
+      productCategoryId: undefined,
+      categoryName: undefined,
+      productCategoryTypeId: undefined,
+      primaryParentCategoryId: undefined,
+      description: undefined,
+    },
+    attachFileds: {
+      productCategoryType: {
+        queryGql: `
+        productCategoryType: productCategoryTypeAll {
+          productCategoryTypeId
+          parentTypeId
+          productCategoryTypeName
+        }`,
+        filed: 'productCategoryTypeId',
+        getData: list =>
+          objToTree(
+            { productCategoryTypeId: '', productCategoryTypeName: '父级节点' },
+            list.productCategoryType || [],
+            'productCategoryTypeId',
+            'parentTypeId',
+            'productCategoryTypeName'
+          ).children || [],
+      },
+    },
+    parentTypeId: 'primaryParentCategoryId',
+    mutateFileds: {
+      categoryName: {
+        type: 'input',
+        label: '产品类别名称',
+        rules: [
+          {
+            required: true,
+            message: '请输入产品类别名称',
+          },
+        ],
+      },
+      productCategoryTypeId: {
+        type: 'treeSelect',
+        label: '产品类别类型',
+        treeData: [],
+        rules: [
+          {
+            required: true,
+            message: '请选择产品类别类型',
+          },
+        ],
+      },
+      primaryParentCategoryId: {
+        type: 'treeSelect',
+        label: '主父产品类别',
+        treeData: [],
       },
       description: {
         type: 'textArea',

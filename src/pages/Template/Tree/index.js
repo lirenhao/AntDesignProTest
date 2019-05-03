@@ -56,14 +56,24 @@ class Tree extends React.Component {
 
   render() {
     const { list, route } = this.props;
-    const { listToTree, header, formInfo } = this.state;
+    const { listToTree, header, parentTypeId, attachFileds, mutateFileds } = this.state;
     const tree = listToTree(list[route.name] || []);
-    formInfo.parentTypeId.treeData = tree;
+    if (parentTypeId) {
+      mutateFileds[parentTypeId].treeData = tree;
+    } else {
+      mutateFileds.parentTypeId.treeData = tree;
+    }
+    if (attachFileds) {
+      Object.keys(attachFileds).forEach(key => {
+        const { filed, getData } = attachFileds[key];
+        mutateFileds[filed].treeData = getData(list);
+      });
+    }
     return (
       <MyTree
         header={header}
         tree={tree}
-        formInfo={formInfo}
+        formInfo={mutateFileds}
         getInfo={this.getInfo}
         createSubmit={this.createSubmit}
         updateSubmit={this.updateSubmit}
