@@ -1,6 +1,6 @@
 import React from 'react';
 import PropsTypes from 'prop-types';
-import { Form, TreeSelect, Input, Radio, Switch, DatePicker } from 'antd';
+import { Form, Input, InputNumber, Select, TreeSelect, Radio, Switch, DatePicker } from 'antd';
 import moment from 'moment';
 
 class MyItem extends React.Component {
@@ -13,11 +13,39 @@ class MyItem extends React.Component {
   static propsTypes = {
     layout: PropsTypes.object,
     getFieldDecorator: PropsTypes.func,
-    type: PropsTypes.oneOf(['input', 'treeSelect', 'radio', 'switch', 'textArea', 'date']),
+    type: PropsTypes.oneOf([
+      'input',
+      'number',
+      'select',
+      'treeSelect',
+      'radio',
+      'switch',
+      'textArea',
+      'date',
+    ]),
     name: PropsTypes.string,
     label: PropsTypes.string,
     value: PropsTypes.string,
     rules: PropsTypes.array,
+  };
+
+  renderNumber = () => {
+    const {
+      layout,
+      getFieldDecorator,
+      name,
+      label,
+      value: initialValue,
+      rules,
+      placeholder,
+    } = this.props;
+    return (
+      <Form.Item {...layout} label={label}>
+        {getFieldDecorator(name, { initialValue, rules })(
+          <InputNumber placeholder={placeholder || '请输入'} />
+        )}
+      </Form.Item>
+    );
   };
 
   renderInput = () => {
@@ -34,6 +62,30 @@ class MyItem extends React.Component {
       <Form.Item {...layout} label={label}>
         {getFieldDecorator(name, { initialValue, rules })(
           <Input placeholder={placeholder || '请输入'} />
+        )}
+      </Form.Item>
+    );
+  };
+
+  renderSelect = () => {
+    const {
+      layout,
+      getFieldDecorator,
+      name,
+      label,
+      value: initialValue,
+      rules,
+      placeholder,
+      options,
+    } = this.props;
+    return (
+      <Form.Item {...layout} label={label}>
+        {getFieldDecorator(name, { initialValue, rules })(
+          <Select placeholder={placeholder || '请选择'}>
+            {options.map(item => (
+              <Select.Option value={item.value}>{item.title}</Select.Option>
+            ))}
+          </Select>
         )}
       </Form.Item>
     );
@@ -138,6 +190,8 @@ class MyItem extends React.Component {
   render() {
     const { type } = this.props;
     if (type === 'input') return this.renderInput();
+    if (type === 'number') return this.renderNumber();
+    if (type === 'select') return this.renderSelect();
     if (type === 'treeSelect') return this.renderTreeSelect();
     if (type === 'radio') return this.renderRadio();
     if (type === 'switch') return this.renderSwitch();

@@ -192,5 +192,125 @@ export default {
   },
   productFeature: {
     header: '产品特征',
+    genKey: record => record.productFeatureId,
+    searchFileds: {},
+    queryFileds: {
+      productFeatureId: undefined,
+      productFeatureTypeId: undefined,
+      productFeatureType: {
+        title: '产品特征类型',
+        dataIndex: 'productFeatureType.productFeatureTypeName',
+        queryGql: 'productFeatureType { productFeatureTypeName }',
+      },
+      productFeatureCategoryId: undefined,
+      uomId: undefined,
+      uom: {
+        title: '计量标识',
+        dataIndex: 'uom.uomName',
+        queryGql: 'uom { uomName }',
+      },
+      numberSpecified: '指定编号',
+      defaultAmount: '默认金额',
+      defaultSequenceNum: '默认序列号',
+      abbrev: '缩写',
+      idCode: 'ID代码',
+      description: '描述',
+    },
+    attachFileds: {
+      productFeatureType: {
+        queryGql: `
+        productFeatureType: productFeatureTypeAll {
+          productFeatureTypeId
+          parentTypeId
+          productFeatureTypeName
+        }`,
+        filed: 'productFeatureTypeId',
+        getData: list =>
+          objToTree(
+            { productFeatureTypeId: '', productFeatureTypeName: '父级节点' },
+            list.productFeatureType || [],
+            'productFeatureTypeId',
+            'parentTypeId',
+            'productFeatureTypeName'
+          ).children || [],
+      },
+      uom: {
+        queryGql: `
+        uom: uomAll {
+          uomId
+          uomName
+        }`,
+        filed: 'uomId',
+        getData: list => (list.uom || []).map(item => ({ value: item.uomId, title: item.uomName })),
+      },
+    },
+    mutateFileds: {
+      productFeatureTypeId: {
+        type: 'treeSelect',
+        label: '产品特征类型',
+        rules: [
+          {
+            required: true,
+            message: '请选择产品特征类型',
+          },
+        ],
+      },
+      productFeatureCategoryId: {
+        type: 'input',
+        label: '产品特征类别标识',
+      },
+      description: {
+        type: 'textArea',
+        label: '描述',
+      },
+      uomId: {
+        type: 'select',
+        label: '计量标识',
+        rules: [
+          {
+            required: true,
+            message: '请选择计量标识',
+          },
+        ],
+      },
+      numberSpecified: {
+        type: 'number',
+        label: '指定编号',
+        rules: [
+          {
+            type: 'number',
+            message: '必须是数字',
+          },
+        ],
+      },
+      defaultAmount: {
+        type: 'number',
+        label: '默认金额',
+        rules: [
+          {
+            type: 'number',
+            message: '必须是数字',
+          },
+        ],
+      },
+      defaultSequenceNum: {
+        type: 'number',
+        label: '默认序列号',
+        rules: [
+          {
+            type: 'number',
+            message: '必须是数字',
+          },
+        ],
+      },
+      abbrev: {
+        type: 'input',
+        label: '缩写',
+      },
+      idCode: {
+        type: 'input',
+        label: 'ID代码',
+      },
+    },
   },
 };

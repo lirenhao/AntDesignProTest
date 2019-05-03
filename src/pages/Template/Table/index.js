@@ -76,7 +76,12 @@ class Table extends React.Component {
     if (attachFileds) {
       Object.keys(attachFileds).forEach(key => {
         const { filed, getData } = attachFileds[key];
-        mutateFileds[filed].treeData = getData(list);
+        if (mutateFileds[filed] && mutateFileds[filed].type === 'select') {
+          mutateFileds[filed].options = getData(list);
+        }
+        if (mutateFileds[filed] && mutateFileds[filed].type === 'treeSelect') {
+          mutateFileds[filed].treeData = getData(list);
+        }
       });
     }
     return (

@@ -215,7 +215,7 @@ export default [
           {
             name: 'productFeature',
             path: '/productSys/productFeature',
-            component: './ProductSys/ProductFeature',
+            component: './Template/Table',
           },
           {
             name: 'productPrice',
