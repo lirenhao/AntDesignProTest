@@ -1,36 +1,24 @@
-import React from 'react'
-import { connect } from 'dva'
-import {
-  Card,
-  Table,
-  Form,
-  Row,
-  Col,
-  Input,
-  TreeSelect,
-  Button,
-  Divider,
-  message,
-} from 'antd'
-import PageHeaderWrapper from '@/components/PageHeaderWrapper'
-import Create from './Create'
+import React from 'react';
+import { connect } from 'dva';
+import { Card, Table, Form, Row, Col, Input, TreeSelect, Button, Divider, message } from 'antd';
+import PageHeaderWrapper from '@/components/PageHeaderWrapper';
+import { objToTree } from '@/utils/utils';
+import Create from './Create';
 
-import styles from '../table.less'
+import styles from '../table.less';
 
-@connect(({ product, type: sysType, loading }) => ({
+@connect(({ product, loading }) => ({
   data: product.data,
-  type: sysType.productType,
-  typeTree: sysType.tree.productType || [{}],
+  productType: product.dict.productType,
   loading: loading.models.product,
 }))
 @Form.create()
 class Product extends React.Component {
-
   state = {
     isCreateShow: false,
     isUpdateShow: false,
     info: {},
-  }
+  };
 
   columns = [
     {
@@ -40,9 +28,9 @@ class Product extends React.Component {
     {
       title: '产品类型',
       dataIndex: 'productTypeId',
-      render: (id) => {
-        const { type } = this.props
-        return type[id] ? type[id].productTypeName : null
+      render: id => {
+        const { productType } = this.props;
+        return productType[id] ? productType[id].productTypeName : null;
       },
     },
     {
@@ -71,15 +59,16 @@ class Product extends React.Component {
         </React.Fragment>
       ),
     },
-  ]
+  ];
 
   componentDidMount() {
     const { dispatch } = this.props;
+    dispatch({ type: 'product/findDict' });
     dispatch({
       type: 'product/findAll',
       payload: {
         type: 'product',
-      }
+      },
     });
     dispatch({
       type: 'type/tree',
@@ -88,36 +77,36 @@ class Product extends React.Component {
         id: 'productTypeId',
         pId: 'parentTypeId',
         title: 'productTypeName',
-      }
+      },
     });
   }
 
-  handleAddModal = (visible) => {
-    this.setState({isCreateShow: visible})
-  }
+  handleAddModal = visible => {
+    this.setState({ isCreateShow: visible });
+  };
 
-  handleAddForm = (record) => {
+  handleAddForm = record => {
     const { dispatch } = this.props;
     dispatch({
       type: 'product/save',
       payload: {
         type: 'product',
-        payload: {id: 'productId', ...record},
+        payload: { id: 'productId', ...record },
       },
-      callback: () => this.handleAddModal(false)
+      callback: () => this.handleAddModal(false),
     });
-  }
+  };
 
-  handleUpdateModal = (visible) => {
-    this.setState({isUpdateShow: visible})
-  }
+  handleUpdateModal = visible => {
+    this.setState({ isUpdateShow: visible });
+  };
 
-  handleUpdate = (record) => {
-    this.setState({info: record})
+  handleUpdate = record => {
+    this.setState({ info: record });
     this.handleUpdateModal(true);
-  }
+  };
 
-  handleUpdateForm = (record) => {
+  handleUpdateForm = record => {
     const { dispatch } = this.props;
     dispatch({
       type: 'product/update',
@@ -126,11 +115,11 @@ class Product extends React.Component {
         key: record.productId,
         payload: record,
       },
-      callback: () => this.handleUpdateModal(false)
+      callback: () => this.handleUpdateModal(false),
     });
-  }
+  };
 
-  handleRemove = (record) => {
+  handleRemove = record => {
     const { dispatch } = this.props;
     dispatch({
       type: 'product/remove',
@@ -140,26 +129,25 @@ class Product extends React.Component {
       },
       callback: () => message.success('删除成功'),
     });
-  }
+  };
 
   render() {
     const {
       loading,
-      data: {
-        list,
-        pagination,
-      },
-      form: {
-        getFieldDecorator
-      },
-      typeTree,
-    } = this.props
-    const { 
-      isCreateShow, 
-      isUpdateShow,
-      info,
-    } = this.state
-    
+      data: { list, pagination },
+      form: { getFieldDecorator },
+      productType,
+    } = this.props;
+    const { isCreateShow, isUpdateShow, info } = this.state;
+
+    const typeTree = objToTree(
+      { productTypeId: '', productTypeName: '父级节点' },
+      productType,
+      'productTypeId',
+      'parentTypeId',
+      'productTypeName'
+    ).children;
+
     return (
       <PageHeaderWrapper title="产品">
         <Card bordered={false}>
@@ -174,7 +162,7 @@ class Product extends React.Component {
                           dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                           placeholder="请选择"
                           treeDefaultExpandAll
-                          treeData={typeTree[0].children}
+                          treeData={typeTree}
                         />
                       )}
                     </Form.Item>
@@ -211,21 +199,21 @@ class Product extends React.Component {
             />
           </div>
         </Card>
-        <Create 
-          visible={isCreateShow} 
-          hideModal={() => this.handleAddModal(false)} 
+        <Create
+          visible={isCreateShow}
+          hideModal={() => this.handleAddModal(false)}
           handleFormSubmit={this.handleAddForm}
           info={{}}
         />
-        <Create 
-          visible={isUpdateShow} 
-          hideModal={() => this.handleUpdateModal(false)} 
+        <Create
+          visible={isUpdateShow}
+          hideModal={() => this.handleUpdateModal(false)}
           handleFormSubmit={this.handleUpdateForm}
           info={info}
         />
       </PageHeaderWrapper>
-    )
+    );
   }
 }
 
-export default Product
+export default Product;

@@ -1,0 +1,1051 @@
+{
+  "productType": [
+    {
+      "productTypeId": "1",
+      "parentTypeId": "",
+      "isPhysical": "0",
+      "isDigital": "0",
+      "hasTable": "0",
+      "productTypeName": "实物",
+      "descript": "实物",
+      "lastUpdatedStamp": "2019-03-17 11:39:38",
+      "createdStamp": "2019-03-17 10:39:38",
+      "version": "v1.0.0"
+    },
+    {
+      "productTypeId": "2",
+      "parentTypeId": "",
+      "isPhysical": "0",
+      "isDigital": "0",
+      "hasTable": "0",
+      "productTypeName": "服务",
+      "descript": "服务",
+      "lastUpdatedStamp": "2019-03-31 19:38:05",
+      "createdStamp": "2019-03-17 10:39:38",
+      "version": "v1.0.0",
+      "key": "2",
+      "undefined": "2"
+    },
+    {
+      "productTypeId": "3",
+      "parentTypeId": "",
+      "isPhysical": "0",
+      "isDigital": "0",
+      "hasTable": "0",
+      "productTypeName": "虚拟产品",
+      "descript": "虚拟产品",
+      "lastUpdatedStamp": "2019-03-17 11:39:38",
+      "createdStamp": "2019-03-17 10:39:38",
+      "version": "v1.0.0"
+    },
+    {
+      "productTypeId": "11",
+      "parentTypeId": "1",
+      "isPhysical": "0",
+      "isDigital": "0",
+      "hasTable": "0",
+      "productTypeName": "制成品",
+      "descript": "制成品",
+      "lastUpdatedStamp": "2019-03-17 11:39:38",
+      "createdStamp": "2019-03-17 10:39:38",
+      "version": "v1.0.0"
+    },
+    {
+      "productTypeId": "12",
+      "parentTypeId": "1",
+      "isPhysical": "0",
+      "isDigital": "0",
+      "hasTable": "0",
+      "productTypeName": "原材料",
+      "descript": "原材料",
+      "lastUpdatedStamp": "2019-03-17 11:39:38",
+      "createdStamp": "2019-03-17 10:39:38",
+      "version": "v1.0.0"
+    },
+    {
+      "productTypeId": "13",
+      "parentTypeId": "1",
+      "isPhysical": "0",
+      "isDigital": "0",
+      "hasTable": "0",
+      "productTypeName": "半成品",
+      "descript": "半成品",
+      "lastUpdatedStamp": "2019-03-17 11:39:38",
+      "createdStamp": "2019-03-17 10:39:38",
+      "version": "v1.0.0"
+    },
+    {
+      "productTypeId": "14",
+      "parentTypeId": "1",
+      "isPhysical": "0",
+      "isDigital": "0",
+      "hasTable": "0",
+      "productTypeName": "数字产品",
+      "descript": "数字产品",
+      "lastUpdatedStamp": "2019-03-17 11:39:38",
+      "createdStamp": "2019-03-17 10:39:38",
+      "version": "v1.0.0"
+    }
+  ],
+  "proudctCategoty": [
+    {
+      "productCategoryId": "Business",
+      "productCategoryName": "工商",
+      "childs": [
+        {
+          "productCategoryId": "Business_setup",
+          "productCategoryName": "设立"
+        },
+        {
+          "productCategoryId": "Business_cancel",
+          "productCategoryName": "注销"
+        },
+        {
+          "productCategoryId": "Business_change",
+          "productCategoryName": "变更"
+        }
+      ]
+    },
+    {
+      "productCategoryId": "Fiscal_tax",
+      "productCategoryName": "财税",
+      "childs": [
+        {
+          "productCategoryId": "Fiscal_tax_sjjz",
+          "productCategoryName": "审计鉴证"
+        },
+        {
+          "productCategoryId": "Fiscal_tax_cwswdl",
+          "productCategoryName": "财务税务代理"
+        }
+      ]
+    },
+
+    {
+      "productCategoryId": "Fixed_package",
+      "productCategoryName": "固定套餐",
+      "childs": [
+        {
+          "productCategoryId": "CSZHGLFW_TC",
+          "productCategoryName": "财税综合管理服务套餐"
+        }
+      ]
+    },
+    {
+      "productCategoryId": "Qual",
+      "productCategoryName": "资质",
+      "childs": []
+    },
+    {
+      "productCategoryId": "legal",
+      "productCategoryName": "法律",
+      "childs": []
+    },
+    {
+      "productCategoryId": "address",
+      "productCategoryName": "地址",
+      "childs": []
+    },
+    {
+      "productCategoryId": "per_outs",
+      "productCategoryName": "人事外包",
+      "childs": []
+    }
+  ],
+  "geo": [
+    {
+      "geoId": "Dong_Cheng_District",
+      "geoTypeId": "3_administrative_distric",
+      "geoName": "东城区"
+    },
+    {
+      "geoId": "XiChengDistrict",
+      "geoTypeId": "3_administrative_distric",
+      "geoName": "西城区"
+    },
+    {
+      "geoId": "ChaoYangDistrict",
+      "geoTypeId": "3_administrative_distric",
+      "geoName": "朝阳区"
+    },
+    {
+      "geoId": "Fengtai_District",
+      "geoTypeId": "3_administrative_distric",
+      "geoName": "丰台区"
+    },
+    {
+      "geoId": "ShijingshanDistrict",
+      "geoTypeId": "3_administrative_distric",
+      "geoName": "石景山区"
+    },
+    {
+      "geoId": "HaidianDistrict",
+      "geoTypeId": "3_administrative_distric",
+      "geoName": "海淀区"
+    },
+    {
+      "geoId": "MentougouDistrict",
+      "geoTypeId": "3_administrative_distric",
+      "geoName": "门头沟区"
+    },
+    {
+      "geoId": "Fangshan_District",
+      "geoTypeId": "3_administrative_distric",
+      "geoName": "房山区"
+    },
+    {
+      "geoId": "Tongzhou_District",
+      "geoTypeId": "3_administrative_distric",
+      "geoName": "通州区"
+    },
+    {
+      "geoId": "ShunyiDistrict",
+      "geoTypeId": "3_administrative_distric",
+      "geoName": "顺义区"
+    },
+    {
+      "geoId": "ChangpingDistrict",
+      "geoTypeId": "3_administrative_distric",
+      "geoName": "昌平区"
+    },
+    {
+      "geoId": "DaXingDistrict",
+      "geoTypeId": "3_administrative_distric",
+      "geoName": "大兴区"
+    },
+    {
+      "geoId": "HuairouDistrict",
+      "geoTypeId": "3_administrative_distric",
+      "geoName": "怀柔区"
+    },
+    {
+      "geoId": "PingguDistrict",
+      "geoTypeId": "3_administrative_distric",
+      "geoName": "平谷区"
+    },
+    {
+      "geoId": "MiyunDistrict",
+      "geoTypeId": "3_administrative_distric",
+      "geoName": "密云区"
+    },
+    {
+      "geoId": "YanqingDistrict",
+      "geoTypeId": "3_administrative_distric",
+      "geoName": "延庆区"
+    }
+  ],
+  "productFeatureType": [
+    {
+      "productFeatureTypeId": "CORP_REG_TYPE",
+      "productFeatureTypeName": "企业注册类型",
+      "isExclusive": "1",
+      "idCode": "10"
+    },
+    {
+      "productFeatureTypeId": "CORP_TAXPAYER_TYPE",
+      "productFeatureTypeName": "企业纳税人类型",
+      "isExclusive": "1",
+      "idCode": "11"
+    },
+    {
+      "productFeatureTypeId": "CROP_ORG_TYPE",
+      "productFeatureTypeName": "企业组织类型",
+      "isExclusive": "1",
+      "idCode": "12"
+    },
+    {
+      "productFeatureTypeId": "GOV_WINDOW",
+      "productFeatureTypeName": "政府窗口",
+      "isExclusive": "0",
+      "idCode": "13"
+    },
+    {
+      "productFeatureTypeId": "FWJJ",
+      "productFeatureTypeName": "服务加急类型",
+      "isExclusive": "1",
+      "idCode": "14"
+    },
+    {
+      "productFeatureTypeId": "GQZRCS",
+      "productFeatureTypeName": "股权转让次数(备注)",
+      "isExclusive": "1",
+      "idCode": "15"
+    },
+    {
+      "productFeatureTypeId": "QYBGNRSL",
+      "productFeatureTypeName": "企业变更内容数量水平(备注)",
+      "isExclusive": "1",
+      "idCode": "16"
+    },
+    {
+      "productFeatureTypeId": "ZRRGDSL",
+      "productFeatureTypeName": "自然人股东数量(备注)",
+      "isExclusive": "1",
+      "idCode": "17"
+    },
+    {
+      "productFeatureTypeId": "SPLX",
+      "productFeatureTypeName": "前后置审批类型(备注)",
+      "isExclusive": "1",
+      "idCode": "18"
+    },
+    {
+      "productFeatureTypeId": "XGLDLJZSL",
+      "productFeatureTypeName": "小规模代理记账数量(备注)",
+      "isExclusive": "1",
+      "idCode": "19"
+    },
+    {
+      "productFeatureTypeId": "YBNSRDLJZSL",
+      "productFeatureTypeName": "一般纳税人代理记账数量(备注)",
+      "isExclusive": "1",
+      "idCode": "20"
+    },
+    {
+      "productFeatureTypeId": "GQZRWSZM",
+      "productFeatureTypeName": "股权转让完税证明(备注)",
+      "isExclusive": "1",
+      "idCode": "21"
+    },
+    {
+      "productFeatureTypeId": "FLZXSL",
+      "productFeatureTypeName": "法律咨询数量",
+      "isExclusive": "1",
+      "idCode": "22"
+    },
+    {
+      "productFeatureTypeId": "SHTSL",
+      "productFeatureTypeName": "审合同数量",
+      "isExclusive": "1",
+      "idCode": "23"
+    },
+    {
+      "productFeatureTypeId": "ZCDZ",
+      "productFeatureTypeName": "注册地址类型",
+      "isExclusive": "1",
+      "idCode": "30"
+    },
+    {
+      "productFeatureTypeId": "QYSLLX",
+      "productFeatureTypeName": "企业设立类型",
+      "isExclusive": "1",
+      "idCode": "40"
+    },
+    {
+      "productFeatureTypeId": "QYBGLX",
+      "productFeatureTypeName": "企业变更类型",
+      "isExclusive": "0",
+      "idCode": "41"
+    },
+    {
+      "productFeatureTypeId": "QYZXLX",
+      "productFeatureTypeName": "企业注销类型",
+      "isExclusive": "1",
+      "idCode": "42"
+    },
+    {
+      "productFeatureTypeId": "SPJYXKZ_SPXSJYZ_LX",
+      "productFeatureTypeName": "食品经营许可证类型(食品销售经营者)",
+      "isExclusive": "1",
+      "idCode": "43"
+    },
+    {
+      "productFeatureTypeId": "SPJYXKZ_CYFW_LX",
+      "productFeatureTypeName": "食品经营许可类型(餐饮服务)",
+      "isExclusive": "1",
+      "idCode": "44"
+    },
+    {
+      "productFeatureTypeId": "WLYXLX",
+      "productFeatureTypeName": "网络游戏类型",
+      "isExclusive": "1",
+      "idCode": "45"
+    },
+    {
+      "productFeatureTypeId": "DXZZLX",
+      "productFeatureTypeName": "电信增值类型",
+      "isExclusive": "1",
+      "idCode": "46"
+    },
+    {
+      "productFeatureTypeId": "YLQXJYXKZLX",
+      "productFeatureTypeName": "医疗器械经营许可证类型",
+      "isExclusive": "1",
+      "idCode": "47"
+    },
+    {
+      "productFeatureTypeId": "SHANGBIAO",
+      "productFeatureTypeName": "商标",
+      "isExclusive": "1",
+      "idCode": "50"
+    },
+    {
+      "productFeatureTypeId": "ZHUANLI",
+      "productFeatureTypeName": "专利",
+      "isExclusive": "1",
+      "idCode": "51"
+    },
+    {
+      "productFeatureTypeId": "ZHUZUOQUAN",
+      "productFeatureTypeName": "著作权",
+      "isExclusive": "1",
+      "idCode": "52"
+    },
+    {
+      "productFeatureTypeId": "shuiwubaodao",
+      "productFeatureTypeName": "税务报道",
+      "isExclusive": "1",
+      "idCode": "60"
+    },
+    {
+      "productFeatureTypeId": "dailijizhang",
+      "productFeatureTypeName": "代理记账",
+      "isExclusive": "1",
+      "idCode": "61"
+    },
+    {
+      "productFeatureTypeId": "CSZHQT",
+      "productFeatureTypeName": "财税综合其它",
+      "isExclusive": "1",
+      "idCode": "62"
+    },
+    {
+      "productFeatureTypeId": "SWQT",
+      "productFeatureTypeName": "税务其它",
+      "isExclusive": "1",
+      "idCode": "63"
+    },
+    {
+      "productFeatureTypeId": "SWCH",
+      "productFeatureTypeName": "税务筹划",
+      "isExclusive": "1",
+      "idCode": "67"
+    },
+    {
+      "productFeatureTypeId": "GRSDNDHSQJ",
+      "productFeatureTypeName": "个人所得税年度汇算清缴",
+      "isExclusive": "1",
+      "idCode": "68"
+    },
+    {
+      "productFeatureTypeId": "QYRSSB",
+      "productFeatureTypeName": "人事社保",
+      "isExclusive": "1",
+      "idCode": "70"
+    },
+    {
+      "productFeatureTypeId": "FUWUNIANXIAN",
+      "productFeatureTypeName": "服务年限",
+      "isExclusive": "1",
+      "idCode": "80"
+    },
+    {
+      "productFeatureTypeId": "FWFLX",
+      "productFeatureTypeName": "服务费类型",
+      "isExclusive": "1",
+      "idCode": "81"
+    }
+  ],
+  "productFeature": [
+    {
+      "productFeatureId": "1001",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "1002",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "1003",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "1101",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "1102",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "1201",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "1202",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "1203",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "1204",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "1205",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "1206",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "1301",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "1302",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "1303",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "1401",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "1402",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "1501",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "1502",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "1503",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "1701",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "1702",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "1703",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "1801",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "1802",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "1901",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "1902",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "1903",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "1904",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "2001",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "2002",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "2003",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "2201",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "2202",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "2301",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "2302",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "3001",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "3002",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "3003",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "4001",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "4101",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "4102",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "4103",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "4104",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "4105",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "4106",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "4107",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "4108",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "4110",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "4111",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "4112",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "4201",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "4202",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "4203",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "4204",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "4205",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "4206",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "4207",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "4301",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "4302",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "4401",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "4402",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "4403",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "4501",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "4502",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "4503",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "4504",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "4601",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "4602",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "4603",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "4604",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "4701",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "4702",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "5001",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "5002",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "5003",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "5004",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "5005",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "5006",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "5101",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "5102",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "5103",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "5104",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "5201",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "5202",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "5203",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "6001",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "6002",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "6003",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "6101",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "6102",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "6103",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "6104",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "6105",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "6106",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "6107",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "6108",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "6109",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "6110",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "6111",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "6112",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "6113",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "6114",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "6115",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "6201",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "6202",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "6301",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "6302",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "6303",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "6304",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "7001",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "7002",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "7003",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "7004",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "7005",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "7006",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "7007",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "8001",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "8002",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "8003",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    },
+    {
+      "productFeatureId": "8101",
+      "productFeatureTypeId": "",
+      "productFeatureName": ""
+    }
+  ]
+}

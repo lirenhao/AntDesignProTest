@@ -284,3 +284,10 @@ export async function deleteProductAssoc(key) {
     method: 'DELETE',
   });
 }
+
+export async function getDictData(params) {
+  return request('/api/getDict', {
+    method: 'POST',
+    body: params,
+  });
+}
