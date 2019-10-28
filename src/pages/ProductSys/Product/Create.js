@@ -34,7 +34,10 @@ class Create extends React.Component {
     };
   }
 
-  static getDerivedStateFromProps(nextProps) {
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.info === prevState.info) {
+      return null;
+    }
     const fixFeatures = nextProps.info.fixFeatures || [];
     const mustFeatures = nextProps.info.mustFeatures || [];
     const optionFeatures = nextProps.info.optionFeatures || [];
@@ -48,12 +51,12 @@ class Create extends React.Component {
       ...mustFeatures.map(item => item.featureIds).reduce((a, b) => [...a, ...b], []),
       ...optionFeatures.map(item => item.featureIds).reduce((a, b) => [...a, ...b], []),
     ];
-    console.log('getDerivedStateFromProps');
     return {
       limit: {
         featureTypeIds,
         featureIds,
       },
+      info: nextProps.info,
     };
   }
 
@@ -70,6 +73,16 @@ class Create extends React.Component {
         });
         form.resetFields();
       }
+    });
+  };
+
+  setLimit = value => {
+    const { limit } = this.state;
+    this.setState({
+      limit: {
+        ...limit,
+        ...value,
+      },
     });
   };
 
@@ -253,7 +266,7 @@ class Create extends React.Component {
                   message: '请添加固定属性',
                 },
               ],
-            })(<Feature limit={limit} />)}
+            })(<Feature limit={limit} setLimit={this.setLimit} />)}
           </Form.Item>
           <Form.Item {...formItemLayout} label="必选属性">
             {getFieldDecorator('mustFeatures', {
@@ -264,7 +277,7 @@ class Create extends React.Component {
                   message: '请添加必选属性',
                 },
               ],
-            })(<Feature limit={limit} />)}
+            })(<Feature limit={limit} setLimit={this.setLimit} />)}
           </Form.Item>
           <Form.Item {...formItemLayout} label="可选属性">
             {getFieldDecorator('optionFeatures', {
@@ -275,7 +288,7 @@ class Create extends React.Component {
                   message: '请添加可选属性',
                 },
               ],
-            })(<Feature limit={limit} />)}
+            })(<Feature limit={limit} setLimit={this.setLimit} />)}
           </Form.Item>
         </Form>
         <div

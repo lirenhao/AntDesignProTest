@@ -27,7 +27,6 @@ class Feature extends React.Component {
     super(props);
     this.state = {
       value: props.value || [],
-      limit: props.limit || { featureTypeIds: [], featureIds: [] },
       isCreateShow: false,
     };
   }
@@ -37,35 +36,37 @@ class Feature extends React.Component {
   };
 
   handleAddForm = record => {
-    const { value, limit } = this.state;
+    const { value } = this.state;
+    const { limit, setLimit } = this.props;
     this.setState({
       value: [...value, record],
-      limit: {
-        featureTypeIds: [...limit.featureTypeIds, record.featureTypeId],
-        featureIds: [...limit.featureIds, ...record.featureIds],
-      },
     });
     const { onChange } = this.props;
     if (onChange) {
       onChange([...value, record]);
     }
+    setLimit({
+      featureTypeIds: [...limit.featureTypeIds, record.featureTypeId],
+      featureIds: [...limit.featureIds, ...record.featureIds],
+    });
     this.handleAddModal(false);
   };
 
   handleRemove = record => {
-    const { value, limit } = this.state;
+    const { value } = this.state;
+    const { limit, setLimit } = this.props;
     this.setState({
       value: value.filter(item => record.featureTypeId !== item.featureTypeId),
-      limit: {
-        featureTypeIds: [...limit.featureTypeIds.filter(id => id !== record.featureTypeId)],
-        featureIds: [...limit.featureIds.filter(id => record.featureIds.indexOf(id) < 0)],
-      },
+    });
+    setLimit({
+      featureTypeIds: [...limit.featureTypeIds.filter(id => id !== record.featureTypeId)],
+      featureIds: [...limit.featureIds.filter(id => record.featureIds.indexOf(id) < 0)],
     });
   };
 
   render() {
-    const { productFeatureType, productFeature } = this.props;
-    const { value, limit, isCreateShow } = this.state;
+    const { productFeatureType, productFeature, limit } = this.props;
+    const { value, isCreateShow } = this.state;
 
     return (
       <div>
