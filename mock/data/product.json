@@ -4,9 +4,7 @@
       "id": "1",
       "productName": "公司新设立",
       "productTypeId": "1",
-      "fromDate": "2019-10-28",
-      "thruDate": "2019-10-28",
-      "statusId": "0",
+      "statusId": "enable",
       "proudctCategotyId": "Qual",
       "geoId": ["Dong_Cheng_District", "Fangshan_District", "Fengtai_District"],
       "fixFeatures": [
@@ -18,6 +16,16 @@
         {
           "featureTypeId": "GOV_WINDOW",
           "featureIds": ["1302", "1303", "1301"],
+          "isExclusive": "0"
+        },
+        {
+          "featureTypeId": "CROP_ORG_TYPE",
+          "featureIds": ["1203", "1206"],
+          "isExclusive": "0"
+        },
+        {
+          "featureTypeId": "FWJJ",
+          "featureIds": ["1402", "1401"],
           "isExclusive": "0"
         }
       ],
@@ -36,17 +44,16 @@
         }
       ],
       "productId": "1",
-      "lastUpdatedStamp": "2019-10-28 11:03:43",
-      "createdStamp": "2019-10-28 10:55:03",
-      "version": "v1.0.0"
+      "releaseDate": "2019-10-28",
+      "salesDiscontinuationDate": "2019-10-31",
+      "method": "put",
+      "lastUpdatedStamp": "2019-10-28 21:55:14"
     },
     "2": {
       "id": "2",
       "productName": "公司变更",
       "productTypeId": "1",
-      "fromDate": "2019-10-28",
-      "thruDate": "2019-10-28",
-      "statusId": "0",
+      "statusId": "disable",
       "proudctCategotyId": "Qual",
       "geoId": ["Dong_Cheng_District", "Fangshan_District", "Fengtai_District"],
       "fixFeatures": [
@@ -76,17 +83,16 @@
         }
       ],
       "productId": "2",
-      "lastUpdatedStamp": "2019-10-28 11:03:43",
-      "createdStamp": "2019-10-28 10:55:03",
-      "version": "v1.0.0"
+      "releaseDate": "2019-10-28",
+      "salesDiscontinuationDate": "2019-10-31",
+      "method": "put",
+      "lastUpdatedStamp": "2019-10-28 20:07:04"
     },
     "3": {
       "id": "3",
       "productName": "国地税报道",
       "productTypeId": "1",
-      "fromDate": "2019-10-28",
-      "thruDate": "2019-10-28",
-      "statusId": "0",
+      "statusId": "disable",
       "proudctCategotyId": "Qual",
       "geoId": ["Dong_Cheng_District", "Fangshan_District", "Fengtai_District"],
       "fixFeatures": [
@@ -116,9 +122,10 @@
         }
       ],
       "productId": "3",
-      "lastUpdatedStamp": "2019-10-28 11:03:43",
-      "createdStamp": "2019-10-28 10:55:03",
-      "version": "v1.0.0"
+      "releaseDate": "2019-10-28",
+      "salesDiscontinuationDate": "2019-10-31",
+      "method": "put",
+      "lastUpdatedStamp": "2019-10-28 20:07:11"
     },
     "4": {
       "id": "4",
@@ -126,7 +133,6 @@
       "productTypeId": "1",
       "fromDate": "2019-10-28",
       "thruDate": "2019-10-28",
-      "statusId": "0",
       "proudctCategotyId": "Qual",
       "geoId": ["Dong_Cheng_District", "Fangshan_District", "Fengtai_District"],
       "fixFeatures": [
@@ -156,17 +162,17 @@
         }
       ],
       "productId": "4",
-      "lastUpdatedStamp": "2019-10-28 11:03:43",
-      "createdStamp": "2019-10-28 10:55:03",
-      "version": "v1.0.0"
+      "releaseDate": "2019-10-28",
+      "salesDiscontinuationDate": "2019-11-08",
+      "statusId": "disable",
+      "method": "put",
+      "lastUpdatedStamp": "2019-10-28 19:59:14"
     },
     "5": {
       "id": "5",
       "productName": "产品测试",
       "productTypeId": "1",
-      "fromDate": "2019-10-28",
-      "thruDate": "2019-10-28",
-      "statusId": "0",
+      "statusId": "enable",
       "proudctCategotyId": "Qual",
       "geoId": ["Dong_Cheng_District", "Fangshan_District", "Fengtai_District"],
       "fixFeatures": [
@@ -196,9 +202,8 @@
         }
       ],
       "productId": "5",
-      "lastUpdatedStamp": "2019-10-28 11:03:43",
-      "createdStamp": "2019-10-28 10:55:03",
-      "version": "v1.0.0"
+      "releaseDate": "2019-10-28",
+      "salesDiscontinuationDate": "2019-11-08"
     }
   },
   "assoc": {

@@ -16,6 +16,7 @@ function findText(id, arr, fieldId, fieldName) {
 class Feature extends React.Component {
   static propTypes = {
     value: PropTypes.array,
+    limit: PropTypes.object.isRequired,
   };
 
   static defaultProps = {
@@ -26,6 +27,7 @@ class Feature extends React.Component {
     super(props);
     this.state = {
       value: props.value || [],
+      limit: props.limit || { featureTypeIds: [], featureIds: [] },
       isCreateShow: false,
     };
   }
@@ -35,9 +37,13 @@ class Feature extends React.Component {
   };
 
   handleAddForm = record => {
-    const { value } = this.state;
+    const { value, limit } = this.state;
     this.setState({
       value: [...value, record],
+      limit: {
+        featureTypeIds: [...limit.featureTypeIds, record.featureTypeId],
+        featureIds: [...limit.featureIds, ...record.featureIds],
+      },
     });
     const { onChange } = this.props;
     if (onChange) {
@@ -46,9 +52,20 @@ class Feature extends React.Component {
     this.handleAddModal(false);
   };
 
+  handleRemove = record => {
+    const { value, limit } = this.state;
+    this.setState({
+      value: value.filter(item => record.featureTypeId !== item.featureTypeId),
+      limit: {
+        featureTypeIds: [...limit.featureTypeIds.filter(id => id !== record.featureTypeId)],
+        featureIds: [...limit.featureIds.filter(id => record.featureIds.indexOf(id) < 0)],
+      },
+    });
+  };
+
   render() {
     const { productFeatureType, productFeature } = this.props;
-    const { value, isCreateShow } = this.state;
+    const { value, limit, isCreateShow } = this.state;
 
     return (
       <div>
@@ -58,9 +75,7 @@ class Feature extends React.Component {
             itemLayout="horizontal"
             dataSource={value}
             renderItem={item => (
-              <List.Item
-                actions={[<Button onClick={() => this.handleAddModal(true)}>删除</Button>]}
-              >
+              <List.Item actions={[<a onClick={() => this.handleRemove(item)}>删除</a>]}>
                 <List.Item.Meta
                   title={findText(
                     item.featureTypeId,
@@ -74,7 +89,7 @@ class Feature extends React.Component {
                     )
                     .join('  ')}
                 />
-                <div>{item.isExclusive}</div>
+                <div>{item.isExclusive === '0' ? '单选' : '多选'}</div>
               </List.Item>
             )}
           />
@@ -85,6 +100,7 @@ class Feature extends React.Component {
           visible={isCreateShow}
           hideModal={() => this.handleAddModal(false)}
           handleFormSubmit={this.handleAddForm}
+          limit={limit}
           info={{}}
         />
       </div>

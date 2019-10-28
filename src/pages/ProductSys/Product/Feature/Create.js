@@ -31,8 +31,26 @@ class Create extends React.Component {
           ...values,
         });
         form.resetFields();
+        this.setState({ featureTypeId: undefined });
       }
     });
+  };
+
+  handleCancel = () => {
+    const { hideModal } = this.props;
+    hideModal();
+    this.setState({ featureTypeId: undefined });
+  };
+
+  renderFeature = (feature, featureTypeId) => {
+    if (feature.length > 0) {
+      return feature.map(item => (
+        <Col span={12} key={item.productFeatureId}>
+          <Checkbox value={item.productFeatureId}>{item.productFeatureName}</Checkbox>
+        </Col>
+      ));
+    }
+    return featureTypeId ? '该类型下没有可选属性' : '请先选择属性类型';
   };
 
   render() {
@@ -40,31 +58,29 @@ class Create extends React.Component {
       form: { getFieldDecorator },
       info,
       visible,
-      hideModal,
       productFeatureType,
       productFeature,
+      limit,
     } = this.props;
     const { featureTypeId } = this.state;
 
+    const featureType = productFeatureType.filter(
+      item => limit.featureTypeIds.indexOf(item.productFeatureTypeId) < 0
+    );
+
+    const feature = productFeature
+      .filter(item => item.productFeatureTypeId === featureTypeId)
+      .filter(item => limit.featureIds.indexOf(item.productFeatureId) < 0);
+
     const formItemLayout = {
       labelCol: {
-        xs: {
-          span: 24,
-        },
-        sm: {
-          span: 7,
-        },
+        xs: { span: 24 },
+        sm: { span: 7 },
       },
       wrapperCol: {
-        xs: {
-          span: 24,
-        },
-        sm: {
-          span: 12,
-        },
-        md: {
-          span: 10,
-        },
+        xs: { span: 24 },
+        sm: { span: 12 },
+        md: { span: 10 },
       },
     };
 
@@ -74,10 +90,11 @@ class Create extends React.Component {
         bodyStyle={{ padding: '32px 40px 48px' }}
         title="新建"
         maskClosable={false}
+        destroyOnClose
         visible={visible}
         okText="提交"
         onOk={this.handleSubmit}
-        onCancel={hideModal}
+        onCancel={this.handleCancel}
       >
         <Form>
           <Form.Item {...formItemLayout} label="属性类型">
@@ -91,8 +108,8 @@ class Create extends React.Component {
                 dropdownMatchSelectWidth={false}
                 onChange={this.featureTypeChange}
               >
-                {productFeatureType.map(item => (
-                  <Select.Option value={item.productFeatureTypeId}>
+                {featureType.map(item => (
+                  <Select.Option key={item.productFeatureTypeId} value={item.productFeatureTypeId}>
                     {item.productFeatureTypeName}
                   </Select.Option>
                 ))}
@@ -105,25 +122,17 @@ class Create extends React.Component {
               rules: [{ required: true, message: '请选择产品属性' }],
             })(
               <Checkbox.Group>
-                <Row>
-                  {productFeature
-                    .filter(item => item.productFeatureTypeId === featureTypeId)
-                    .map(item => (
-                      <Col span={12}>
-                        <Checkbox value={item.productFeatureId}>{item.productFeatureName}</Checkbox>
-                      </Col>
-                    ))}
-                </Row>
+                <Row>{this.renderFeature(feature, featureTypeId)}</Row>
               </Checkbox.Group>
             )}
           </Form.Item>
-          <Form.Item {...formItemLayout} label="单选/多选">
+          <Form.Item {...formItemLayout} label="是否多选">
             {getFieldDecorator('isExclusive', {
               initialValue: info.isExclusive || '0',
               rules: [
                 {
                   required: true,
-                  message: '请选择单选/多选',
+                  message: '请选择单选或多选',
                 },
               ],
             })(

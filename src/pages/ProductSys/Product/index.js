@@ -34,20 +34,17 @@ class Product extends React.Component {
       },
     },
     {
-      title: '描述',
-      dataIndex: 'description',
+      title: '发布日期',
+      dataIndex: 'releaseDate',
     },
     {
-      title: '最后修改时间',
-      dataIndex: 'lastUpdatedStamp',
+      title: '销售终止日期',
+      dataIndex: 'salesDiscontinuationDate',
     },
     {
-      title: '创建时间',
-      dataIndex: 'createdStamp',
-    },
-    {
-      title: '版本',
-      dataIndex: 'version',
+      title: '状态',
+      dataIndex: 'statusId',
+      render: id => (id === 'enable' ? '启用' : '暂停'),
     },
     {
       title: '操作',

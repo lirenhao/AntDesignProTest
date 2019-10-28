@@ -16,13 +16,47 @@ import moment from 'moment';
 import { objToTree } from '@/utils/utils';
 import Feature from './Feature';
 
-@connect(({ product }) => ({
+@connect(({ product, loading }) => ({
   productType: product.dict.productType,
   proudctCategoty: product.dict.proudctCategoty,
   geo: product.dict.geo,
+  loading: loading.models.product,
 }))
 @Form.create()
 class Create extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      limit: {
+        featureTypeIds: [],
+        featureIds: [],
+      },
+    };
+  }
+
+  static getDerivedStateFromProps(nextProps) {
+    const fixFeatures = nextProps.info.fixFeatures || [];
+    const mustFeatures = nextProps.info.mustFeatures || [];
+    const optionFeatures = nextProps.info.optionFeatures || [];
+    const featureTypeIds = [
+      ...fixFeatures.map(item => item.featureTypeId),
+      ...mustFeatures.map(item => item.featureTypeId),
+      ...optionFeatures.map(item => item.featureTypeId),
+    ];
+    const featureIds = [
+      ...fixFeatures.map(item => item.featureIds).reduce((a, b) => [...a, ...b], []),
+      ...mustFeatures.map(item => item.featureIds).reduce((a, b) => [...a, ...b], []),
+      ...optionFeatures.map(item => item.featureIds).reduce((a, b) => [...a, ...b], []),
+    ];
+    console.log('getDerivedStateFromProps');
+    return {
+      limit: {
+        featureTypeIds,
+        featureIds,
+      },
+    };
+  }
+
   handleSubmit = e => {
     const { handleFormSubmit, form, info } = this.props;
     e.preventDefault();
@@ -31,8 +65,8 @@ class Create extends React.Component {
         handleFormSubmit({
           ...info,
           ...values,
-          fromDate: values.fromDate.format('YYYY-MM-DD'),
-          thruDate: values.thruDate.format('YYYY-MM-DD'),
+          releaseDate: values.releaseDate.format('YYYY-MM-DD'),
+          salesDiscontinuationDate: values.salesDiscontinuationDate.format('YYYY-MM-DD'),
         });
         form.resetFields();
       }
@@ -49,27 +83,20 @@ class Create extends React.Component {
       productType,
       proudctCategoty,
       geo,
+      loading,
     } = this.props;
+
+    const { limit } = this.state;
 
     const formItemLayout = {
       labelCol: {
-        xs: {
-          span: 24,
-        },
-        sm: {
-          span: 7,
-        },
+        xs: { span: 24 },
+        sm: { span: 7 },
       },
       wrapperCol: {
-        xs: {
-          span: 24,
-        },
-        sm: {
-          span: 12,
-        },
-        md: {
-          span: 10,
-        },
+        xs: { span: 24 },
+        sm: { span: 12 },
+        md: { span: 10 },
       },
     };
 
@@ -133,13 +160,13 @@ class Create extends React.Component {
               />
             )}
           </Form.Item>
-          <Form.Item {...formItemLayout} label="上架日期">
-            {getFieldDecorator('fromDate', {
-              initialValue: moment(info.fromDate),
+          <Form.Item {...formItemLayout} label="发布日期">
+            {getFieldDecorator('releaseDate', {
+              initialValue: moment(info.releaseDate),
               rules: [
                 {
                   required: true,
-                  message: '请选择上架日期',
+                  message: '请选择发布日期',
                 },
               ],
             })(
@@ -147,17 +174,17 @@ class Create extends React.Component {
                 style={{
                   width: '100%',
                 }}
-                placeholder="选择上架日期"
+                placeholder="选择发布日期"
               />
             )}
           </Form.Item>
-          <Form.Item {...formItemLayout} label="下架日期">
-            {getFieldDecorator('thruDate', {
-              initialValue: moment(info.thruDate),
+          <Form.Item {...formItemLayout} label="销售终止日期">
+            {getFieldDecorator('salesDiscontinuationDate', {
+              initialValue: moment(info.salesDiscontinuationDate),
               rules: [
                 {
                   required: true,
-                  message: '请选择下架日期',
+                  message: '请选择销售终止日期',
                 },
               ],
             })(
@@ -165,13 +192,13 @@ class Create extends React.Component {
                 style={{
                   width: '100%',
                 }}
-                placeholder="选择下架日期"
+                placeholder="选择销售终止日期"
               />
             )}
           </Form.Item>
           <Form.Item {...formItemLayout} label="产品状态">
             {getFieldDecorator('statusId', {
-              initialValue: info.statusId || '0',
+              initialValue: info.statusId,
               rules: [
                 {
                   required: true,
@@ -180,8 +207,8 @@ class Create extends React.Component {
               ],
             })(
               <Radio.Group>
-                <Radio value="0">启用</Radio>
-                <Radio value="1">暂停</Radio>
+                <Radio value="enable">启用</Radio>
+                <Radio value="disable">暂停</Radio>
               </Radio.Group>
             )}
           </Form.Item>
@@ -209,7 +236,7 @@ class Create extends React.Component {
               <Checkbox.Group>
                 <Row>
                   {geo.map(item => (
-                    <Col span={8}>
+                    <Col span={8} key={item.geoId}>
                       <Checkbox value={item.geoId}>{item.geoName}</Checkbox>
                     </Col>
                   ))}
@@ -226,7 +253,7 @@ class Create extends React.Component {
                   message: '请添加固定属性',
                 },
               ],
-            })(<Feature title="固定属性" />)}
+            })(<Feature limit={limit} />)}
           </Form.Item>
           <Form.Item {...formItemLayout} label="必选属性">
             {getFieldDecorator('mustFeatures', {
@@ -237,7 +264,7 @@ class Create extends React.Component {
                   message: '请添加必选属性',
                 },
               ],
-            })(<Feature title="必选属性" />)}
+            })(<Feature limit={limit} />)}
           </Form.Item>
           <Form.Item {...formItemLayout} label="可选属性">
             {getFieldDecorator('optionFeatures', {
@@ -248,7 +275,7 @@ class Create extends React.Component {
                   message: '请添加可选属性',
                 },
               ],
-            })(<Feature title="可选属性" />)}
+            })(<Feature limit={limit} />)}
           </Form.Item>
         </Form>
         <div
@@ -272,7 +299,7 @@ class Create extends React.Component {
           >
             取消
           </Button>
-          <Button onClick={this.handleSubmit} type="primary">
+          <Button onClick={this.handleSubmit} type="primary" loading={loading}>
             提交
           </Button>
         </div>
