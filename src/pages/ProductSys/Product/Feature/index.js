@@ -4,16 +4,21 @@ import { connect } from 'dva';
 import { List, Button } from 'antd';
 import Create from './Create';
 
+function findText(id, arr, fieldId, fieldName) {
+  const data = arr.filter(item => item[fieldId] === id);
+  return data && data[0] ? data[0][fieldName] : '';
+}
+
 @connect(({ product }) => ({
   productFeatureType: product.dict.productFeatureType,
   productFeature: product.dict.productFeature,
 }))
 class Feature extends React.Component {
-  propTypes = {
-    value: PropTypes.array.isRequired,
+  static propTypes = {
+    value: PropTypes.array,
   };
 
-  defaultProps = {
+  static defaultProps = {
     value: [],
   };
 
@@ -30,29 +35,52 @@ class Feature extends React.Component {
   };
 
   handleAddForm = record => {
-    // TODO set value
-    console.log(record);
+    const { value } = this.state;
+    this.setState({
+      value: [...value, record],
+    });
+    const { onChange } = this.props;
+    if (onChange) {
+      onChange([...value, record]);
+    }
+    this.handleAddModal(false);
   };
 
   render() {
+    const { productFeatureType, productFeature } = this.props;
     const { value, isCreateShow } = this.state;
 
     return (
       <div>
-        {value.map(item => (
-          <div>{item.name}</div>
-        ))}
         <Button onClick={() => this.handleAddModal(true)}>添加</Button>
-        <List
-          itemLayout="horizontal"
-          dataSource={[]}
-          renderItem={item => (
-            <List.Item actions={[<Button onClick={() => this.handleAddModal(true)}>删除</Button>]}>
-              <List.Item.Meta title={item.featureTypeId} description={item.featureIds} />
-              <div>{item.isExclusive}</div>
-            </List.Item>
-          )}
-        />
+        {value && value.length > 0 ? (
+          <List
+            itemLayout="horizontal"
+            dataSource={value}
+            renderItem={item => (
+              <List.Item
+                actions={[<Button onClick={() => this.handleAddModal(true)}>删除</Button>]}
+              >
+                <List.Item.Meta
+                  title={findText(
+                    item.featureTypeId,
+                    productFeatureType,
+                    'productFeatureTypeId',
+                    'productFeatureTypeName'
+                  )}
+                  description={item.featureIds
+                    .map(id =>
+                      findText(id, productFeature, 'productFeatureId', 'productFeatureName')
+                    )
+                    .join('  ')}
+                />
+                <div>{item.isExclusive}</div>
+              </List.Item>
+            )}
+          />
+        ) : (
+          <div />
+        )}
         <Create
           visible={isCreateShow}
           hideModal={() => this.handleAddModal(false)}

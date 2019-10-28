@@ -15,8 +15,8 @@ export default {
       pagination: {},
     },
     dict: {
-      productType: [{}],
-      proudctCategoty: [{}],
+      productType: [],
+      proudctCategoty: [],
       geo: [],
       productFeatureType: [],
       productFeature: [],

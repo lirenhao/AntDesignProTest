@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Modal, Form, Radio, Select } from 'antd';
+import { Modal, Form, Radio, Select, Checkbox, Row, Col } from 'antd';
 
 @connect(({ product }) => ({
   productFeatureType: product.dict.productFeatureType,
@@ -8,18 +8,18 @@ import { Modal, Form, Radio, Select } from 'antd';
 }))
 @Form.create()
 class Create extends React.Component {
-  componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'type/tree',
-      payload: {
-        type: 'productType',
-        id: 'productTypeId',
-        pId: 'parentTypeId',
-        title: 'productTypeName',
-      },
-    });
+  constructor(props) {
+    super(props);
+    this.state = {
+      featureTypeId: props.featureTypeId,
+    };
   }
+
+  featureTypeChange = value => {
+    this.setState({
+      featureTypeId: value,
+    });
+  };
 
   handleSubmit = e => {
     const { handleFormSubmit, form, info } = this.props;
@@ -44,6 +44,7 @@ class Create extends React.Component {
       productFeatureType,
       productFeature,
     } = this.props;
+    const { featureTypeId } = this.state;
 
     const formItemLayout = {
       labelCol: {
@@ -88,10 +89,11 @@ class Create extends React.Component {
                 placeholder="请选择属性类型"
                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                 dropdownMatchSelectWidth={false}
+                onChange={this.featureTypeChange}
               >
                 {productFeatureType.map(item => (
-                  <Select.Option value={item.proudctFeatureTypeId}>
-                    {item.proudctFeatureTypeName}
+                  <Select.Option value={item.productFeatureTypeId}>
+                    {item.productFeatureTypeName}
                   </Select.Option>
                 ))}
               </Select>
@@ -99,25 +101,25 @@ class Create extends React.Component {
           </Form.Item>
           <Form.Item {...formItemLayout} label="产品属性">
             {getFieldDecorator('featureIds', {
-              initialValue: info.featureIds,
+              initialValue: info.featureIds || [],
               rules: [{ required: true, message: '请选择产品属性' }],
             })(
-              <Select
-                placeholder="请选择产品属性"
-                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                dropdownMatchSelectWidth={false}
-              >
-                {productFeature.map(item => (
-                  <Select.Option value={item.proudctFeatureId}>
-                    {item.proudctFeatureName}
-                  </Select.Option>
-                ))}
-              </Select>
+              <Checkbox.Group>
+                <Row>
+                  {productFeature
+                    .filter(item => item.productFeatureTypeId === featureTypeId)
+                    .map(item => (
+                      <Col span={12}>
+                        <Checkbox value={item.productFeatureId}>{item.productFeatureName}</Checkbox>
+                      </Col>
+                    ))}
+                </Row>
+              </Checkbox.Group>
             )}
           </Form.Item>
           <Form.Item {...formItemLayout} label="单选/多选">
             {getFieldDecorator('isExclusive', {
-              initialValue: info.isExclusive,
+              initialValue: info.isExclusive || '0',
               rules: [
                 {
                   required: true,

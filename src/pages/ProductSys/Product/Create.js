@@ -1,6 +1,17 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Drawer, Form, Input, TreeSelect, DatePicker, Radio, Select, Button } from 'antd';
+import {
+  Drawer,
+  Form,
+  Input,
+  TreeSelect,
+  DatePicker,
+  Radio,
+  Checkbox,
+  Row,
+  Col,
+  Button,
+} from 'antd';
 import moment from 'moment';
 import { objToTree } from '@/utils/utils';
 import Feature from './Feature';
@@ -30,6 +41,7 @@ class Create extends React.Component {
 
   render() {
     const {
+      title,
       form: { getFieldDecorator },
       info,
       visible,
@@ -63,15 +75,25 @@ class Create extends React.Component {
 
     const typeTree = objToTree(
       { productTypeId: '', productTypeName: '父级节点' },
-      productType,
+      productType.map(item => (item.parentTypeId ? item : { ...item, parentTypeId: '' })),
       'productTypeId',
       'parentTypeId',
       'productTypeName'
     ).children;
 
+    const categotyTree = objToTree(
+      { productCategoryId: '', productCategoryName: '父级节点' },
+      proudctCategoty.map(item =>
+        item.parentCategoryId ? item : { ...item, parentCategoryId: '' }
+      ),
+      'productCategoryId',
+      'parentCategoryId',
+      'productCategoryName'
+    ).children;
+
     return (
       <Drawer
-        title="新建"
+        title={title}
         width="70%"
         destroyOnClose
         maskClosable={false}
@@ -149,7 +171,7 @@ class Create extends React.Component {
           </Form.Item>
           <Form.Item {...formItemLayout} label="产品状态">
             {getFieldDecorator('statusId', {
-              initialValue: info.statusId,
+              initialValue: info.statusId || '0',
               rules: [
                 {
                   required: true,
@@ -168,17 +190,15 @@ class Create extends React.Component {
               initialValue: info.proudctCategotyId,
               rules: [{ required: true, message: '请选择产品类别' }],
             })(
-              <Select
-                placeholder="请选择产品类别"
-                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                dropdownMatchSelectWidth={false}
-              >
-                {proudctCategoty.map(item => (
-                  <Select.Option value={item.proudctCategotyId}>
-                    {item.proudctCategotyName}
-                  </Select.Option>
-                ))}
-              </Select>
+              <TreeSelect
+                dropdownStyle={{
+                  maxHeight: 400,
+                  overflow: 'auto',
+                }}
+                placeholder="请选择"
+                treeDefaultExpandAll
+                treeData={categotyTree}
+              />
             )}
           </Form.Item>
           <Form.Item {...formItemLayout} label="区域属性">
@@ -186,30 +206,48 @@ class Create extends React.Component {
               initialValue: info.geoId,
               rules: [{ required: true, message: '请选择区域属性' }],
             })(
-              <Select
-                placeholder="请选择区域属性"
-                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                dropdownMatchSelectWidth={false}
-              >
-                {geo.map(item => (
-                  <Select.Option value={item.geoId}>{item.geoName}</Select.Option>
-                ))}
-              </Select>
+              <Checkbox.Group>
+                <Row>
+                  {geo.map(item => (
+                    <Col span={8}>
+                      <Checkbox value={item.geoId}>{item.geoName}</Checkbox>
+                    </Col>
+                  ))}
+                </Row>
+              </Checkbox.Group>
             )}
           </Form.Item>
           <Form.Item {...formItemLayout} label="固定属性">
             {getFieldDecorator('fixFeatures', {
               initialValue: info.fixFeatures,
+              rules: [
+                {
+                  required: true,
+                  message: '请添加固定属性',
+                },
+              ],
             })(<Feature title="固定属性" />)}
           </Form.Item>
           <Form.Item {...formItemLayout} label="必选属性">
             {getFieldDecorator('mustFeatures', {
               initialValue: info.mustFeatures,
+              rules: [
+                {
+                  required: true,
+                  message: '请添加必选属性',
+                },
+              ],
             })(<Feature title="必选属性" />)}
           </Form.Item>
           <Form.Item {...formItemLayout} label="可选属性">
             {getFieldDecorator('optionFeatures', {
               initialValue: info.optionFeatures,
+              rules: [
+                {
+                  required: true,
+                  message: '请添加可选属性',
+                },
+              ],
             })(<Feature title="可选属性" />)}
           </Form.Item>
         </Form>

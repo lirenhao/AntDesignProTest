@@ -70,15 +70,6 @@ class Product extends React.Component {
         type: 'product',
       },
     });
-    dispatch({
-      type: 'type/tree',
-      payload: {
-        type: 'productType',
-        id: 'productTypeId',
-        pId: 'parentTypeId',
-        title: 'productTypeName',
-      },
-    });
   }
 
   handleAddModal = visible => {
@@ -200,12 +191,14 @@ class Product extends React.Component {
           </div>
         </Card>
         <Create
+          title="新建产品"
           visible={isCreateShow}
           hideModal={() => this.handleAddModal(false)}
           handleFormSubmit={this.handleAddForm}
           info={{}}
         />
         <Create
+          title="编辑产品"
           visible={isUpdateShow}
           hideModal={() => this.handleUpdateModal(false)}
           handleFormSubmit={this.handleUpdateForm}
