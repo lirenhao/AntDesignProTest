@@ -11,7 +11,7 @@ class Create extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      featureTypeId: props.featureTypeId,
+      featureTypeId: props.info.featureTypeId,
     };
   }
 
@@ -26,10 +26,13 @@ class Create extends React.Component {
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        handleFormSubmit({
-          ...info,
-          ...values,
-        });
+        handleFormSubmit(
+          {
+            ...info,
+            ...values,
+          },
+          info
+        );
         form.resetFields();
         this.setState({ featureTypeId: undefined });
       }
@@ -42,10 +45,21 @@ class Create extends React.Component {
     this.setState({ featureTypeId: undefined });
   };
 
-  renderFeature = (feature, featureTypeId) => {
+  renderCheckbox = () => {
+    const { productFeature, limit, info } = this.props;
+    const { featureTypeId } = this.state;
+    const typeId = featureTypeId || info.featureTypeId;
+    const ids = info.featureIds || [];
+    const feature = productFeature
+      .filter(item => item.productFeatureTypeId === typeId)
+      .filter(
+        item =>
+          limit.featureIds.indexOf(item.productFeatureId) < 0 ||
+          ids.indexOf(item.productFeatureId) > -1
+      );
     if (feature.length > 0) {
       return feature.map(item => (
-        <Col span={12} key={item.productFeatureId}>
+        <Col span={24} key={item.productFeatureId}>
           <Checkbox value={item.productFeatureId}>{item.productFeatureName}</Checkbox>
         </Col>
       ));
@@ -56,26 +70,21 @@ class Create extends React.Component {
   render() {
     const {
       form: { getFieldDecorator },
-      info,
       visible,
       productFeatureType,
-      productFeature,
       title,
       limit,
       value,
+      info,
     } = this.props;
-    const { featureTypeId } = this.state;
 
     const featureType = productFeatureType.filter(
       item =>
         limit.featureTypeIds.indexOf(item.productFeatureTypeId) < 0 ||
+        item.productFeatureTypeId === info.featureTypeId ||
         (item.productFeatureTypeId === 'QYBGLX' &&
           value.map(v => v.featureTypeId).indexOf(item.productFeatureTypeId) < 0)
     );
-
-    const feature = productFeature
-      .filter(item => item.productFeatureTypeId === featureTypeId)
-      .filter(item => limit.featureIds.indexOf(item.productFeatureId) < 0);
 
     const formItemLayout = {
       labelCol: {
@@ -93,7 +102,7 @@ class Create extends React.Component {
       <Modal
         width="60%"
         bodyStyle={{ padding: '32px 40px 48px' }}
-        title={`添加${title}`}
+        title={title}
         maskClosable={false}
         destroyOnClose
         visible={visible}
@@ -127,7 +136,7 @@ class Create extends React.Component {
               rules: [{ required: true, message: '请选择产品属性' }],
             })(
               <Checkbox.Group>
-                <Row>{this.renderFeature(feature, featureTypeId)}</Row>
+                <Row>{this.renderCheckbox()}</Row>
               </Checkbox.Group>
             )}
           </Form.Item>

@@ -10,7 +10,7 @@
       "fixFeatures": [
         {
           "featureTypeId": "CORP_REG_TYPE",
-          "featureIds": ["1001", "1003"],
+          "featureIds": ["1001", "1002"],
           "isExclusive": "0"
         },
         {
@@ -47,7 +47,7 @@
       "releaseDate": "2019-10-28",
       "salesDiscontinuationDate": "2019-10-31",
       "method": "put",
-      "lastUpdatedStamp": "2019-10-28 21:55:14"
+      "lastUpdatedStamp": "2019-10-29 21:09:25"
     },
     "2": {
       "id": "2",
