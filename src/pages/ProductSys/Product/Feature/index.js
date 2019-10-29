@@ -65,7 +65,7 @@ class Feature extends React.Component {
   };
 
   render() {
-    const { productFeatureType, productFeature, limit } = this.props;
+    const { productFeatureType, productFeature, title, label, limit } = this.props;
     const { value, isCreateShow } = this.state;
 
     return (
@@ -101,7 +101,10 @@ class Feature extends React.Component {
           visible={isCreateShow}
           hideModal={() => this.handleAddModal(false)}
           handleFormSubmit={this.handleAddForm}
+          title={title}
+          label={label}
           limit={limit}
+          value={value || []}
           info={{}}
         />
       </div>

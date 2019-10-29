@@ -266,7 +266,14 @@ class Create extends React.Component {
                   message: '请添加固定属性',
                 },
               ],
-            })(<Feature limit={limit} setLimit={this.setLimit} />)}
+            })(
+              <Feature
+                title="固定属性"
+                label="fixFeatures"
+                limit={limit}
+                setLimit={this.setLimit}
+              />
+            )}
           </Form.Item>
           <Form.Item {...formItemLayout} label="必选属性">
             {getFieldDecorator('mustFeatures', {
@@ -277,7 +284,14 @@ class Create extends React.Component {
                   message: '请添加必选属性',
                 },
               ],
-            })(<Feature limit={limit} setLimit={this.setLimit} />)}
+            })(
+              <Feature
+                title="必选属性"
+                label="mustFeatures"
+                limit={limit}
+                setLimit={this.setLimit}
+              />
+            )}
           </Form.Item>
           <Form.Item {...formItemLayout} label="可选属性">
             {getFieldDecorator('optionFeatures', {
@@ -288,7 +302,14 @@ class Create extends React.Component {
                   message: '请添加可选属性',
                 },
               ],
-            })(<Feature limit={limit} setLimit={this.setLimit} />)}
+            })(
+              <Feature
+                title="可选属性"
+                label="optionFeatures"
+                limit={limit}
+                setLimit={this.setLimit}
+              />
+            )}
           </Form.Item>
         </Form>
         <div

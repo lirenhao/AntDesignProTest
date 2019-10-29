@@ -60,12 +60,17 @@ class Create extends React.Component {
       visible,
       productFeatureType,
       productFeature,
+      title,
       limit,
+      value,
     } = this.props;
     const { featureTypeId } = this.state;
 
     const featureType = productFeatureType.filter(
-      item => limit.featureTypeIds.indexOf(item.productFeatureTypeId) < 0
+      item =>
+        limit.featureTypeIds.indexOf(item.productFeatureTypeId) < 0 ||
+        (item.productFeatureTypeId === 'QYBGLX' &&
+          value.map(v => v.featureTypeId).indexOf(item.productFeatureTypeId) < 0)
     );
 
     const feature = productFeature
@@ -88,11 +93,11 @@ class Create extends React.Component {
       <Modal
         width="60%"
         bodyStyle={{ padding: '32px 40px 48px' }}
-        title="新建"
+        title={`添加${title}`}
         maskClosable={false}
         destroyOnClose
         visible={visible}
-        okText="提交"
+        okText="确定"
         onOk={this.handleSubmit}
         onCancel={this.handleCancel}
       >
