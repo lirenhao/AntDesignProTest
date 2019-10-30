@@ -1,87 +1,25 @@
 {
   "productType": [
     {
-      "productTypeId": "1",
+      "productTypeId": "SERVICE",
       "parentTypeId": "",
       "isPhysical": "0",
       "isDigital": "0",
       "hasTable": "0",
-      "productTypeName": "实物",
-      "descript": "实物",
+      "productTypeName": "服务产品类型",
+      "descript": "服务产品类型",
       "lastUpdatedStamp": "2019-03-17 11:39:38",
       "createdStamp": "2019-03-17 10:39:38",
       "version": "v1.0.0"
     },
     {
-      "productTypeId": "2",
+      "productTypeId": "SERVICE_PKG",
       "parentTypeId": "",
       "isPhysical": "0",
       "isDigital": "0",
       "hasTable": "0",
-      "productTypeName": "服务",
-      "descript": "服务",
-      "lastUpdatedStamp": "2019-03-31 19:38:05",
-      "createdStamp": "2019-03-17 10:39:38",
-      "version": "v1.0.0",
-      "key": "2",
-      "undefined": "2"
-    },
-    {
-      "productTypeId": "3",
-      "parentTypeId": "",
-      "isPhysical": "0",
-      "isDigital": "0",
-      "hasTable": "0",
-      "productTypeName": "虚拟产品",
-      "descript": "虚拟产品",
-      "lastUpdatedStamp": "2019-03-17 11:39:38",
-      "createdStamp": "2019-03-17 10:39:38",
-      "version": "v1.0.0"
-    },
-    {
-      "productTypeId": "11",
-      "parentTypeId": "1",
-      "isPhysical": "0",
-      "isDigital": "0",
-      "hasTable": "0",
-      "productTypeName": "制成品",
-      "descript": "制成品",
-      "lastUpdatedStamp": "2019-03-17 11:39:38",
-      "createdStamp": "2019-03-17 10:39:38",
-      "version": "v1.0.0"
-    },
-    {
-      "productTypeId": "12",
-      "parentTypeId": "1",
-      "isPhysical": "0",
-      "isDigital": "0",
-      "hasTable": "0",
-      "productTypeName": "原材料",
-      "descript": "原材料",
-      "lastUpdatedStamp": "2019-03-17 11:39:38",
-      "createdStamp": "2019-03-17 10:39:38",
-      "version": "v1.0.0"
-    },
-    {
-      "productTypeId": "13",
-      "parentTypeId": "1",
-      "isPhysical": "0",
-      "isDigital": "0",
-      "hasTable": "0",
-      "productTypeName": "半成品",
-      "descript": "半成品",
-      "lastUpdatedStamp": "2019-03-17 11:39:38",
-      "createdStamp": "2019-03-17 10:39:38",
-      "version": "v1.0.0"
-    },
-    {
-      "productTypeId": "14",
-      "parentTypeId": "1",
-      "isPhysical": "0",
-      "isDigital": "0",
-      "hasTable": "0",
-      "productTypeName": "数字产品",
-      "descript": "数字产品",
+      "productTypeName": "服务产品套餐类型",
+      "descript": "服务产品套餐类型",
       "lastUpdatedStamp": "2019-03-17 11:39:38",
       "createdStamp": "2019-03-17 10:39:38",
       "version": "v1.0.0"
@@ -634,62 +572,62 @@
     },
     {
       "productFeatureId": "4001",
-      "productFeatureTypeId": "QYZXLX",
+      "productFeatureTypeId": "QYSLLX",
       "productFeatureName": "企业设立"
     },
     {
       "productFeatureId": "4101",
-      "productFeatureTypeId": "QYZXLX",
+      "productFeatureTypeId": "QYBGLX",
       "productFeatureName": "名称变更"
     },
     {
       "productFeatureId": "4102",
-      "productFeatureTypeId": "QYZXLX",
+      "productFeatureTypeId": "QYBGLX",
       "productFeatureName": "地址变更"
     },
     {
       "productFeatureId": "4103",
-      "productFeatureTypeId": "QYZXLX",
+      "productFeatureTypeId": "QYBGLX",
       "productFeatureName": "法人变更"
     },
     {
       "productFeatureId": "4104",
-      "productFeatureTypeId": "QYZXLX",
+      "productFeatureTypeId": "QYBGLX",
       "productFeatureName": "经营范围变更"
     },
     {
       "productFeatureId": "4105",
-      "productFeatureTypeId": "QYZXLX",
+      "productFeatureTypeId": "QYBGLX",
       "productFeatureName": "经营期限变更"
     },
     {
       "productFeatureId": "4106",
-      "productFeatureTypeId": "QYZXLX",
+      "productFeatureTypeId": "QYBGLX",
       "productFeatureName": "注册资本变更"
     },
     {
       "productFeatureId": "4107",
-      "productFeatureTypeId": "QYZXLX",
+      "productFeatureTypeId": "QYBGLX",
       "productFeatureName": "高管变更"
     },
     {
       "productFeatureId": "4108",
-      "productFeatureTypeId": "QYZXLX",
+      "productFeatureTypeId": "QYBGLX",
       "productFeatureName": "股权变更#股东变更"
     },
     {
       "productFeatureId": "4110",
-      "productFeatureTypeId": "QYZXLX",
+      "productFeatureTypeId": "QYBGLX",
       "productFeatureName": "个体转有限"
     },
     {
       "productFeatureId": "4111",
-      "productFeatureTypeId": "QYZXLX",
+      "productFeatureTypeId": "QYBGLX",
       "productFeatureName": "工商解年报异常"
     },
     {
       "productFeatureId": "4112",
-      "productFeatureTypeId": "QYZXLX",
+      "productFeatureTypeId": "QYBGLX",
       "productFeatureName": "工商解地址异常"
     },
     {

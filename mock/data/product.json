@@ -3,14 +3,14 @@
     "1": {
       "id": "1",
       "productName": "公司新设立",
-      "productTypeId": "1",
+      "productTypeId": "SERVICE",
       "statusId": "enable",
       "proudctCategotyId": "Qual",
       "geoId": ["Dong_Cheng_District", "Fangshan_District", "Fengtai_District"],
       "fixFeatures": [
         {
           "featureTypeId": "CORP_REG_TYPE",
-          "featureIds": ["1001", "1002"],
+          "featureIds": ["1001", "1002", "1003"],
           "isExclusive": "0"
         },
         {
@@ -47,12 +47,12 @@
       "releaseDate": "2019-10-28",
       "salesDiscontinuationDate": "2019-10-31",
       "method": "put",
-      "lastUpdatedStamp": "2019-10-29 21:09:25"
+      "lastUpdatedStamp": "2019-10-30 14:29:40"
     },
     "2": {
       "id": "2",
       "productName": "公司变更",
-      "productTypeId": "1",
+      "productTypeId": "SERVICE",
       "statusId": "disable",
       "proudctCategotyId": "Qual",
       "geoId": ["Dong_Cheng_District", "Fangshan_District", "Fengtai_District"],
@@ -86,12 +86,12 @@
       "releaseDate": "2019-10-28",
       "salesDiscontinuationDate": "2019-10-31",
       "method": "put",
-      "lastUpdatedStamp": "2019-10-28 20:07:04"
+      "lastUpdatedStamp": "2019-10-30 14:30:17"
     },
     "3": {
       "id": "3",
       "productName": "国地税报道",
-      "productTypeId": "1",
+      "productTypeId": "SERVICE",
       "statusId": "disable",
       "proudctCategotyId": "Qual",
       "geoId": ["Dong_Cheng_District", "Fangshan_District", "Fengtai_District"],
@@ -125,12 +125,12 @@
       "releaseDate": "2019-10-28",
       "salesDiscontinuationDate": "2019-10-31",
       "method": "put",
-      "lastUpdatedStamp": "2019-10-28 20:07:11"
+      "lastUpdatedStamp": "2019-10-30 14:30:09"
     },
     "4": {
       "id": "4",
       "productName": "代理记账",
-      "productTypeId": "1",
+      "productTypeId": "SERVICE",
       "fromDate": "2019-10-28",
       "thruDate": "2019-10-28",
       "proudctCategotyId": "Qual",
@@ -166,12 +166,12 @@
       "salesDiscontinuationDate": "2019-11-08",
       "statusId": "disable",
       "method": "put",
-      "lastUpdatedStamp": "2019-10-28 19:59:14"
+      "lastUpdatedStamp": "2019-10-30 14:30:25"
     },
     "5": {
       "id": "5",
       "productName": "产品测试",
-      "productTypeId": "1",
+      "productTypeId": "SERVICE_PKG",
       "statusId": "enable",
       "proudctCategotyId": "Qual",
       "geoId": ["Dong_Cheng_District", "Fangshan_District", "Fengtai_District"],
@@ -203,7 +203,9 @@
       ],
       "productId": "5",
       "releaseDate": "2019-10-28",
-      "salesDiscontinuationDate": "2019-11-08"
+      "salesDiscontinuationDate": "2019-11-08",
+      "method": "put",
+      "lastUpdatedStamp": "2019-10-30 14:30:33"
     }
   },
   "assoc": {
