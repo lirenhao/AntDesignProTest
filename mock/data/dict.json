@@ -89,81 +89,97 @@
     {
       "geoId": "Dong_Cheng_District",
       "geoTypeId": "3_administrative_distric",
+      "ADMINISTRATIVE_DIVISION_CODE": "110101",
       "geoName": "东城区"
     },
     {
       "geoId": "XiChengDistrict",
       "geoTypeId": "3_administrative_distric",
+      "ADMINISTRATIVE_DIVISION_CODE": "110102",
       "geoName": "西城区"
     },
     {
       "geoId": "ChaoYangDistrict",
       "geoTypeId": "3_administrative_distric",
+      "ADMINISTRATIVE_DIVISION_CODE": "110105",
       "geoName": "朝阳区"
     },
     {
       "geoId": "Fengtai_District",
       "geoTypeId": "3_administrative_distric",
+      "ADMINISTRATIVE_DIVISION_CODE": "110106",
       "geoName": "丰台区"
     },
     {
       "geoId": "ShijingshanDistrict",
       "geoTypeId": "3_administrative_distric",
+      "ADMINISTRATIVE_DIVISION_CODE": "110107",
       "geoName": "石景山区"
     },
     {
       "geoId": "HaidianDistrict",
       "geoTypeId": "3_administrative_distric",
+      "ADMINISTRATIVE_DIVISION_CODE": "110108",
       "geoName": "海淀区"
     },
     {
       "geoId": "MentougouDistrict",
       "geoTypeId": "3_administrative_distric",
+      "ADMINISTRATIVE_DIVISION_CODE": "110109",
       "geoName": "门头沟区"
     },
     {
       "geoId": "Fangshan_District",
       "geoTypeId": "3_administrative_distric",
+      "ADMINISTRATIVE_DIVISION_CODE": "110111",
       "geoName": "房山区"
     },
     {
       "geoId": "Tongzhou_District",
       "geoTypeId": "3_administrative_distric",
+      "ADMINISTRATIVE_DIVISION_CODE": "110112",
       "geoName": "通州区"
     },
     {
       "geoId": "ShunyiDistrict",
       "geoTypeId": "3_administrative_distric",
+      "ADMINISTRATIVE_DIVISION_CODE": "110113",
       "geoName": "顺义区"
     },
     {
       "geoId": "ChangpingDistrict",
       "geoTypeId": "3_administrative_distric",
+      "ADMINISTRATIVE_DIVISION_CODE": "110114",
       "geoName": "昌平区"
     },
     {
       "geoId": "DaXingDistrict",
       "geoTypeId": "3_administrative_distric",
+      "ADMINISTRATIVE_DIVISION_CODE": "110115",
       "geoName": "大兴区"
     },
     {
       "geoId": "HuairouDistrict",
       "geoTypeId": "3_administrative_distric",
+      "ADMINISTRATIVE_DIVISION_CODE": "110116",
       "geoName": "怀柔区"
     },
     {
       "geoId": "PingguDistrict",
       "geoTypeId": "3_administrative_distric",
+      "ADMINISTRATIVE_DIVISION_CODE": "110117",
       "geoName": "平谷区"
     },
     {
       "geoId": "MiyunDistrict",
       "geoTypeId": "3_administrative_distric",
+      "ADMINISTRATIVE_DIVISION_CODE": "110118",
       "geoName": "密云区"
     },
     {
       "geoId": "YanqingDistrict",
       "geoTypeId": "3_administrative_distric",
+      "ADMINISTRATIVE_DIVISION_CODE": "110119",
       "geoName": "延庆区"
     }
   ],
