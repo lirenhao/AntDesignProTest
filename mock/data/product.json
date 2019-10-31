@@ -6,7 +6,7 @@
       "productTypeId": "SERVICE",
       "statusId": "enable",
       "proudctCategotyId": "Qual",
-      "geoId": ["Dong_Cheng_District", "Fangshan_District", "Fengtai_District"],
+      "geoIds": ["Dong_Cheng_District", "Fangshan_District", "Fengtai_District"],
       "fixFeatures": [
         {
           "featureTypeId": "CORP_REG_TYPE",
@@ -55,7 +55,7 @@
       "productTypeId": "SERVICE",
       "statusId": "disable",
       "proudctCategotyId": "Qual",
-      "geoId": ["Dong_Cheng_District", "Fangshan_District", "Fengtai_District"],
+      "geoIds": ["Dong_Cheng_District", "Fangshan_District", "Fengtai_District"],
       "fixFeatures": [
         {
           "featureTypeId": "CORP_REG_TYPE",
@@ -94,7 +94,7 @@
       "productTypeId": "SERVICE",
       "statusId": "disable",
       "proudctCategotyId": "Qual",
-      "geoId": ["Dong_Cheng_District", "Fangshan_District", "Fengtai_District"],
+      "geoIds": ["Dong_Cheng_District", "Fangshan_District", "Fengtai_District"],
       "fixFeatures": [
         {
           "featureTypeId": "CORP_REG_TYPE",
@@ -134,7 +134,7 @@
       "fromDate": "2019-10-28",
       "thruDate": "2019-10-28",
       "proudctCategotyId": "Qual",
-      "geoId": ["Dong_Cheng_District", "Fangshan_District", "Fengtai_District"],
+      "geoIds": ["Dong_Cheng_District", "Fangshan_District", "Fengtai_District"],
       "fixFeatures": [
         {
           "featureTypeId": "CORP_REG_TYPE",
@@ -174,7 +174,7 @@
       "productTypeId": "SERVICE_PKG",
       "statusId": "enable",
       "proudctCategotyId": "Qual",
-      "geoId": ["Dong_Cheng_District", "Fangshan_District", "Fengtai_District"],
+      "geoIds": ["Dong_Cheng_District", "Fangshan_District", "Fengtai_District"],
       "fixFeatures": [
         {
           "featureTypeId": "CORP_REG_TYPE",

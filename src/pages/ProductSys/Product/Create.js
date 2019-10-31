@@ -242,8 +242,8 @@ class Create extends React.Component {
             )}
           </Form.Item>
           <Form.Item {...formItemLayout} label="区域属性">
-            {getFieldDecorator('geoId', {
-              initialValue: info.geoId,
+            {getFieldDecorator('geoIds', {
+              initialValue: info.geoIds,
               rules: [{ required: true, message: '请选择区域属性' }],
             })(
               <Checkbox.Group>

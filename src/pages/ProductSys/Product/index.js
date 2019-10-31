@@ -4,6 +4,7 @@ import { Card, Table, Form, Row, Col, Input, TreeSelect, Button, Divider, messag
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import { objToTree } from '@/utils/utils';
 import Create from './Create';
+import Price from './Price';
 
 import styles from '../table.less';
 
@@ -17,7 +18,9 @@ class Product extends React.Component {
   state = {
     isCreateShow: false,
     isUpdateShow: false,
+    isPriceShow: false,
     info: {},
+    price: {},
   };
 
   columns = [
@@ -48,11 +51,13 @@ class Product extends React.Component {
     },
     {
       title: '操作',
-      render: (text, record) => (
+      render: (_, record) => (
         <React.Fragment>
           <a onClick={() => this.handleRemove(record)}>删除</a>
           <Divider type="vertical" />
           <a onClick={() => this.handleUpdate(record)}>修改</a>
+          <Divider type="vertical" />
+          <a onClick={() => this.handlePrice(record)}>价格</a>
         </React.Fragment>
       ),
     },
@@ -79,7 +84,7 @@ class Product extends React.Component {
       type: 'product/save',
       payload: {
         type: 'product',
-        payload: { id: 'productId', ...record },
+        payload: { ...record },
       },
       callback: () => this.handleAddModal(false),
     });
@@ -119,6 +124,42 @@ class Product extends React.Component {
     });
   };
 
+  handlePriceModal = visible => {
+    this.setState({ isPriceShow: visible });
+  };
+
+  handlePrice = record => {
+    const price = {
+      productId: record.productId,
+      statusId: 'enable',
+      proudctPrice: 0.0,
+      geoPrices: record.geoIds.map(geoId => ({
+        geoId,
+        geoPrice: 0.0,
+        featurePrices: [
+          ...record.fixFeatures.map(item => item.featureIds).reduce((a, b) => [...a, ...b], []),
+          ...record.mustFeatures.map(item => item.featureIds).reduce((a, b) => [...a, ...b], []),
+          ...record.optionFeatures.map(item => item.featureIds).reduce((a, b) => [...a, ...b], []),
+        ].map(featureId => ({ featureId, featurePrice: 0.0 })),
+      })),
+    };
+    this.setState({ info: record, price });
+    this.handlePriceModal(true);
+  };
+
+  handlePriceForm = record => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'product/price',
+      payload: {
+        type: 'product',
+        key: record.productId,
+        payload: record,
+      },
+      callback: () => this.handlePriceModal(false),
+    });
+  };
+
   render() {
     const {
       loading,
@@ -126,7 +167,7 @@ class Product extends React.Component {
       form: { getFieldDecorator },
       productType,
     } = this.props;
-    const { isCreateShow, isUpdateShow, info } = this.state;
+    const { isCreateShow, isUpdateShow, isPriceShow, info, price } = this.state;
 
     const typeTree = objToTree(
       { productTypeId: '', productTypeName: '父级节点' },
@@ -200,6 +241,14 @@ class Product extends React.Component {
           hideModal={() => this.handleUpdateModal(false)}
           handleFormSubmit={this.handleUpdateForm}
           info={info}
+        />
+        <Price
+          title="产品价格"
+          visible={isPriceShow}
+          hideModal={() => this.handlePriceModal(false)}
+          handleFormSubmit={this.handlePriceForm}
+          product={info}
+          info={price}
         />
       </PageHeaderWrapper>
     );
