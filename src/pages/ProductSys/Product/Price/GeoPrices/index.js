@@ -1,32 +1,39 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Card } from 'antd';
 import GeoPrice from './GeoPrice';
 
 class GeoPrices extends React.Component {
-  static propTypes = {
-    value: PropTypes.array,
-  };
-
-  static defaultProps = {
-    value: [],
-  };
-
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      value: props.value || [],
+    };
   }
 
+  handleChange = geoId => geoPrice => {
+    const { value } = this.state;
+    const { onChange } = this.props;
+    const newValue = value.map(item => (item.geoId === geoId ? geoPrice : item));
+    this.setState({
+      value: newValue,
+    });
+    if (onChange) {
+      onChange(newValue);
+    }
+  };
+
   render() {
-    const { product, value } = this.props;
+    const { product } = this.props;
+    const { value } = this.state;
 
     return (
       <React.Fragment>
         {product.geoIds.map(geoId => (
           <Card>
             <GeoPrice
+              onChange={this.handleChange(geoId)}
               product={product}
-              info={value.filter(item => item.geoId === geoId)[0] || {}}
+              value={value.filter(item => item.geoId === geoId)[0] || {}}
             />
           </Card>
         ))}

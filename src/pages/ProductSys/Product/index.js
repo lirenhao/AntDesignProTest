@@ -148,16 +148,8 @@ class Product extends React.Component {
   };
 
   handlePriceForm = record => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'product/price',
-      payload: {
-        type: 'product',
-        key: record.productId,
-        payload: record,
-      },
-      callback: () => this.handlePriceModal(false),
-    });
+    console.log(record);
+    this.handlePriceModal(false);
   };
 
   render() {

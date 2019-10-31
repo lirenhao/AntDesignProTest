@@ -2,8 +2,7 @@ import React from 'react';
 import { Form, Radio, Input } from 'antd';
 import GeoPrices from './GeoPrices';
 
-@Form.create()
-class Create extends React.Component {
+class Create extends React.PureComponent {
   render() {
     const {
       form: { getFieldDecorator },
@@ -25,7 +24,7 @@ class Create extends React.Component {
     };
 
     return (
-      <Form>
+      <React.Fragment>
         <Form.Item {...formItemLayout} label="价格状态">
           {getFieldDecorator('statusId', {
             initialValue: info.statusId,
@@ -66,7 +65,7 @@ class Create extends React.Component {
             ],
           })(<GeoPrices product={product} />)}
         </Form.Item>
-      </Form>
+      </React.Fragment>
     );
   }
 }

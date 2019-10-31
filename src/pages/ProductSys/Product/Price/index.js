@@ -8,14 +8,22 @@ import Create from './Create';
 }))
 @Form.create()
 class Price extends React.Component {
-  constructor(props) {
-    super(props);
-    // TODO 获取价格的数据结构
-    this.state = {};
-  }
+  handleSubmit = e => {
+    const { handleFormSubmit, form, info } = this.props;
+    e.preventDefault();
+    form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        handleFormSubmit({
+          ...info,
+          ...values,
+        });
+        form.resetFields();
+      }
+    });
+  };
 
   render() {
-    const { title, visible, hideModal, product, info, loading } = this.props;
+    const { title, visible, hideModal, form, product, info, loading } = this.props;
 
     return (
       <Drawer
@@ -26,7 +34,9 @@ class Price extends React.Component {
         visible={visible}
         onClose={hideModal}
       >
-        <Create product={product} info={info} />
+        <Form>
+          <Create form={form} product={product} info={info} />
+        </Form>
         <div
           style={{
             position: 'absolute',

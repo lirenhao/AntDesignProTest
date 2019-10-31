@@ -11,7 +11,9 @@ import FeaturePrice from './FeaturePrice';
 class GeoPrice extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      value: props.value || {},
+    };
   }
 
   getGeoName = geoId => {
@@ -26,13 +28,46 @@ class GeoPrice extends React.Component {
     return types.length > 0 ? types[0].productFeatureTypeName : typeId;
   };
 
+  geoPriceChange = e => {
+    const { value } = this.state;
+    const { onChange } = this.props;
+    this.setState({
+      value: { ...value, geoPrice: e.target.value },
+    });
+    if (onChange) {
+      onChange({ ...value, geoPrice: e.target.value });
+    }
+  };
+
+  featurePriceChange = featurePrice => {
+    const { value } = this.state;
+    const { onChange } = this.props;
+    const featurePrices = value.featurePrices.map(fp =>
+      fp.featureId === featurePrice.featureId ? featurePrice : fp
+    );
+    this.setState({
+      value: { ...value, featurePrices },
+    });
+    if (onChange) {
+      onChange({ ...value, featurePrices });
+    }
+  };
+
   render() {
-    const { info, product } = this.props;
+    const { product } = this.props;
+    const { value } = this.state;
 
     return (
       <React.Fragment>
-        <Form.Item label={`${this.getGeoName(info.geoId)}价格`} colon={false}>
-          <Input placeholder="请输入区域价格" style={{ width: 200 }} prefix="￥" suffix="RMB" />
+        <Form.Item label={`${this.getGeoName(value.geoId)}价格`} colon={false}>
+          <Input
+            placeholder="请输入区域价格"
+            style={{ width: 200 }}
+            prefix="￥"
+            suffix="RMB"
+            onChange={this.geoPriceChange}
+            value={value.geoPrice}
+          />
         </Form.Item>
         <Card size="small" type="inner" title="固定属性">
           <List
@@ -45,7 +80,12 @@ class GeoPrice extends React.Component {
               <List.Item>
                 <List.Item.Meta
                   title={item.title}
-                  description={<FeaturePrice featureIds={item.featureIds} info={{}} />}
+                  description={item.featureIds.map(id => (
+                    <FeaturePrice
+                      value={value.featurePrices.filter(fp => fp.featureId === id)[0] || {}}
+                      onChange={this.featurePriceChange}
+                    />
+                  ))}
                 />
               </List.Item>
             )}
@@ -62,7 +102,12 @@ class GeoPrice extends React.Component {
               <List.Item>
                 <List.Item.Meta
                   title={item.title}
-                  description={<FeaturePrice featureIds={item.featureIds} info={{}} />}
+                  description={item.featureIds.map(id => (
+                    <FeaturePrice
+                      value={value.featurePrices.filter(fp => fp.featureId === id)[0] || {}}
+                      onChange={this.featurePriceChange}
+                    />
+                  ))}
                 />
               </List.Item>
             )}
@@ -79,7 +124,12 @@ class GeoPrice extends React.Component {
               <List.Item>
                 <List.Item.Meta
                   title={item.title}
-                  description={<FeaturePrice featureIds={item.featureIds} info={{}} />}
+                  description={item.featureIds.map(id => (
+                    <FeaturePrice
+                      value={value.featurePrices.filter(fp => fp.featureId === id)[0] || {}}
+                      onChange={this.featurePriceChange}
+                    />
+                  ))}
                 />
               </List.Item>
             )}
