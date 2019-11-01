@@ -1,7 +1,13 @@
 import React from 'react';
-import { Card } from 'antd';
+import { connect } from 'dva';
+import { Collapse } from 'antd';
 import GeoPrice from './GeoPrice';
 
+const { Panel } = Collapse;
+
+@connect(({ product }) => ({
+  geo: product.dict.geo,
+}))
 class GeoPrices extends React.Component {
   constructor(props) {
     super(props);
@@ -9,6 +15,12 @@ class GeoPrices extends React.Component {
       value: props.value || [],
     };
   }
+
+  getGeoName = geoId => {
+    const { geo } = this.props;
+    const geos = geo.filter(item => item.geoId === geoId);
+    return geos.length > 0 ? geos[0].geoName : geoId;
+  };
 
   handleChange = geoId => geoPrice => {
     const { value } = this.state;
@@ -27,17 +39,17 @@ class GeoPrices extends React.Component {
     const { value } = this.state;
 
     return (
-      <React.Fragment>
+      <Collapse accordion>
         {product.geoIds.map(geoId => (
-          <Card>
+          <Panel header={this.getGeoName(geoId)} key={geoId}>
             <GeoPrice
               onChange={this.handleChange(geoId)}
               product={product}
               value={value.filter(item => item.geoId === geoId)[0] || {}}
             />
-          </Card>
+          </Panel>
         ))}
-      </React.Fragment>
+      </Collapse>
     );
   }
 }
