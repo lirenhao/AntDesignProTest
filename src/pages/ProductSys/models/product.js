@@ -4,6 +4,8 @@ import {
   addProduct,
   updateProduct,
   deleteProduct,
+  getProductPrice,
+  saveProductPrice,
 } from '@/services/api';
 
 export default {
@@ -66,6 +68,14 @@ export default {
         payload: response,
       });
       if (callback) callback();
+    },
+    *findPrice({ payload, callback }, { call }) {
+      const response = yield call(getProductPrice, payload);
+      if (callback) callback(response);
+    },
+    *savePrice({ payload, callback }, { call }) {
+      const response = yield call(saveProductPrice, payload);
+      if (callback) callback(response);
     },
   },
 

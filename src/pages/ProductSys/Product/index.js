@@ -129,6 +129,7 @@ class Product extends React.Component {
   };
 
   handlePrice = record => {
+    const { dispatch } = this.props;
     const price = {
       productId: record.productId,
       statusId: 'enable',
@@ -143,13 +144,36 @@ class Product extends React.Component {
         ].map(featureId => ({ featureId, featurePrice: 0.0 })),
       })),
     };
-    this.setState({ info: record, price });
-    this.handlePriceModal(true);
+    dispatch({
+      type: 'product/findPrice',
+      payload: record.productId,
+      callback: productPrice => {
+        this.setState({
+          info: record,
+          price: {
+            ...price,
+            ...productPrice,
+          },
+        });
+        this.handlePriceModal(true);
+      },
+    });
   };
 
   handlePriceForm = record => {
-    console.log(record);
-    this.handlePriceModal(false);
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'product/savePrice',
+      payload: { ...record },
+      callback: result => {
+        if (result) {
+          message.success('保存成功');
+          this.handlePriceModal(false);
+        } else {
+          message.success('保存失败');
+        }
+      },
+    });
   };
 
   render() {

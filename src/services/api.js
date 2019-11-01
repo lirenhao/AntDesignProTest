@@ -150,26 +150,33 @@ export async function getProductInfo(type, key, params) {
 export async function addProduct(type, params) {
   return request(`/api/product/${type}`, {
     method: 'POST',
-    body: {
-      ...params,
-      method: 'post',
-    },
+    body: { ...params },
   });
 }
 
 export async function updateProduct(type, key, params) {
   return request(`/api/product/${type}/${key}`, {
     method: 'PUT',
-    body: {
-      ...params,
-      method: 'put',
-    },
+    body: { ...params },
   });
 }
 
 export async function deleteProduct(type, key) {
   return request(`/api/product/${type}/${key}`, {
     method: 'DELETE',
+  });
+}
+
+export async function getProductPrice(id) {
+  return request(`/api/product/price?id=${id}`, {
+    method: 'GET',
+  });
+}
+
+export async function saveProductPrice(params) {
+  return request('/api/product/price', {
+    method: 'POST',
+    body: { ...params },
   });
 }
 
