@@ -6,15 +6,15 @@
     "geoPrices": [
       {
         "geoId": "Dong_Cheng_District",
-        "geoPrice": 0,
+        "geoPrice": "0",
         "featurePrices": [
           {
             "featureId": "1001",
-            "featurePrice": 0
+            "featurePrice": "0"
           },
           {
             "featureId": "1002",
-            "featurePrice": 0
+            "featurePrice": "0"
           },
           {
             "featureId": "1003",

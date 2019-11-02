@@ -49,6 +49,10 @@ class Create extends React.PureComponent {
                 required: true,
                 message: '请输入产品价格',
               },
+              {
+                pattern: /^(\d+)((?:\.\d{1,2})?)$/,
+                message: '请输入合法金额数字',
+              },
             ],
           })(
             <Input placeholder="请输入产品价格" style={{ width: 200 }} prefix="￥" suffix="RMB" />

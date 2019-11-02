@@ -20,13 +20,17 @@ class FeaturePrice extends React.Component {
   };
 
   featurePriceChange = e => {
-    const { value } = this.state;
-    const { onChange } = this.props;
-    this.setState({
-      value: { ...value, featurePrice: e.target.value },
-    });
-    if (onChange) {
-      onChange({ ...value, featurePrice: e.target.value });
+    const featurePrice = e.target.value;
+    const pattern = /^(\d+)((?:\.\d{1,2})?)$/;
+    if (pattern.test(featurePrice)) {
+      const { value } = this.state;
+      const { onChange } = this.props;
+      this.setState({
+        value: { ...value, featurePrice },
+      });
+      if (onChange) {
+        onChange({ ...value, featurePrice });
+      }
     }
   };
 
@@ -46,7 +50,11 @@ class FeaturePrice extends React.Component {
 
     return (
       <React.Fragment>
-        <Form.Item {...formItemLayout} label={`${this.getFeatureName(value.featureId)}价格`}>
+        <Form.Item
+          {...formItemLayout}
+          label={`${this.getFeatureName(value.featureId)}价格`}
+          help={() => {}}
+        >
           <Input
             style={{ width: 200 }}
             prefix="￥"

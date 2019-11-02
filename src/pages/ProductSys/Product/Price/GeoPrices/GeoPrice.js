@@ -29,13 +29,17 @@ class GeoPrice extends React.Component {
   };
 
   geoPriceChange = e => {
-    const { value } = this.state;
-    const { onChange } = this.props;
-    this.setState({
-      value: { ...value, geoPrice: e.target.value },
-    });
-    if (onChange) {
-      onChange({ ...value, geoPrice: e.target.value });
+    const geoPrice = e.target.value;
+    const pattern = /^(\d+)((?:\.\d{1,2})?)$/;
+    if (pattern.test(geoPrice)) {
+      const { value } = this.state;
+      const { onChange } = this.props;
+      this.setState({
+        value: { ...value, geoPrice },
+      });
+      if (onChange) {
+        onChange({ ...value, geoPrice });
+      }
     }
   };
 
@@ -77,7 +81,7 @@ class GeoPrice extends React.Component {
               title: this.getFeatureTypeName(item.featureTypeId),
             }))}
             renderItem={item => (
-              <List.Item>
+              <List.Item key={item.geoId}>
                 <List.Item.Meta
                   title={item.title}
                   description={item.featureIds.map(id => (
@@ -99,7 +103,7 @@ class GeoPrice extends React.Component {
               title: this.getFeatureTypeName(item.featureTypeId),
             }))}
             renderItem={item => (
-              <List.Item>
+              <List.Item key={item.geoId}>
                 <List.Item.Meta
                   title={item.title}
                   description={item.featureIds.map(id => (
@@ -121,7 +125,7 @@ class GeoPrice extends React.Component {
               title: this.getFeatureTypeName(item.featureTypeId),
             }))}
             renderItem={item => (
-              <List.Item>
+              <List.Item key={item.geoId}>
                 <List.Item.Meta
                   title={item.title}
                   description={item.featureIds.map(id => (

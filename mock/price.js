@@ -4,7 +4,7 @@ import jsonfile from 'jsonfile';
 const file = path.resolve('mock/data/price.json');
 
 function findPrice(req, res) {
-  const { id } = req.params;
+  const { id } = req.query;
   jsonfile
     .readFile(file)
     .then(dataSource => {
