@@ -6,11 +6,11 @@
     "geoPrices": [
       {
         "geoId": "Dong_Cheng_District",
-        "geoPrice": "0",
+        "geoPrice": "100",
         "featurePrices": [
           {
             "featureId": "1001",
-            "featurePrice": "0"
+            "featurePrice": "10"
           },
           {
             "featureId": "1002",
@@ -22,7 +22,7 @@
           },
           {
             "featureId": "1302",
-            "featurePrice": 0
+            "featurePrice": "10"
           },
           {
             "featureId": "1303",
@@ -34,7 +34,7 @@
           },
           {
             "featureId": "1203",
-            "featurePrice": 0
+            "featurePrice": "10"
           },
           {
             "featureId": "1206",
@@ -42,7 +42,7 @@
           },
           {
             "featureId": "1402",
-            "featurePrice": 0
+            "featurePrice": "10"
           },
           {
             "featureId": "1401",
@@ -60,15 +60,15 @@
       },
       {
         "geoId": "Fangshan_District",
-        "geoPrice": 0,
+        "geoPrice": "100",
         "featurePrices": [
           {
             "featureId": "1001",
-            "featurePrice": 0
+            "featurePrice": "10"
           },
           {
             "featureId": "1002",
-            "featurePrice": 0
+            "featurePrice": "0"
           },
           {
             "featureId": "1003",
@@ -76,7 +76,7 @@
           },
           {
             "featureId": "1302",
-            "featurePrice": 0
+            "featurePrice": "10"
           },
           {
             "featureId": "1303",
@@ -88,7 +88,7 @@
           },
           {
             "featureId": "1203",
-            "featurePrice": 0
+            "featurePrice": "10"
           },
           {
             "featureId": "1206",
@@ -96,7 +96,7 @@
           },
           {
             "featureId": "1402",
-            "featurePrice": 0
+            "featurePrice": "10"
           },
           {
             "featureId": "1401",
@@ -114,15 +114,15 @@
       },
       {
         "geoId": "Fengtai_District",
-        "geoPrice": 0,
+        "geoPrice": "0",
         "featurePrices": [
           {
             "featureId": "1001",
-            "featurePrice": 0
+            "featurePrice": "0"
           },
           {
             "featureId": "1002",
-            "featurePrice": 0
+            "featurePrice": "0"
           },
           {
             "featureId": "1003",
