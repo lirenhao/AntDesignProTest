@@ -16,6 +16,13 @@ class GeoPrice extends React.Component {
     };
   }
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.value === prevState.value) {
+      return null;
+    }
+    return { value: nextProps.value };
+  }
+
   getGeoName = geoId => {
     const { geo } = this.props;
     const geos = geo.filter(item => item.geoId === geoId);
