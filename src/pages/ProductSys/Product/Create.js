@@ -18,7 +18,7 @@ import Feature from './Feature';
 
 @connect(({ product, loading }) => ({
   productType: product.dict.productType,
-  proudctCategoty: product.dict.proudctCategoty,
+  productCategoty: product.dict.productCategoty,
   geo: product.dict.geo,
   loading: loading.models.product,
 }))
@@ -94,7 +94,7 @@ class Create extends React.Component {
       visible,
       hideModal,
       productType,
-      proudctCategoty,
+      productCategoty,
       geo,
       loading,
     } = this.props;
@@ -123,7 +123,7 @@ class Create extends React.Component {
 
     const categotyTree = objToTree(
       { productCategoryId: '', productCategoryName: '父级节点' },
-      proudctCategoty.map(item =>
+      productCategoty.map(item =>
         item.parentCategoryId ? item : { ...item, parentCategoryId: '' }
       ),
       'productCategoryId',
@@ -226,8 +226,8 @@ class Create extends React.Component {
             )}
           </Form.Item>
           <Form.Item {...formItemLayout} label="产品类别">
-            {getFieldDecorator('proudctCategotyId', {
-              initialValue: info.proudctCategotyId,
+            {getFieldDecorator('productCategotyId', {
+              initialValue: info.productCategotyId,
               rules: [{ required: true, message: '请选择产品类别' }],
             })(
               <TreeSelect

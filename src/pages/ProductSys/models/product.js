@@ -18,7 +18,7 @@ export default {
     },
     dict: {
       productType: [],
-      proudctCategoty: [],
+      productCategoty: [],
       geo: [],
       productFeatureType: [],
       productFeature: [],

@@ -5,7 +5,7 @@
       "productName": "公司新设立",
       "productTypeId": "SERVICE",
       "statusId": "enable",
-      "proudctCategotyId": "Qual",
+      "productCategotyId": "Qual",
       "geoIds": ["Dong_Cheng_District", "Fangshan_District", "Fengtai_District"],
       "fixFeatures": [
         {
@@ -54,7 +54,7 @@
       "productName": "公司变更",
       "productTypeId": "SERVICE",
       "statusId": "disable",
-      "proudctCategotyId": "Qual",
+      "productCategotyId": "Qual",
       "geoIds": ["Dong_Cheng_District", "Fangshan_District", "Fengtai_District"],
       "fixFeatures": [
         {
@@ -93,7 +93,7 @@
       "productName": "国地税报道",
       "productTypeId": "SERVICE",
       "statusId": "disable",
-      "proudctCategotyId": "Qual",
+      "productCategotyId": "Qual",
       "geoIds": ["Dong_Cheng_District", "Fangshan_District", "Fengtai_District"],
       "fixFeatures": [
         {
@@ -133,7 +133,7 @@
       "productTypeId": "SERVICE",
       "fromDate": "2019-10-28",
       "thruDate": "2019-10-28",
-      "proudctCategotyId": "Qual",
+      "productCategotyId": "Qual",
       "geoIds": ["Dong_Cheng_District", "Fangshan_District", "Fengtai_District"],
       "fixFeatures": [
         {
@@ -173,7 +173,7 @@
       "productName": "产品测试",
       "productTypeId": "SERVICE_PKG",
       "statusId": "enable",
-      "proudctCategotyId": "Qual",
+      "productCategotyId": "Qual",
       "geoIds": ["Dong_Cheng_District", "Fangshan_District", "Fengtai_District"],
       "fixFeatures": [
         {
