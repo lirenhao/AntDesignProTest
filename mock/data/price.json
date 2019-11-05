@@ -2,7 +2,7 @@
   "1": {
     "productId": "1",
     "statusId": "enable",
-    "proudctPrice": 0,
+    "productPrice": 0,
     "geoPrices": [
       {
         "geoId": "Dong_Cheng_District",

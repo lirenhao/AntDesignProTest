@@ -54,122 +54,122 @@ export default [
           {
             name: 'statusType',
             path: '/infraSys/statusType',
-            component: './InfraSys/StatusType'
+            component: './InfraSys/StatusType',
           },
           {
             name: 'statusItem',
             path: '/infraSys/statusItem',
-            component: './InfraSys/StatusItem'
+            component: './InfraSys/StatusItem',
           },
           {
             name: 'uomType',
             path: '/infraSys/uomType',
-            component: './InfraSys/UomType'
+            component: './InfraSys/UomType',
           },
           {
             name: 'uom',
             path: '/infraSys/uom',
-            component: './InfraSys/Uom'
+            component: './InfraSys/Uom',
           },
           {
             name: 'dataSourceType',
             path: '/infraSys/dataSourceType',
-            component: './InfraSys/DataSourceType'
+            component: './InfraSys/DataSourceType',
           },
           {
             name: 'dataSource',
             path: '/infraSys/dataSource',
-            component: './InfraSys/DataSource'
+            component: './InfraSys/DataSource',
           },
           {
             name: 'quantityBreakType',
             path: '/infraSys/quantityBreakType',
-            component: './InfraSys/QuantityBreakType'
+            component: './InfraSys/QuantityBreakType',
           },
           {
             name: 'quantityBreak',
             path: '/infraSys/quantityBreak',
-            component: './InfraSys/QuantityBreak'
+            component: './InfraSys/QuantityBreak',
           },
           {
             name: 'rateType',
             path: '/infraSys/rateType',
-            component: './InfraSys/RateType'
+            component: './InfraSys/RateType',
           },
           {
             name: 'deliverableType',
             path: '/infraSys/deliverableType',
-            component: './InfraSys/DeliverableType'
+            component: './InfraSys/DeliverableType',
           },
           {
             name: 'deliverable',
             path: '/infraSys/deliverable',
-            component: './InfraSys/Deliverable'
+            component: './InfraSys/Deliverable',
           },
           {
             name: 'emplPositionType',
             path: '/infraSys/emplPositionType',
-            component: './InfraSys/EmplPositionType'
+            component: './InfraSys/EmplPositionType',
           },
           {
             name: 'emplPosition',
             path: '/infraSys/emplPosition',
-            component: './InfraSys/EmplPosition'
+            component: './InfraSys/EmplPosition',
           },
           {
             name: 'responsibilityType',
             path: '/infraSys/responsibilityType',
-            component: './InfraSys/ResponsibilityType'
+            component: './InfraSys/ResponsibilityType',
           },
           {
             name: 'validResponsibility',
             path: '/infraSys/validResponsibility',
-            component: './InfraSys/ValidResponsibility'
+            component: './InfraSys/ValidResponsibility',
           },
           {
             name: 'contentPurposeType',
             path: '/infraSys/contentPurposeType',
-            component: './InfraSys/ContentPurposeType'
+            component: './InfraSys/ContentPurposeType',
           },
           {
             name: 'dataResourceType',
             path: '/infraSys/dataResourceType',
-            component: './InfraSys/DataResourceType'
+            component: './InfraSys/DataResourceType',
           },
           {
             name: 'mimeType',
             path: '/infraSys/mimeType',
-            component: './InfraSys/MimeType'
+            component: './InfraSys/MimeType',
           },
           {
             name: 'periodType',
             path: '/infraSys/periodType',
-            component: './InfraSys/PeriodType'
+            component: './InfraSys/PeriodType',
           },
           {
             name: 'priorityType',
             path: '/infraSys/priorityType',
-            component: './InfraSys/PriorityType'
+            component: './InfraSys/PriorityType',
           },
           {
             name: 'ratingType',
             path: '/infraSys/ratingType',
-            component: './InfraSys/RatingType'
+            component: './InfraSys/RatingType',
           },
           {
             name: 'requirementType',
             path: '/infraSys/requirementType',
-            component: './InfraSys/RequirementType'
+            component: './InfraSys/RequirementType',
           },
           {
             name: 'saleType',
             path: '/infraSys/saleType',
-            component: './InfraSys/SaleType'
+            component: './InfraSys/SaleType',
           },
           {
             name: 'skillType',
             path: '/infraSys/skillType',
-            component: './InfraSys/SkillType'
+            component: './InfraSys/SkillType',
           },
         ],
       },
@@ -319,6 +319,24 @@ export default [
           },
         ],
       },
+      // orderSys
+      {
+        name: 'order',
+        icon: 'contacts',
+        path: '/orderSys',
+        routes: [
+          {
+            name: 'clue',
+            path: '/orderSys/clue',
+            component: './OrderSys/Clue',
+          },
+          {
+            name: 'order',
+            path: '/orderSys/order',
+            component: './OrderSys/Order',
+          },
+        ],
+      },
       // test
       {
         name: 'test',
@@ -347,7 +365,7 @@ export default [
             path: '/test/pending',
             component: './Test/Work/Pending/PendingList',
           },
-        ]
+        ],
       },
       // forms
       // {

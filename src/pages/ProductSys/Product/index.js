@@ -133,7 +133,7 @@ class Product extends React.Component {
     const price = {
       productId: record.productId,
       statusId: 'enable',
-      proudctPrice: 0.0,
+      productPrice: 0.0,
       geoPrices: record.geoIds.map(geoId => ({
         geoId,
         geoPrice: 0.0,

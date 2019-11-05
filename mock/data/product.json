@@ -11,7 +11,7 @@
         {
           "featureTypeId": "CORP_REG_TYPE",
           "featureIds": ["1001", "1002", "1003"],
-          "isExclusive": "0"
+          "isExclusive": "1"
         },
         {
           "featureTypeId": "GOV_WINDOW",
@@ -26,7 +26,7 @@
         {
           "featureTypeId": "FWJJ",
           "featureIds": ["1402", "1401"],
-          "isExclusive": "0"
+          "isExclusive": "1"
         }
       ],
       "mustFeatures": [

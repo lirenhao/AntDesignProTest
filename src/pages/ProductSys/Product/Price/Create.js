@@ -42,8 +42,8 @@ class Create extends React.PureComponent {
           )}
         </Form.Item>
         <Form.Item {...formItemLayout} label="产品价格">
-          {getFieldDecorator('proudctPrice', {
-            initialValue: info.proudctPrice,
+          {getFieldDecorator('productPrice', {
+            initialValue: info.productPrice,
             rules: [
               {
                 required: true,
