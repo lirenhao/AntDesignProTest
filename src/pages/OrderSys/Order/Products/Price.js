@@ -43,20 +43,26 @@ class Price extends React.PureComponent {
   };
 
   getFeatureName = featureId => {
-    const { productFeature, productPrice, details } = this.props;
+    const { productFeature } = this.props;
+
+    const features = productFeature.filter(item => item.productFeatureId === featureId);
+    const featureName = features.length > 0 ? features[0].productFeatureName : featureId;
+
+    return featureName;
+  };
+
+  getFeaturePrice = featureId => {
+    const { productPrice, details } = this.props;
 
     const geoPrices = productPrice.geoPrices.filter(item => item.geoId === details.geoId);
     const featurePrices = geoPrices.length > 0 ? geoPrices[0].featurePrices : {};
     const featurePrice = featurePrices.filter(item => item.featureId === featureId)[0] || {};
 
-    const features = productFeature.filter(item => item.productFeatureId === featureId);
-    const featureName = features.length > 0 ? features[0].productFeatureName : featureId;
-
-    return `${featureName}[${featurePrice.featurePrice}]`;
+    return featurePrice.featurePrice;
   };
 
   handleSubmit = e => {
-    const { details, form, handleNext } = this.props;
+    const { details, productPrice, form, handleNext } = this.props;
     const { featurePrices } = this.getGeoPrice(details.geoId);
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
@@ -64,14 +70,22 @@ class Price extends React.PureComponent {
         const featureIds = Object.keys(values)
           .map(key => values[key])
           .reduce((a, b) => (b ? [...a, ...b] : a), []);
+        const geoPrices = productPrice.geoPrices.filter(gp => gp.geoId === details.geoId);
+        const geoPrice = geoPrices.length > 0 ? geoPrices[0].geoPrice : 0;
         const result = {
           productId: details.productId,
+          productName: details.productName,
+          productPrice: productPrice.productPrice,
           geoId: details.geoId,
-          geoPrice: '',
-          productListPrice: '没有优惠的合计',
-          productPrice: '实际价格',
+          geoName: details.geoName,
+          geoPrice,
           discountPrice: '优惠金额',
-          features: featurePrices.filter(item => featureIds.indexOf(item.featureId) > -1),
+          features: featurePrices
+            .filter(item => featureIds.indexOf(item.featureId) > -1)
+            .map(item => ({
+              ...item,
+              featureName: this.getFeatureName(item.featureId),
+            })),
         };
         handleNext(result);
       }
@@ -100,7 +114,12 @@ class Price extends React.PureComponent {
         {features.map(feature => (
           <Form.Item {...formItemLayout} label={this.getFeatureTypeName(feature.featureTypeId)}>
             {getFieldDecorator(`featureType#${feature.featureTypeId}`)(
-              <Feature feature={feature} getFeatureName={this.getFeatureName} />
+              <Feature
+                feature={feature}
+                getFeatureName={featureId =>
+                  `${this.getFeatureName(featureId)}[${this.getFeaturePrice(featureId)}]`
+                }
+              />
             )}
           </Form.Item>
         ))}

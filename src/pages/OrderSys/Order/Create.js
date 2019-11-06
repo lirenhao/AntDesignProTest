@@ -1,20 +1,31 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Drawer, Steps, Button } from 'antd';
+import { Drawer, Steps } from 'antd';
 import Products from './Products';
+import BasicInfo from './BasicInfo';
+import Result from './Result';
 
-@connect(({ order, loading }) => ({
+@connect(({ order }) => ({
   productType: order.dict.productType,
   productCategoty: order.dict.productCategoty,
   geo: order.dict.geo,
-  loading: loading.models.order,
 }))
 class Create extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       current: 0,
-      products: [],
+      info: props.info || {},
+    };
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.info.orderId === prevState.info.orderId) {
+      return null;
+    }
+    return {
+      current: 0,
+      info: nextProps.info,
     };
   }
 
@@ -28,31 +39,37 @@ class Create extends React.Component {
     this.setState({ current: current - 1 });
   };
 
-  handleProducts = product => {
-    const { products } = this.state;
-    this.setState({ products: [...products, product] });
+  handleProducts = products => {
+    const { info } = this.state;
+    this.setState({
+      info: {
+        ...info,
+        products,
+      },
+    });
+    this.handleNext();
   };
 
-  handleSubmit = e => {
-    const { handleFormSubmit, form, info } = this.props;
-    e.preventDefault();
-    form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        handleFormSubmit({
-          ...info,
-          ...values,
-          releaseDate: values.releaseDate.format('YYYY-MM-DD'),
-          salesDiscontinuationDate: values.salesDiscontinuationDate.format('YYYY-MM-DD'),
-        });
-        form.resetFields();
-      }
+  handleBasicInfo = basicInfo => {
+    const { info } = this.state;
+    this.setState({
+      info: {
+        ...info,
+        ...basicInfo,
+      },
     });
+    this.handleNext();
+  };
+
+  handleSubmit = value => {
+    const { handleFormSubmit } = this.props;
+    handleFormSubmit(value);
   };
 
   render() {
-    const { title, visible, hideModal, loading } = this.props;
+    const { title, visible, hideModal } = this.props;
 
-    const { current } = this.state;
+    const { current, info } = this.state;
 
     return (
       <Drawer
@@ -68,51 +85,13 @@ class Create extends React.Component {
           <Steps.Step title="输入订单信息" />
           <Steps.Step title="完成" />
         </Steps>
-        <div
-          style={{
-            marginTop: '16px',
-            border: '1px dashed #e9e9e9',
-            borderRadius: '6px',
-            backgroundColor: '#fafafa',
-            minHeight: '200px',
-            textAlign: 'center',
-          }}
-        >
-          {current === 0 && <Products handleFormSubmit={console.log} />}
-          {current === 1 && <div>分步表单</div>}
-          {current === 2 && <div>分步表单</div>}
-        </div>
-        <div
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            width: '100%',
-            borderTop: '1px solid #e8e8e8',
-            padding: '10px 16px',
-            left: 0,
-            background: '#fff',
-            borderRadius: '0 0 4px 4px',
-          }}
-        >
-          <Button style={{ marginRight: 8 }} onClick={hideModal}>
-            取消
-          </Button>
-          {current < 2 && (
-            <Button type="primary" onClick={() => this.handleNext()}>
-              下一步
-            </Button>
-          )}
-          {current === 2 && (
-            <Button type="primary" onClick={this.handleSubmit} loading={loading}>
-              提交
-            </Button>
-          )}
-          {current > 0 && (
-            <Button style={{ marginLeft: 8 }} onClick={() => this.handlePrev()}>
-              上一步
-            </Button>
-          )}
-        </div>
+        {current === 0 && <Products products={info.products} handleNext={this.handleProducts} />}
+        {current === 1 && (
+          <BasicInfo info={info} handleNext={this.handleBasicInfo} handlePrev={this.handlePrev} />
+        )}
+        {current === 2 && (
+          <Result info={info} handleNext={this.handleSubmit} handlePrev={this.handlePrev} />
+        )}
       </Drawer>
     );
   }

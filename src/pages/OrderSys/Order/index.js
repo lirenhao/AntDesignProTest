@@ -21,6 +21,10 @@ class Order extends React.Component {
 
   columns = [
     {
+      title: '订单',
+      dataIndex: 'orderId',
+    },
+    {
       title: '订单编码',
       dataIndex: 'orderCode',
     },
@@ -66,10 +70,7 @@ class Order extends React.Component {
     const { dispatch } = this.props;
     dispatch({
       type: 'order/save',
-      payload: {
-        type: 'order',
-        payload: { ...record },
-      },
+      payload: { ...record },
       callback: () => this.handleAddModal(false),
     });
   };
@@ -88,9 +89,8 @@ class Order extends React.Component {
     dispatch({
       type: 'order/update',
       payload: {
-        type: 'order',
         key: record.orderId,
-        payload: record,
+        payload: { ...record },
       },
       callback: () => this.handleUpdateModal(false),
     });
@@ -100,10 +100,7 @@ class Order extends React.Component {
     const { dispatch } = this.props;
     dispatch({
       type: 'order/remove',
-      payload: {
-        type: 'order',
-        key: record.orderId,
-      },
+      payload: record.orderId,
       callback: () => message.success('删除成功'),
     });
   };
@@ -111,7 +108,7 @@ class Order extends React.Component {
   render() {
     const {
       loading,
-      data: { list, pagination },
+      data,
       form: { getFieldDecorator },
     } = this.props;
     const { isCreateShow, isUpdateShow, info } = this.state;
@@ -160,8 +157,8 @@ class Order extends React.Component {
             </div>
             <Table
               loading={loading}
-              dataSource={list}
-              pagination={pagination}
+              dataSource={data}
+              pagination={false}
               columns={this.columns}
               rowKey={record => record.orderId}
             />

@@ -1,20 +1,11 @@
-import {
-  getDictData,
-  getProductList,
-  addProduct,
-  updateProduct,
-  deleteProduct,
-} from '@/services/api';
-import { queryProduct, queryPrice } from '@/services/order';
+import { getDictData } from '@/services/api';
+import { queryProduct, queryPrice, findOrder, save, update, remove } from '@/services/order';
 
 export default {
   namespace: 'order',
 
   state: {
-    data: {
-      list: [],
-      pagination: {},
-    },
+    data: [],
     dict: {
       productType: [],
       productCategoty: [],
@@ -41,16 +32,14 @@ export default {
       if (callback) callback(response);
     },
     *findAll({ payload }, { call, put }) {
-      const { type, payload: params } = payload;
-      const response = yield call(getProductList, type, params);
+      const response = yield call(findOrder, payload);
       yield put({
         type: 'createData',
         payload: response,
       });
     },
     *save({ payload, callback }, { call, put }) {
-      const { type, payload: params } = payload;
-      const response = yield call(addProduct, type, params);
+      const response = yield call(save, payload);
       yield put({
         type: 'createData',
         payload: response,
@@ -58,8 +47,8 @@ export default {
       if (callback) callback();
     },
     *update({ payload, callback }, { call, put }) {
-      const { type, key, payload: params } = payload;
-      const response = yield call(updateProduct, type, key, params);
+      const { key, payload: params } = payload;
+      const response = yield call(update, key, params);
       yield put({
         type: 'createData',
         payload: response,
@@ -67,9 +56,7 @@ export default {
       if (callback) callback();
     },
     *remove({ payload, callback }, { call, put }) {
-      const { type, key, payload: params } = payload;
-      yield call(deleteProduct, type, key, params);
-      const response = yield call(getProductList, type, params);
+      const response = yield call(remove, payload);
       yield put({
         type: 'createData',
         payload: response,

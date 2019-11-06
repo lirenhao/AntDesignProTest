@@ -103,4 +103,7 @@ export default {
   'menu.infraSys.emplPositionType': '职位类型',
   'menu.infraSys.responsibilityType': '职责类型',
   'menu.infraSys.enumeration': '枚举',
+  'menu.order': '订单系统',
+  'menu.order.clue': '线索',
+  'menu.order.order': '订单',
 };

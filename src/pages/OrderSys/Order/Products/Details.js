@@ -44,10 +44,16 @@ class Details extends React.PureComponent {
 
   handleSubmit = e => {
     const { handleNext, form } = this.props;
+    const { product } = this.state;
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        handleNext({ ...values });
+        handleNext({
+          productId: values.productId,
+          productName: product.productName,
+          geoId: values.geoId,
+          geoName: this.getGeoName(values.geoId),
+        });
       }
     });
   };
