@@ -6,7 +6,7 @@ import Details from './Details';
 import Price from './Price';
 
 @connect(({ loading }) => ({
-  loading: loading.models.orderCreateProduct,
+  loading: loading.models.order,
 }))
 class Create extends React.Component {
   constructor(props) {
@@ -72,7 +72,6 @@ class Create extends React.Component {
 
   render() {
     const { visible, hideModal } = this.props;
-
     const { current, query, products, details, productPrice } = this.state;
 
     return (

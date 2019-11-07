@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Spin, Card, Descriptions, Button } from 'antd';
+import { Card, Descriptions, Button } from 'antd';
 
 @connect(({ order, loading }) => ({
   geo: order.dict.geo,
@@ -18,7 +18,7 @@ class Result extends React.PureComponent {
     const { info, handlePrev, loading } = this.props;
 
     return (
-      <Spin spinning={loading}>
+      <React.Fragment>
         <div
           style={{
             marginTop: '16px',
@@ -39,7 +39,7 @@ class Result extends React.PureComponent {
               <Descriptions.Item label="合同编号">{info.agreementCode}</Descriptions.Item>
               <Descriptions.Item label="订单日期">{info.orderDate}</Descriptions.Item>
               <Descriptions.Item label="服务佣金">{info.serviceCommission}</Descriptions.Item>
-              <Descriptions.Item label="服务佣金">{info.serviceCommission}</Descriptions.Item>
+              <Descriptions.Item label="订单总金额">{info.grandTotal}</Descriptions.Item>
               <Descriptions.Item label="服务产品" span={3}>
                 {info.products.map(item => (
                   <React.Fragment>
@@ -74,14 +74,14 @@ class Result extends React.PureComponent {
             borderRadius: '0 0 4px 4px',
           }}
         >
-          <Button type="primary" onClick={this.handleSubmit}>
+          <Button type="primary" onClick={this.handleSubmit} loading={loading}>
             提 交
           </Button>
-          <Button onClick={handlePrev} style={{ marginLeft: 8 }}>
+          <Button onClick={handlePrev} style={{ marginLeft: 8 }} loading={loading}>
             上一步
           </Button>
         </div>
-      </Spin>
+      </React.Fragment>
     );
   }
 }

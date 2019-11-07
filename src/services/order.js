@@ -14,6 +14,10 @@ export async function queryPrice(params) {
   });
 }
 
+export async function findProductPrice(id) {
+  return request(`/api/order/findProductPrice/${id}`);
+}
+
 export async function findOrder() {
   return request('/api/order');
 }

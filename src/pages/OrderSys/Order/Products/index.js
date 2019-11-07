@@ -1,7 +1,12 @@
 import React from 'react';
+import { connect } from 'dva';
 import { Card, Table, Divider, Button } from 'antd';
 import Create from './Create';
+import Update from './Update';
 
+@connect(({ loading }) => ({
+  loading: loading.effects['order/findProductPrice'],
+}))
 class Products extends React.Component {
   columns = [
     { title: '产品', dataIndex: 'productName', key: 'productId' },
@@ -26,7 +31,11 @@ class Products extends React.Component {
     super(props);
     this.state = {
       isCreateShow: false,
+      isUpdateShow: false,
       products: props.products || [],
+      info: {},
+      productInfo: {},
+      productPrice: {},
     };
   }
 
@@ -40,17 +49,59 @@ class Products extends React.Component {
     this.handleAddModal(false);
   };
 
+  handleUpdateModal = visible => {
+    this.setState({ isUpdateShow: visible });
+  };
+
+  handleUpdate = record => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'order/findProductPrice',
+      payload: record.productId,
+      callback: resp => {
+        if (resp) {
+          this.setState({
+            info: record,
+            productInfo: resp.productInfo,
+            productPrice: resp.productPrice,
+          });
+          this.handleUpdateModal(true);
+        }
+      },
+    });
+  };
+
+  handleUpdateForm = record => {
+    const { products } = this.state;
+    this.setState({
+      products: products.map(item =>
+        item.productId === record.productId ? { ...item, ...record } : item
+      ),
+    });
+    this.handleUpdateModal(false);
+  };
+
+  handleRemove = record => {
+    const { products } = this.state;
+    this.setState({
+      products: products.filter(item => item.productId !== record.productId),
+    });
+  };
+
   expandedRowRender = record => {
     const columns = [
       { title: '属性', dataIndex: 'featureName', key: 'featureId' },
       { title: '属性价格', dataIndex: 'featurePrice', key: 'featurePrice' },
     ];
-    return <Table columns={columns} dataSource={record.features} pagination={false} />;
+    return (
+      <Table columns={columns} rowKey="featureId" dataSource={record.features} pagination={false} />
+    );
   };
 
   render() {
-    const { handleNext } = this.props;
-    const { products, isCreateShow } = this.state;
+    const { loading, handleNext } = this.props;
+    const { isCreateShow, isUpdateShow, products, info, productInfo, productPrice } = this.state;
+
     return (
       <React.Fragment>
         <div
@@ -69,6 +120,7 @@ class Products extends React.Component {
             extra={<a onClick={() => this.handleAddModal(true)}>添加</a>}
           >
             <Table
+              loading={loading}
               columns={this.columns}
               dataSource={products}
               rowKey="productId"
@@ -76,11 +128,18 @@ class Products extends React.Component {
               expandedRowRender={this.expandedRowRender}
             />
             <Create
-              title="添加服务"
               visible={isCreateShow}
               hideModal={() => this.handleAddModal(false)}
               handleFormSubmit={this.handleAddForm}
               info={{}}
+            />
+            <Update
+              visible={isUpdateShow}
+              hideModal={() => this.handleUpdateModal(false)}
+              handleFormSubmit={this.handleUpdateForm}
+              info={info || {}}
+              productInfo={productInfo || {}}
+              productPrice={productPrice || {}}
             />
           </Card>
         </div>

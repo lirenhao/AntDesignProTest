@@ -33,6 +33,13 @@ function queryPrice(req, res, u, b) {
     .catch(error => res.status(500).send(error));
 }
 
+async function findProductPrice(req, res) {
+  const { key } = req.params;
+  const products = jsonfile.readFileSync(productPath).product;
+  const prices = jsonfile.readFileSync(pricePath);
+  res.json({ productInfo: products[key], productPrice: prices[key] });
+}
+
 function find(req, res) {
   jsonfile
     .readFile(orderPath)
@@ -92,6 +99,7 @@ function remove(req, res) {
 export default {
   'POST /api/order/queryProduct': queryProduct,
   'POST /api/order/queryPrice': queryPrice,
+  'GET /api/order/findProductPrice/:key': findProductPrice,
   'GET /api/order': find,
   'POST /api/order': save,
   'PUT /api/order/:key': update,

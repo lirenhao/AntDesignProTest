@@ -1,5 +1,13 @@
 import { getDictData } from '@/services/api';
-import { queryProduct, queryPrice, findOrder, save, update, remove } from '@/services/order';
+import {
+  queryProduct,
+  queryPrice,
+  findProductPrice,
+  findOrder,
+  save,
+  update,
+  remove,
+} from '@/services/order';
 
 export default {
   namespace: 'order',
@@ -29,6 +37,10 @@ export default {
     },
     *findPrice({ payload, callback }, { call }) {
       const response = yield call(queryPrice, payload);
+      if (callback) callback(response);
+    },
+    *findProductPrice({ payload, callback }, { call }) {
+      const response = yield call(findProductPrice, payload);
       if (callback) callback(response);
     },
     *findAll({ payload }, { call, put }) {

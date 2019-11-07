@@ -18,7 +18,7 @@ const formItemLayout = {
   geo: order.dict.geo,
   productFeatureType: order.dict.productFeatureType,
   productFeature: order.dict.productFeature,
-  loading: loading.models.orderCreateProductDetails,
+  loading: loading.models.order,
 }))
 @Form.create()
 class Price extends React.PureComponent {
@@ -111,9 +111,9 @@ class Price extends React.PureComponent {
         <Form.Item {...formItemLayout} className={styles.stepFormText} label="区域">
           {`${this.getGeoName(details.geoId)}[${this.getGeoPrice(details.geoId).geoPrice}]`}
         </Form.Item>
-        {features.map(feature => (
+        {features.map((feature, index) => (
           <Form.Item {...formItemLayout} label={this.getFeatureTypeName(feature.featureTypeId)}>
-            {getFieldDecorator(`featureType#${feature.featureTypeId}`)(
+            {getFieldDecorator(`featureType#${index}#${feature.featureTypeId}`)(
               <Feature
                 feature={feature}
                 getFeatureName={featureId =>
