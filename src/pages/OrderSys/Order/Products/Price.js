@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Form, Button } from 'antd';
+import { Form, Input, Button } from 'antd';
 import Feature from './Feature';
 
 import styles from './style.less';
@@ -68,6 +68,7 @@ class Price extends React.PureComponent {
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         const featureIds = Object.keys(values)
+          .filter(key => key.indexOf('featureType') > -1)
           .map(key => values[key])
           .reduce((a, b) => (b ? [...a, ...b] : a), []);
         const geoPrices = productPrice.geoPrices.filter(gp => gp.geoId === details.geoId);
@@ -79,7 +80,7 @@ class Price extends React.PureComponent {
           geoId: details.geoId,
           geoName: details.geoName,
           geoPrice,
-          discountPrice: '优惠金额',
+          discountPrice: values.discountPrice,
           features: featurePrices
             .filter(item => featureIds.indexOf(item.featureId) > -1)
             .map(item => ({
@@ -95,24 +96,48 @@ class Price extends React.PureComponent {
   render() {
     const {
       form: { getFieldDecorator },
-      product,
       details,
+      productInfo,
       productPrice,
       handlePrev,
       loading,
     } = this.props;
-    const features = [...product.fixFeatures, ...product.mustFeatures, ...product.optionFeatures];
+    const features = [
+      ...productInfo.fixFeatures,
+      ...productInfo.mustFeatures,
+      ...productInfo.optionFeatures,
+    ];
 
     return (
       <Form layout="horizontal" className={styles.stepForm}>
         <Form.Item {...formItemLayout} className={styles.stepFormText} label="产品">
-          {`${product.productName}[${productPrice.productPrice}]`}
+          {`${productInfo.productName}[${productPrice.productPrice}]`}
         </Form.Item>
         <Form.Item {...formItemLayout} className={styles.stepFormText} label="区域">
           {`${this.getGeoName(details.geoId)}[${this.getGeoPrice(details.geoId).geoPrice}]`}
         </Form.Item>
+        <Form.Item {...formItemLayout} label="优惠金额">
+          {getFieldDecorator('discountPrice', {
+            initialValue: 0,
+            rules: [
+              {
+                required: true,
+                message: '请输入优惠金额',
+              },
+              {
+                pattern: /^(\d+)((?:\.\d{1,2})?)$/,
+                message: '请输入合法金额数字',
+              },
+            ],
+          })(<Input placeholder="请输入" />)}
+        </Form.Item>
         {features.map((feature, index) => (
-          <Form.Item {...formItemLayout} label={this.getFeatureTypeName(feature.featureTypeId)}>
+          <Form.Item
+            {...formItemLayout}
+            // eslint-disable-next-line react/no-array-index-key
+            key={`${feature.featureTypeId}-${index}`}
+            label={this.getFeatureTypeName(feature.featureTypeId)}
+          >
             {getFieldDecorator(`featureType#${index}#${feature.featureTypeId}`)(
               <Feature
                 feature={feature}

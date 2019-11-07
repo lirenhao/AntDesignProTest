@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Form, Button, Select } from 'antd';
+import { Form, Button, Select, message } from 'antd';
 import styles from './style.less';
 
 const formItemLayout = {
@@ -14,25 +14,26 @@ const formItemLayout = {
 
 @connect(({ order, loading }) => ({
   geo: order.dict.geo,
-  loading: loading.models.orderCreateProductDetails,
+  loading: loading.effects['order/findPrice'],
 }))
 @Form.create()
 class Details extends React.PureComponent {
   constructor(props) {
     super(props);
-    const product = props.products.filter(item => item.productId === props.info.productId)[0] || {};
+    const product =
+      props.productInfos.filter(item => item.productId === props.info.productId)[0] || {};
     this.state = {
       product,
     };
   }
 
   productChange = productId => {
-    const { form, products } = this.props;
+    const { form, productInfos } = this.props;
     form.setFieldsValue({
       geoId: undefined,
     });
     this.setState({
-      product: products.filter(item => item.productId === productId)[0] || {},
+      product: productInfos.filter(item => item.productId === productId)[0] || {},
     });
   };
 
@@ -48,11 +49,25 @@ class Details extends React.PureComponent {
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        handleNext({
-          productId: values.productId,
-          productName: product.productName,
-          geoId: values.geoId,
-          geoName: this.getGeoName(values.geoId),
+        const { dispatch } = this.props;
+        dispatch({
+          type: 'order/findPrice',
+          payload: values,
+          callback: productPrice => {
+            if (productPrice) {
+              handleNext(
+                {
+                  productId: values.productId,
+                  productName: product.productName,
+                  geoId: values.geoId,
+                  geoName: this.getGeoName(values.geoId),
+                },
+                productPrice
+              );
+            } else {
+              message.error('没有查询到产品价格!');
+            }
+          },
         });
       }
     });
@@ -62,7 +77,7 @@ class Details extends React.PureComponent {
     const {
       form: { getFieldDecorator },
       info,
-      products,
+      productInfos,
       handlePrev,
       loading,
     } = this.props;
@@ -86,7 +101,7 @@ class Details extends React.PureComponent {
               dropdownMatchSelectWidth={false}
               onChange={this.productChange}
             >
-              {products.map(item => (
+              {productInfos.map(item => (
                 <Select.Option key={item.productId} value={item.productId}>
                   {item.productName}
                 </Select.Option>

@@ -15,7 +15,7 @@
         "geoId": "Dong_Cheng_District",
         "geoName": "东城区",
         "geoPrice": "100",
-        "discountPrice": "优惠金额",
+        "discountPrice": "10",
         "features": [
           {
             "featureId": "1002",
@@ -41,7 +41,7 @@
         "geoId": "Dong_Cheng_District",
         "geoName": "东城区",
         "geoPrice": "100",
-        "discountPrice": "优惠金额",
+        "discountPrice": "10",
         "features": [
           {
             "featureId": "1001",
@@ -67,7 +67,8 @@
       }
     ],
     "orderDate": "2019-11-07",
-    "serviceCommission": "100"
+    "serviceCommission": "100",
+    "grandTotal": 550
   },
   "order2": {
     "orderId": "order2",
@@ -85,7 +86,7 @@
         "geoId": "Dong_Cheng_District",
         "geoName": "东城区",
         "geoPrice": "100",
-        "discountPrice": "优惠金额",
+        "discountPrice": "10",
         "features": [
           {
             "featureId": "1001",
@@ -111,7 +112,8 @@
       }
     ],
     "orderDate": "2019-11-07",
-    "serviceCommission": "100"
+    "serviceCommission": "100",
+    "grandTotal": 230
   },
   "order3": {
     "orderId": "order3",
@@ -129,7 +131,7 @@
         "geoId": "Dong_Cheng_District",
         "geoName": "东城区",
         "geoPrice": "100",
-        "discountPrice": "优惠金额",
+        "discountPrice": "10",
         "features": [
           {
             "featureId": "1002",
@@ -150,6 +152,7 @@
       }
     ],
     "orderDate": "2019-11-07",
-    "serviceCommission": "100"
+    "serviceCommission": "100",
+    "grandTotal": 190
   }
 }

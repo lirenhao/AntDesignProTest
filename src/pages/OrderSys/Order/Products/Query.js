@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Form, TreeSelect, Button } from 'antd';
+import { Form, TreeSelect, Button, message } from 'antd';
 import { objToTree } from '@/utils/utils';
 
 import styles from './style.less';
@@ -17,7 +17,7 @@ const formItemLayout = {
 @connect(({ order, loading }) => ({
   productType: order.dict.productType,
   productCategoty: order.dict.productCategoty,
-  loading: loading.models.orderCreateProductQuery,
+  loading: loading.effects['order/findProduct'],
 }))
 @Form.create()
 class Query extends React.Component {
@@ -26,7 +26,18 @@ class Query extends React.Component {
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        handleNext({ ...info, ...values });
+        const { dispatch } = this.props;
+        dispatch({
+          type: 'order/findProduct',
+          payload: values,
+          callback: products => {
+            if (products && products.length > 0) {
+              handleNext({ ...info, ...values }, products);
+            } else {
+              message.error('没有查询到产品信息!');
+            }
+          },
+        });
       }
     });
   };

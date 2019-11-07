@@ -14,7 +14,7 @@ class Create extends React.Component {
     this.state = {
       current: 0,
       query: {},
-      products: [],
+      productInfos: [],
       details: {},
       productPrice: {},
     };
@@ -30,38 +30,20 @@ class Create extends React.Component {
     this.setState({ current: current - 1 });
   };
 
-  handleQuery = query => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'order/findProduct',
-      payload: query,
-      callback: products => {
-        if (products && products.length > 0) {
-          this.setState({
-            query,
-            products,
-          });
-          this.handleNext();
-        }
-      },
+  handleQuery = (query, productInfos) => {
+    this.setState({
+      query,
+      productInfos,
     });
+    this.handleNext();
   };
 
-  handleDetails = details => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'order/findPrice',
-      payload: details,
-      callback: productPrice => {
-        if (productPrice) {
-          this.setState({
-            details,
-            productPrice,
-          });
-          this.handleNext();
-        }
-      },
+  handleDetails = (details, productPrice) => {
+    this.setState({
+      details,
+      productPrice,
     });
+    this.handleNext();
   };
 
   handleSubmit = value => {
@@ -72,7 +54,7 @@ class Create extends React.Component {
 
   render() {
     const { visible, hideModal } = this.props;
-    const { current, query, products, details, productPrice } = this.state;
+    const { current, query, productInfos, details, productPrice } = this.state;
 
     return (
       <Modal
@@ -93,7 +75,7 @@ class Create extends React.Component {
         {current === 1 && (
           <Details
             info={details}
-            products={products}
+            productInfos={productInfos}
             handleNext={this.handleDetails}
             handlePrev={this.handlePrev}
           />
@@ -102,7 +84,7 @@ class Create extends React.Component {
           <Price
             info={{}}
             details={details}
-            product={products.filter(item => item.productId === details.productId)[0] || {}}
+            productInfo={productInfos.filter(item => item.productId === details.productId)[0] || {}}
             productPrice={productPrice}
             handleNext={this.handleSubmit}
             handlePrev={this.handlePrev}

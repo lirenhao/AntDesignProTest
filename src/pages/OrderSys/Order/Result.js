@@ -11,7 +11,25 @@ import { Card, Descriptions, Button } from 'antd';
 class Result extends React.PureComponent {
   handleSubmit = () => {
     const { info, handleNext } = this.props;
-    handleNext({ ...info });
+    handleNext({ ...info, grandTotal: this.handleTotal() });
+  };
+
+  handleTotal = () => {
+    const { info } = this.props;
+    const productPrice = info.products
+      .map(record => {
+        const featurePrice = record.features
+          .map(item => item.featurePrice)
+          .reduce((a, b) => parseFloat(a) + parseFloat(b), 0);
+        return (
+          parseFloat(record.productPrice) +
+          parseFloat(record.geoPrice) +
+          parseFloat(featurePrice) -
+          parseFloat(record.discountPrice)
+        );
+      })
+      .reduce((a, b) => parseFloat(a) + parseFloat(b), 0);
+    return parseFloat(info.serviceCommission) + parseFloat(productPrice);
   };
 
   render() {
@@ -39,7 +57,7 @@ class Result extends React.PureComponent {
               <Descriptions.Item label="合同编号">{info.agreementCode}</Descriptions.Item>
               <Descriptions.Item label="订单日期">{info.orderDate}</Descriptions.Item>
               <Descriptions.Item label="服务佣金">{info.serviceCommission}</Descriptions.Item>
-              <Descriptions.Item label="订单总金额">{info.grandTotal}</Descriptions.Item>
+              <Descriptions.Item label="订单总金额">{this.handleTotal()}</Descriptions.Item>
               <Descriptions.Item label="服务产品" span={3}>
                 {info.products.map(item => (
                   <React.Fragment>
@@ -50,7 +68,7 @@ class Result extends React.PureComponent {
                       <Descriptions.Item label="优惠价格">{item.discountPrice}</Descriptions.Item>
                       <Descriptions.Item label={item.geoName}>{item.geoPrice}</Descriptions.Item>
                       {item.features.map(feature => (
-                        <Descriptions.Item label={feature.featureName}>
+                        <Descriptions.Item key={feature.featureId} label={feature.featureName}>
                           {feature.featurePrice}
                         </Descriptions.Item>
                       ))}

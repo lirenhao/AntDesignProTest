@@ -14,7 +14,20 @@ class Products extends React.Component {
     { title: '区域', dataIndex: 'geoName', key: 'geoId' },
     { title: '区域价格', dataIndex: 'geoPrice', key: 'geoPrice' },
     { title: '优惠价格', dataIndex: 'discountPrice', key: 'discountPrice' },
-    { title: '合计价格', dataIndex: 'productListPrice', key: 'productListPrice' },
+    {
+      title: '合计价格',
+      render: (_, record) => {
+        const featurePrice = record.features
+          .map(item => item.featurePrice)
+          .reduce((a, b) => parseFloat(a) + parseFloat(b), 0);
+        return (
+          parseFloat(record.productPrice) +
+          parseFloat(record.geoPrice) +
+          parseFloat(featurePrice) -
+          parseFloat(record.discountPrice)
+        );
+      },
+    },
     {
       title: '操作',
       render: (_, record) => (

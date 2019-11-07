@@ -1,18 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Modal, Form } from 'antd';
+import { Modal, Form, Input } from 'antd';
 import Feature from './Feature';
-
-import styles from './style.less';
-
-const formItemLayout = {
-  labelCol: {
-    span: 5,
-  },
-  wrapperCol: {
-    span: 19,
-  },
-};
 
 @connect(({ order, loading }) => ({
   geo: order.dict.geo,
@@ -68,6 +57,7 @@ class Update extends React.Component {
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         const featureIds = Object.keys(values)
+          .filter(key => key.indexOf('featureType') > -1)
           .map(key => values[key])
           .reduce((a, b) => (b ? [...a, ...b] : a), []);
         const result = {
@@ -77,7 +67,7 @@ class Update extends React.Component {
           geoId: info.geoId,
           geoName: this.getGeoName(info.geoId),
           geoPrice: info.geoPrice,
-          discountPrice: '优惠金额',
+          discountPrice: values.discountPrice,
           features: featurePrices
             .filter(item => featureIds.indexOf(item.featureId) > -1)
             .map(item => ({
@@ -106,6 +96,18 @@ class Update extends React.Component {
       ...(productInfo.optionFeatures || []),
     ];
 
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 7 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 12 },
+        md: { span: 10 },
+      },
+    };
+
     return (
       <Modal
         width="60%"
@@ -117,12 +119,27 @@ class Update extends React.Component {
         onOk={this.handleSubmit}
         onCancel={hideModal}
       >
-        <Form layout="horizontal" className={styles.stepForm}>
-          <Form.Item {...formItemLayout} className={styles.stepFormText} label="产品">
+        <Form layout="horizontal">
+          <Form.Item {...formItemLayout} label="产品">
             {`${productInfo.productName}[${productPrice.productPrice}]`}
           </Form.Item>
-          <Form.Item {...formItemLayout} className={styles.stepFormText} label="区域">
+          <Form.Item {...formItemLayout} label="区域">
             {`${this.getGeoName(info.geoId)}[${this.getGeoPrice(info.geoId).geoPrice}]`}
+          </Form.Item>
+          <Form.Item {...formItemLayout} label="优惠金额">
+            {getFieldDecorator('discountPrice', {
+              initialValue: info.discountPrice,
+              rules: [
+                {
+                  required: true,
+                  message: '请输入优惠金额',
+                },
+                {
+                  pattern: /^(\d+)((?:\.\d{1,2})?)$/,
+                  message: '请输入合法金额数字',
+                },
+              ],
+            })(<Input placeholder="请输入" />)}
           </Form.Item>
           {features.map((feature, index) => (
             <Form.Item
