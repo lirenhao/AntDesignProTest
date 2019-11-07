@@ -6,6 +6,7 @@ import StandardFormRow from '@/components/StandardFormRow';
 import TagSelect from '@/components/TagSelect';
 import StandardTable from '@/components/StandardTable';
 
+import Create from '../Order/Create';
 import styles from './List.less';
 
 const getValue = obj =>
@@ -20,6 +21,7 @@ const getValue = obj =>
 @Form.create()
 class Clue extends PureComponent {
   state = {
+    isCreateShow: false,
     selectedRows: [],
     formValues: {},
   };
@@ -119,8 +121,17 @@ class Clue extends PureComponent {
     });
   };
 
-  handleSignModalVisible = (flag, record) => {
-    console.log(flag, record);
+  handleAddModal = visible => {
+    this.setState({ isCreateShow: visible });
+  };
+
+  handleAddForm = record => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'order/save',
+      payload: { ...record },
+      callback: () => this.handleAddModal(false),
+    });
   };
 
   render() {
@@ -128,7 +139,7 @@ class Clue extends PureComponent {
       clue: { data },
       loading,
     } = this.props;
-    const { selectedRows } = this.state;
+    const { selectedRows, isCreateShow } = this.state;
     const actionsTextMap = {
       expandText: <FormattedMessage id="component.tagSelect.expand" defaultMessage="Expand" />,
       collapseText: (
@@ -172,41 +183,25 @@ class Clue extends PureComponent {
               </StandardFormRow>
             </div>
             <div className={styles.tableListOperator}>
-              <Button icon="form" type="primary" onClick={() => this.handleSignModalVisible(true)}>
+              <Button icon="form" type="primary" onClick={() => this.handleAddModal(true)}>
                 签合同
               </Button>
-              <Button icon="edit" type="primary" onClick={() => this.handleSignModalVisible(true)}>
+              <Button icon="edit" type="primary" onClick={() => this.handleAddModal(true)}>
                 直接下单
               </Button>
-              <Button icon="enter" type="primary" onClick={() => this.handleSignModalVisible(true)}>
+              <Button icon="enter" type="primary" onClick={() => this.handleAddModal(true)}>
                 转移
               </Button>
-              <Button
-                icon="rollback"
-                type="primary"
-                onClick={() => this.handleSignModalVisible(true)}
-              >
+              <Button icon="rollback" type="primary" onClick={() => this.handleAddModal(true)}>
                 放入公海
               </Button>
-              <Button
-                icon="message"
-                type="primary"
-                onClick={() => this.handleSignModalVisible(true)}
-              >
+              <Button icon="message" type="primary" onClick={() => this.handleAddModal(true)}>
                 发短信
               </Button>
-              <Button
-                icon="retweet"
-                type="primary"
-                onClick={() => this.handleSignModalVisible(true)}
-              >
+              <Button icon="retweet" type="primary" onClick={() => this.handleAddModal(true)}>
                 线索合并
               </Button>
-              <Button
-                icon="delete"
-                type="primary"
-                onClick={() => this.handleSignModalVisible(true)}
-              >
+              <Button icon="delete" type="primary" onClick={() => this.handleAddModal(true)}>
                 删除
               </Button>
             </div>
@@ -219,6 +214,13 @@ class Clue extends PureComponent {
               onChange={this.handleStandardTableChange}
             />
           </div>
+          <Create
+            title="创建订单"
+            visible={isCreateShow}
+            hideModal={() => this.handleAddModal(false)}
+            handleFormSubmit={this.handleAddForm}
+            info={{}}
+          />
         </Card>
       </Fragment>
     );

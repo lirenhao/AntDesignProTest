@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Card, Form, Radio, Input, Button } from 'antd';
+import { Card, Form, Radio, Input, DatePicker, Button } from 'antd';
+import moment from 'moment';
 
 @connect(({ loading }) => ({
   loading: loading.models.orderCreateInfo,
@@ -15,6 +16,7 @@ class BasicInfo extends React.Component {
         handleNext({
           ...info,
           ...values,
+          orderDate: values.orderDate.format('YYYY-MM-DD'),
         });
         form.resetFields();
       }
@@ -128,6 +130,39 @@ class BasicInfo extends React.Component {
                     {
                       required: true,
                       message: '请输入合同编号',
+                    },
+                  ],
+                })(<Input placeholder="请输入" />)}
+              </Form.Item>
+              <Form.Item {...formItemLayout} label="订单日期">
+                {getFieldDecorator('orderDate', {
+                  initialValue: moment(info.orderDate),
+                  rules: [
+                    {
+                      required: true,
+                      message: '请选择订单日期',
+                    },
+                  ],
+                })(
+                  <DatePicker
+                    style={{
+                      width: '100%',
+                    }}
+                    placeholder="选择日期"
+                  />
+                )}
+              </Form.Item>
+              <Form.Item {...formItemLayout} label="服务佣金">
+                {getFieldDecorator('serviceCommission', {
+                  initialValue: info.serviceCommission,
+                  rules: [
+                    {
+                      required: true,
+                      message: '请输入服务佣金',
+                    },
+                    {
+                      pattern: /^(\d+)((?:\.\d{1,2})?)$/,
+                      message: '请输入合法金额数字',
                     },
                   ],
                 })(<Input placeholder="请输入" />)}

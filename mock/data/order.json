@@ -5,8 +5,8 @@
     "renewalFeeStatusId": "0",
     "legalPartyGroupName": "公司法人",
     "corpName": "公司名称",
-    "agreementTypeId": "test",
-    "agreementCode": "test",
+    "agreementTypeId": "合同类型",
+    "agreementCode": "合同编号",
     "products": [
       {
         "productId": "1",
@@ -33,8 +33,41 @@
             "featureName": "代表处"
           }
         ]
+      },
+      {
+        "productId": "2",
+        "productName": "公司变更",
+        "productPrice": "100",
+        "geoId": "Dong_Cheng_District",
+        "geoName": "东城区",
+        "geoPrice": "100",
+        "discountPrice": "优惠金额",
+        "features": [
+          {
+            "featureId": "1001",
+            "featurePrice": "10",
+            "featureName": "内资"
+          },
+          {
+            "featureId": "1302",
+            "featurePrice": "30",
+            "featureName": "税务"
+          },
+          {
+            "featureId": "1102",
+            "featurePrice": "60",
+            "featureName": "一般纳税人"
+          },
+          {
+            "featureId": "1201",
+            "featurePrice": "70",
+            "featureName": "有限公司"
+          }
+        ]
       }
-    ]
+    ],
+    "orderDate": "2019-11-07",
+    "serviceCommission": "100"
   },
   "order2": {
     "orderId": "order2",
@@ -76,7 +109,9 @@
           }
         ]
       }
-    ]
+    ],
+    "orderDate": "2019-11-07",
+    "serviceCommission": "100"
   },
   "order3": {
     "orderId": "order3",
@@ -113,6 +148,8 @@
           }
         ]
       }
-    ]
+    ],
+    "orderDate": "2019-11-07",
+    "serviceCommission": "100"
   }
 }
