@@ -6,13 +6,6 @@ import { Input, Form } from 'antd';
   productFeature: product.dict.productFeature,
 }))
 class FeaturePrice extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: props.value || [],
-    };
-  }
-
   getFeatureName = id => {
     const { productFeature } = this.props;
     const list = productFeature.filter(item => item.productFeatureId === id);
@@ -23,11 +16,7 @@ class FeaturePrice extends React.Component {
     const featurePrice = e.target.value;
     const pattern = /^(\d+)((?:\.\d{1,2})?)$/;
     if (pattern.test(featurePrice)) {
-      const { value } = this.state;
-      const { onChange } = this.props;
-      this.setState({
-        value: { ...value, featurePrice },
-      });
+      const { value, onChange } = this.props;
       if (onChange) {
         onChange({ ...value, featurePrice });
       }
@@ -46,7 +35,7 @@ class FeaturePrice extends React.Component {
         md: { span: 10 },
       },
     };
-    const { value } = this.state;
+    const { value } = this.props;
 
     return (
       <React.Fragment>
