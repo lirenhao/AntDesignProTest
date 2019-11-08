@@ -91,7 +91,7 @@ function remove(req, res) {
       // eslint-disable-next-line no-param-reassign
       delete dataSource[key];
       jsonfile.writeFileSync(orderPath, dataSource, { spaces: 2 });
-      find(req, res);
+      res.send('success');
     })
     .catch(error => res.status(500).send(error));
 }

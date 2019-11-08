@@ -68,7 +68,8 @@ export default {
       if (callback) callback();
     },
     *remove({ payload, callback }, { call, put }) {
-      const response = yield call(remove, payload);
+      yield call(remove, payload);
+      const response = yield call(findOrder, payload);
       yield put({
         type: 'createData',
         payload: response,
