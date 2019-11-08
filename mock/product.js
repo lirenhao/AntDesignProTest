@@ -5,6 +5,7 @@ import jsonfile from 'jsonfile';
 
 let index = 100;
 const file = path.resolve('mock/data/product.json');
+const pricePath = path.resolve('mock/data/price.json');
 
 function findAll(req, res, u) {
   let url = u;
@@ -79,6 +80,10 @@ function update(req, res, u, b) {
       // eslint-disable-next-line no-param-reassign
       dataSource[type] = data;
       jsonfile.writeFileSync(file, dataSource, { spaces: 2 });
+      // 删除价格
+      const prices = jsonfile.readFileSync(pricePath);
+      delete prices[key];
+      jsonfile.writeFileSync(pricePath, prices, { spaces: 2 });
       findAll(req, res, u);
     })
     .catch(error => res.status(500).send(error));
