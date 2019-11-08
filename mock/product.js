@@ -56,7 +56,7 @@ function save(req, res, u, b) {
       const data = dataSource[type] || {};
       data[key] = {
         ...body,
-        [body.id]: key,
+        productId: key,
       };
       // eslint-disable-next-line no-param-reassign
       dataSource[type] = data;
