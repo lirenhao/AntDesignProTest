@@ -31,9 +31,10 @@ class Product extends React.Component {
     {
       title: '产品类型',
       dataIndex: 'productTypeId',
-      render: id => {
+      render: typeId => {
         const { productType } = this.props;
-        return productType[id] ? productType[id].productTypeName : null;
+        const data = productType.filter(item => item.productTypeId === typeId);
+        return data && data[0] ? data[0].productTypeName : typeId;
       },
     },
     {
